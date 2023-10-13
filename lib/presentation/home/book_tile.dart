@@ -64,6 +64,8 @@ class BookTile extends StatelessWidget {
                   imageUrl: imageLink,
                   height: 108,
                   fit: BoxFit.cover,
+                  placeholder: (_, __) => _buildPlaceholder(),
+                  errorWidget: (_, __, ___) => _buildPlaceholder(),
                 ),
               ),
               Text('$pageCount pages'),
@@ -97,6 +99,12 @@ class BookTile extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildPlaceholder() {
+    return const Image(
+      image: AssetImage('assets/book-cover-placeholder.jpg'),
     );
   }
 }

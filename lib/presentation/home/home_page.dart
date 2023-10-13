@@ -1,7 +1,7 @@
 import 'package:books/domain/repository/book_repository.dart';
 import 'package:books/presentation/home/bloc/home_bloc.dart';
 import 'package:books/presentation/home/bloc/home_state.dart';
-import 'package:books/presentation/home/bool_tile.dart';
+import 'package:books/presentation/home/book_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
