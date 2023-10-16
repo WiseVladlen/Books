@@ -6,7 +6,8 @@ class BookTile extends StatelessWidget {
   const BookTile({
     super.key,
     required this.title,
-    required this.authors,
+    this.authors,
+    this.pageCount,
     this.publisher,
     this.publishedDate,
     required this.description,
@@ -15,11 +16,12 @@ class BookTile extends StatelessWidget {
   });
 
   final String title;
-  final List<String> authors;
+  final List<String>? authors;
+  final int? pageCount;
   final String? publisher;
   final DateTime? publishedDate;
-  final String description;
-  final String imageLink;
+  final String? description;
+  final String? imageLink;
   final String language;
 
   factory BookTile.fromModel(BookModel model) {
@@ -27,6 +29,7 @@ class BookTile extends StatelessWidget {
       key: ValueKey(model.id),
       title: model.title,
       authors: model.authors,
+      pageCount: model.pageCount,
       publisher: model.publisher,
       publishedDate: model.publishedDate,
       description: model.description,
@@ -37,12 +40,15 @@ class BookTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final imageUrl = imageLink;
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
+            width: 96,
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
@@ -53,13 +59,15 @@ class BookTile extends StatelessWidget {
                 ),
               ],
             ),
-            child: CachedNetworkImage(
-              imageUrl: imageLink,
-              height: 108,
-              fit: BoxFit.cover,
-              placeholder: (_, __) => _buildPlaceholder(),
-              errorWidget: (_, __, ___) => _buildPlaceholder(),
-            ),
+            child: imageUrl != null
+                ? CachedNetworkImage(
+                    imageUrl: imageUrl,
+                    placeholder: (_, __) => _buildPlaceholder(),
+                    errorWidget: (_, __, ___) => _buildPlaceholder(),
+                    fadeOutDuration: const Duration(milliseconds: 250),
+                    fadeInDuration: const Duration(milliseconds: 125),
+                  )
+                : _buildPlaceholder(),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -80,19 +88,24 @@ class BookTile extends StatelessWidget {
                   child: Text.rich(
                     TextSpan(
                       children: [
-                        TextSpan(text: 'Authors: ${authors.join(', ')}\n'),
-                        if (publisher != null) TextSpan(text: 'Publisher: $publisher\n'),
+                        if (authors case List<String> authors)
+                          TextSpan(text: 'Authors: ${authors.join(', ')}\n'),
+                        if (publisher case String publisher)
+                          TextSpan(text: 'Publisher: $publisher\n'),
+                        if (pageCount case int pageCount)
+                          TextSpan(text: 'Page count: $pageCount\n'),
                         TextSpan(text: 'Language: $language'),
                       ],
                     ),
                   ),
                 ),
-                Text(
-                  description,
-                  maxLines: 5,
-                  textAlign: TextAlign.justify,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                if (description case String description)
+                  Text(
+                    description,
+                    maxLines: 5,
+                    textAlign: TextAlign.justify,
+                    overflow: TextOverflow.ellipsis,
+                  ),
               ],
             ),
           ),
@@ -103,7 +116,9 @@ class BookTile extends StatelessWidget {
 
   Widget _buildPlaceholder() {
     return const Image(
+      height: 96,
       image: AssetImage('assets/book-cover-placeholder.jpg'),
+      fit: BoxFit.cover,
     );
   }
 }
