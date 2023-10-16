@@ -13,6 +13,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   void _loadBooks(LoadBooksEvent event, Emitter<HomeState> emit) {
-    emit(state.copyWith(books: bookRepository.getAll()));
+    emit(state.copyWith(books: bookRepository.getBooks()));
   }
 }

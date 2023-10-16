@@ -3,7 +3,7 @@ import 'package:books/domain/repository/book_repository.dart';
 
 class BookRepository implements IBookRepository {
   @override
-  List<BookModel> getAll() {
+  List<BookModel> getBooks() {
     return [
       for (var i = 0; i < 30; i++)
         BookModel(
