@@ -1,5 +1,9 @@
+import 'package:books/app/widget/book_placeholder.dart';
+import 'package:books/app/widget/custom_network_image.dart';
 import 'package:books/domain/model/book_model.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:books/utils/build_context.dart';
+import 'package:books/utils/text_format.dart';
+import 'package:books/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class BookTile extends StatelessWidget {
@@ -8,21 +12,12 @@ class BookTile extends StatelessWidget {
     required this.title,
     this.authors,
     this.pageCount,
-    this.publisher,
+    required this.publisher,
     this.publishedDate,
     required this.description,
     required this.imageLink,
     required this.language,
   });
-
-  final String title;
-  final List<String>? authors;
-  final int? pageCount;
-  final String? publisher;
-  final DateTime? publishedDate;
-  final String? description;
-  final String? imageLink;
-  final String language;
 
   factory BookTile.fromModel(BookModel model) {
     return BookTile(
@@ -30,95 +25,98 @@ class BookTile extends StatelessWidget {
       title: model.title,
       authors: model.authors,
       pageCount: model.pageCount,
-      publisher: model.publisher,
+      publisher: model.publisher ?? '',
       publishedDate: model.publishedDate,
-      description: model.description,
-      imageLink: model.imageLink,
+      description: model.description ?? '',
+      imageLink: model.imageLink ?? '',
       language: model.language,
     );
   }
 
+  final String title;
+  final List<String>? authors;
+  final int? pageCount;
+  final String publisher;
+  final DateTime? publishedDate;
+  final String description;
+  final String imageLink;
+  final String language;
+
   @override
   Widget build(BuildContext context) {
-    final imageUrl = imageLink;
-
-    return Container(
+    return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 96,
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.25),
-                  offset: const Offset(0, 2),
-                  spreadRadius: 2,
-                  blurRadius: 4,
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: SizedBox(
+              width: 96,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.25),
+                      offset: const Offset(0, 2),
+                      spreadRadius: 2,
+                      blurRadius: 4,
+                    ),
+                  ],
                 ),
-              ],
+                child: imageLink.isNotEmpty
+                    ? CustomNetworkImage(imageLink: imageLink)
+                    : const BookPlaceholder(
+                        image: AssetImage(placeholderPath),
+                        height: 96,
+                      ),
+              ),
             ),
-            child: imageUrl != null
-                ? CachedNetworkImage(
-                    imageUrl: imageUrl,
-                    placeholder: (_, __) => _buildPlaceholder(),
-                    errorWidget: (_, __, ___) => _buildPlaceholder(),
-                    fadeOutDuration: const Duration(milliseconds: 250),
-                    fadeInDuration: const Duration(milliseconds: 125),
-                  )
-                : _buildPlaceholder(),
           ),
-          const SizedBox(width: 16),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text.rich(
-                  TextSpan(
-                    text: title,
-                    children: [
-                      if (publishedDate case DateTime date) TextSpan(text: ' · (${date.year})')
-                    ],
-                  ),
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Text.rich(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text.rich(
                     TextSpan(
+                      text: title,
                       children: [
-                        if (authors case List<String> authors)
-                          TextSpan(text: 'Authors: ${authors.join(', ')}\n'),
-                        if (publisher case String publisher)
-                          TextSpan(text: 'Publisher: $publisher\n'),
-                        if (pageCount case int pageCount)
-                          TextSpan(text: 'Page count: $pageCount\n'),
-                        TextSpan(text: 'Language: $language'),
+                        if (publishedDate case DateTime date) TextSpan(text: ' · (${date.year})')
                       ],
                     ),
+                    style: context.textStyles.cardTitleMedium,
                   ),
-                ),
-                if (description case String description)
-                  Text(
-                    description,
-                    maxLines: 5,
-                    textAlign: TextAlign.justify,
-                    overflow: TextOverflow.ellipsis,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: Text.rich(
+                      TextSpan(
+                        children: [
+                          if (authors case List<String> authors)
+                            context.l10n.authorsHeader.combineWith(authors.toFormattedString()),
+                          if (publisher.isNotEmpty)
+                            context.l10n.publisherHeader.combineWith(publisher),
+                          if (pageCount case int pageCount)
+                            context.l10n.pageCountHeader.combineWith(pageCount),
+                          context.l10n.languageHeader.combineWith(language, endSymbol: ''),
+                        ],
+                      ),
+                    ),
                   ),
-              ],
+                  if (description.isNotEmpty)
+                    Text(
+                      description,
+                      maxLines: 5,
+                      textAlign: TextAlign.justify,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                ],
+              ),
             ),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildPlaceholder() {
-    return const Image(
-      height: 96,
-      image: AssetImage('assets/book-cover-placeholder.jpg'),
-      fit: BoxFit.cover,
     );
   }
 }

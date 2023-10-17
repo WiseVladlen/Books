@@ -1,5 +1,5 @@
 import 'package:books/domain/model/book_model.dart';
 
 abstract interface class IBookRepository {
-  List<BookModel> getBooks();
+  Future<List<BookModel>> getBooks();
 }
