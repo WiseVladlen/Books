@@ -3,7 +3,6 @@ import 'package:books/app/widget/custom_network_image.dart';
 import 'package:books/domain/model/book_model.dart';
 import 'package:books/utils/build_context.dart';
 import 'package:books/utils/text_format.dart';
-import 'package:books/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class BookTile extends StatelessWidget {
@@ -12,10 +11,10 @@ class BookTile extends StatelessWidget {
     required this.title,
     this.authors,
     this.pageCount,
-    required this.publisher,
+    this.publisher = '',
     this.publishedDate,
-    required this.description,
-    required this.imageLink,
+    this.description = '',
+    this.imageLink = '',
     required this.language,
   });
 
@@ -66,10 +65,7 @@ class BookTile extends StatelessWidget {
                 ),
                 child: imageLink.isNotEmpty
                     ? CustomNetworkImage(imageLink: imageLink)
-                    : const BookPlaceholder(
-                        image: AssetImage(placeholderPath),
-                        height: 96,
-                      ),
+                    : const BookPlaceholder(height: 96),
               ),
             ),
           ),
