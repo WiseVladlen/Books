@@ -25,14 +25,26 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         bookDownloadStatus: DownloadStatus.success,
       ));
     } on IOException catch (error, stack) {
-      log(tag, error: error, stackTrace: stack);
-      emit(state.copyWith(bookDownloadStatus: DownloadStatus.failure));
+      _handleException(emit: emit, message: tag, error: error, stackTrace: stack);
     } on Exception catch (error, stack) {
-      log(tag, error: error, stackTrace: stack);
-      emit(state.copyWith(bookDownloadStatus: DownloadStatus.failure));
+      _handleException(emit: emit, message: tag, error: error, stackTrace: stack);
     } catch (error, stack) {
-      log('$tag - Unspecified type exception: ', error: error, stackTrace: stack);
-      emit(state.copyWith(bookDownloadStatus: DownloadStatus.failure));
+      _handleException(
+        emit: emit,
+        message: '$tag - Unspecified type exception: ',
+        error: error,
+        stackTrace: stack,
+      );
     }
+  }
+
+  void _handleException({
+    required Emitter<HomeState> emit,
+    required String message,
+    Object? error,
+    StackTrace? stackTrace,
+  }) {
+    log(message, error: error, stackTrace: stackTrace);
+    emit(state.copyWith(bookDownloadStatus: DownloadStatus.failure));
   }
 }
