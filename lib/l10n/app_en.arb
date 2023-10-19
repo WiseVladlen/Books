@@ -1,0 +1,30 @@
+{
+  "appName": "Books",
+  "@appName": {
+    "description": "Application name"
+  },
+  "searchBooksMessage": "Search books",
+  "@searchBooks": {
+    "description": "A message about finding books"
+  },
+  "noResultsMessage": "No books found",
+  "@noResults": {
+    "description": "Reporting unsuccessful search results"
+  },
+  "authorsHeader": "Authors",
+  "@authorsHeader": {
+    "description": "Header of the \"Authors\" section"
+  },
+  "publisherHeader": "Publisher",
+  "@publisherHeader": {
+    "description": "Header of the \"Publisher\" section"
+  },
+  "pageCountHeader": "Page count",
+  "@pageCountHeader": {
+    "description": "Header of the \"Page count\" section"
+  },
+  "languageHeader": "Language",
+  "@languageHeader": {
+    "description": "Header of the \"Language\" section"
+  }
+}

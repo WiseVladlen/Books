@@ -1,0 +1,9 @@
+{
+  "appName": "Books",
+  "searchBooksMessage": "Поиск книг",
+  "noResultsMessage": "Книги не найдены",
+  "authorsHeader": "Авторы",
+  "publisherHeader": "Издательство",
+  "pageCountHeader": "Кол-во страниц",
+  "languageHeader": "Язык"
+}
