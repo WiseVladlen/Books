@@ -3,6 +3,10 @@
   "@appName": {
     "description": "Application name"
   },
+  "searchHint": "Search",
+  "@searchHint": {
+    "description": "Hint for the search text field"
+  },
   "searchBooksMessage": "Search books",
   "@searchBooks": {
     "description": "A message about finding books"
