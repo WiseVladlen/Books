@@ -105,9 +105,9 @@ class _BookListState extends State<_BookList> {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final List<BookModel>? books = state.books;
+          final List<BookModel> books = state.books;
 
-          if (state.bookDownloadStatus.isSuccess && books != null && books.isNotEmpty) {
+          if (state.bookDownloadStatus.isSuccess && books.isNotEmpty) {
             SchedulerBinding.instance.addPostFrameCallback((_) {
               if (state.requestParameterChanged) _scrollController.jumpTo(0);
             });

@@ -42,7 +42,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       emit(
         state.copyWith(
-          books: <BookModel>[...?state.books, ...books],
+          books: <BookModel>[...state.books, ...books],
           bookDownloadStatus: DownloadStatus.success,
           lastIndex: state.lastIndex + books.length,
           hasReachedMax: books.length < QueryParameters.pageSize,

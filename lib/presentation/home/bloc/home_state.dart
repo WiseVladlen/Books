@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 class HomeState extends Equatable {
   const HomeState({
     this.query = '',
-    this.books,
+    this.books = const <BookModel>[],
     this.bookDownloadStatus = DownloadStatus.initial,
     this.lastIndex = 0,
     this.hasReachedMax = false,
@@ -14,7 +14,7 @@ class HomeState extends Equatable {
   });
 
   final String query;
-  final List<BookModel>? books;
+  final List<BookModel> books;
   final DownloadStatus bookDownloadStatus;
   final int lastIndex;
   final bool hasReachedMax;
@@ -42,7 +42,7 @@ class HomeState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
+  List<Object> get props => <Object>[
         query,
         books,
         bookDownloadStatus,
