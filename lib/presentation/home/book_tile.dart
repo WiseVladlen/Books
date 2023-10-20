@@ -20,7 +20,7 @@ class BookTile extends StatelessWidget {
 
   factory BookTile.fromModel(BookModel model) {
     return BookTile(
-      key: ValueKey(model.id),
+      key: ValueKey<String>(model.id),
       title: model.title,
       authors: model.authors,
       pageCount: model.pageCount,
@@ -47,14 +47,14 @@ class BookTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 8),
             child: SizedBox(
               width: 96,
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  boxShadow: [
+                  boxShadow: <BoxShadow>[
                     BoxShadow(
                       color: Colors.black.withOpacity(0.25),
                       offset: const Offset(0, 2),
@@ -74,12 +74,13 @@ class BookTile extends StatelessWidget {
               padding: const EdgeInsets.only(left: 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Text.rich(
                     TextSpan(
                       text: title,
-                      children: [
-                        if (publishedDate case DateTime date) TextSpan(text: ' · (${date.year})')
+                      children: <InlineSpan>[
+                        if (publishedDate case final DateTime date)
+                          TextSpan(text: ' · (${date.year})'),
                       ],
                     ),
                     style: context.textStyles.cardTitleMedium,
@@ -88,12 +89,12 @@ class BookTile extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: Text.rich(
                       TextSpan(
-                        children: [
-                          if (authors case List<String> authors)
+                        children: <InlineSpan>[
+                          if (authors case final List<String> authors)
                             context.l10n.authorsHeader.combineWith(authors.toFormattedString()),
                           if (publisher.isNotEmpty)
                             context.l10n.publisherHeader.combineWith(publisher),
-                          if (pageCount case int pageCount)
+                          if (pageCount case final int pageCount)
                             context.l10n.pageCountHeader.combineWith(pageCount),
                           context.l10n.languageHeader.combineWith(language, endSymbol: ''),
                         ],
