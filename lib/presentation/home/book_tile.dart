@@ -7,7 +7,7 @@ class BookTile extends StatelessWidget {
   const BookTile({
     super.key,
     required this.title,
-    this.authors,
+    this.authors = const <String>[],
     this.pageCount,
     this.publisher = '',
     this.publishedDate,
@@ -31,7 +31,7 @@ class BookTile extends StatelessWidget {
   }
 
   final String title;
-  final List<String>? authors;
+  final List<String> authors;
   final int? pageCount;
   final String publisher;
   final DateTime? publishedDate;
@@ -88,7 +88,7 @@ class BookTile extends StatelessWidget {
                     child: Text.rich(
                       TextSpan(
                         children: <InlineSpan>[
-                          if (authors case final List<String> authors)
+                          if (authors.isNotEmpty)
                             context.l10n.authorsHeader.combineWith(authors.toFormattedString()),
                           if (publisher.isNotEmpty)
                             context.l10n.publisherHeader.combineWith(publisher),

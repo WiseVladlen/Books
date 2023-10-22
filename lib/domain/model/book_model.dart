@@ -4,7 +4,7 @@ final class BookModel extends Equatable {
   const BookModel({
     required this.id,
     required this.title,
-    this.authors,
+    this.authors = const <String>[],
     this.pageCount,
     this.publisher,
     this.publishedDate,
@@ -15,7 +15,7 @@ final class BookModel extends Equatable {
 
   final String id;
   final String title;
-  final List<String>? authors;
+  final List<String> authors;
   final int? pageCount;
   final String? publisher;
   final DateTime? publishedDate;
@@ -24,7 +24,7 @@ final class BookModel extends Equatable {
   final String language;
 
   @override
-  List<Object?> get props => [
+  List<Object?> get props => <Object?>[
         id,
         title,
         authors,
