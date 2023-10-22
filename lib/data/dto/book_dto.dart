@@ -1,8 +1,10 @@
+import 'package:books/data/converter/date_converter.dart';
+import 'package:books/domain/model/book_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'book_dto.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 final class ImageLinksDTO {
   const ImageLinksDTO({required this.thumbnail});
 
@@ -10,15 +12,13 @@ final class ImageLinksDTO {
 
   @JsonKey(name: 'thumbnail')
   final String thumbnail;
-
-  Map<String, dynamic> toJson() => _$ImageLinksDTOToJson(this);
 }
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, createToJson: false)
 final class VolumeInfoDTO {
   const VolumeInfoDTO({
     required this.title,
-    this.authors,
+    required this.authors,
     this.pageCount,
     this.publisher,
     this.publishedDate,
@@ -32,8 +32,8 @@ final class VolumeInfoDTO {
   @JsonKey(name: 'title')
   final String title;
 
-  @JsonKey(name: 'authors')
-  final List<String>? authors;
+  @JsonKey(name: 'authors', defaultValue: <String>[])
+  final List<String> authors;
 
   @JsonKey(name: 'pageCount')
   final int? pageCount;
@@ -41,8 +41,8 @@ final class VolumeInfoDTO {
   @JsonKey(name: 'publisher')
   final String? publisher;
 
-  @JsonKey(name: 'publishedDate')
-  final String? publishedDate;
+  @JsonKey(name: 'publishedDate', fromJson: DateConverter.fromJson)
+  final DateTime? publishedDate;
 
   @JsonKey(name: 'description')
   final String? description;
@@ -52,11 +52,9 @@ final class VolumeInfoDTO {
 
   @JsonKey(name: 'language')
   final String language;
-
-  Map<String, dynamic> toJson() => _$VolumeInfoDTOToJson(this);
 }
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, createToJson: false)
 class BookDTO {
   const BookDTO({required this.id, required this.volumeInfo});
 
@@ -67,18 +65,28 @@ class BookDTO {
 
   @JsonKey(name: 'volumeInfo')
   final VolumeInfoDTO volumeInfo;
-
-  Map<String, dynamic> toJson() => _$BookDTOToJson(this);
 }
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable(explicitToJson: true, createToJson: false)
 class BookResponseDTO {
   const BookResponseDTO({required this.books});
 
   factory BookResponseDTO.fromJson(Map<String, dynamic> json) => _$BookResponseDTOFromJson(json);
 
-  @JsonKey(name: 'items', defaultValue: [])
+  @JsonKey(name: 'items', defaultValue: <BookDTO>[])
   final List<BookDTO> books;
+}
 
-  Map<String, dynamic> toJson() => _$BookResponseDTOToJson(this);
+extension BookDTOToBookModelMapper on BookDTO {
+  BookModel get model => BookModel(
+        id: id,
+        title: volumeInfo.title,
+        authors: volumeInfo.authors,
+        pageCount: volumeInfo.pageCount,
+        publisher: volumeInfo.publisher,
+        publishedDate: volumeInfo.publishedDate,
+        description: volumeInfo.description,
+        imageLink: volumeInfo.imageLinks?.thumbnail,
+        language: volumeInfo.language,
+      );
 }

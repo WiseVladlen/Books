@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:books/domain/model/book_model.dart';
 import 'package:books/domain/model/enum/download_status.dart';
-import 'package:books/domain/model/query_parameter.dart';
+import 'package:books/domain/model/query_parameters.dart';
 import 'package:books/domain/repository/book_repository.dart';
 import 'package:books/presentation/home/bloc/home_event.dart';
 import 'package:books/presentation/home/bloc/home_state.dart';
@@ -24,15 +24,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final IBookRepository bookRepository;
 
   Future<void> _loadBooks(LoadBooksEvent event, Emitter<HomeState> emit) async {
-    if (state.hasReachedMax) return;
+    if (state.booksPeaked) return;
 
     if (state.query.isNotEmpty) {
-      final List<BookModel> books = await _runCatching(
+      final List<BookModel> books = await _runSafely(
         emit,
         () => bookRepository.getBooks(
           queryParameters: QueryParameters(
-            q: state.query,
-            startIndex: state.lastIndex,
+            query: state.query,
+            startIndex: state.lastBookIndex,
           ),
         ),
         onError: () => errorTemplate,
@@ -44,8 +44,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         state.copyWith(
           books: <BookModel>[...state.books, ...books],
           bookDownloadStatus: DownloadStatus.success,
-          lastIndex: state.lastIndex + books.length,
-          hasReachedMax: books.length < QueryParameters.pageSize,
+          lastBookIndex: state.lastBookIndex + books.length,
+          booksPeaked: books.length < QueryParameters.pageSize,
           requestParameterChanged: false,
         ),
       );
@@ -63,8 +63,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           query: query,
           books: <BookModel>[],
           bookDownloadStatus: DownloadStatus.initial,
-          lastIndex: 0,
-          hasReachedMax: false,
+          lastBookIndex: 0,
+          booksPeaked: false,
           requestParameterChanged: true,
         ),
       );
@@ -78,10 +78,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       ),
     );
 
-    final List<BookModel> books = await _runCatching(
+    final List<BookModel> books = await _runSafely(
       emit,
       () => bookRepository.getBooks(
-        queryParameters: QueryParameters(q: query),
+        queryParameters: QueryParameters(query: query),
       ),
       onError: () => errorTemplate,
     );
@@ -92,8 +92,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       state.copyWith(
         books: books,
         bookDownloadStatus: DownloadStatus.success,
-        lastIndex: books.length,
-        hasReachedMax: books.length < QueryParameters.pageSize,
+        lastBookIndex: books.length,
+        booksPeaked: books.length < QueryParameters.pageSize,
       ),
     );
   }
@@ -102,10 +102,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (state.bookDownloadStatus.isInProgress) return;
 
     if (state.query.isNotEmpty) {
-      final List<BookModel> books = await _runCatching(
+      final List<BookModel> books = await _runSafely(
         emit,
         () => bookRepository.getBooks(
-          queryParameters: QueryParameters(q: state.query),
+          queryParameters: QueryParameters(query: state.query),
         ),
         onError: () => errorTemplate,
       );
@@ -115,8 +115,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(
         state.copyWith(
           books: books,
-          lastIndex: books.length,
-          hasReachedMax: books.length < QueryParameters.pageSize,
+          lastBookIndex: books.length,
+          booksPeaked: books.length < QueryParameters.pageSize,
           refreshed: true,
           requestParameterChanged: true,
         ),
@@ -124,13 +124,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
   }
 
-  T _runCatching<T>(
+  T _runSafely<T>(
     Emitter<HomeState> emit,
-    T Function() bloc, {
+    T Function() query, {
     required T Function() onError,
   }) {
     try {
-      return bloc();
+      return query();
     } on IOException catch (error, stack) {
       _handleException(emit: emit, message: tag, error: error, stackTrace: stack);
     } on Exception catch (error, stack) {

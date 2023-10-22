@@ -131,8 +131,6 @@ linter:
     - require_trailing_commas
 
 dart_code_metrics:
-  metrics-exclude:
-    - test/**
   rules-exclude:
     - test/**
   anti-patterns:

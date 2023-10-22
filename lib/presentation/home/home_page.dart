@@ -64,10 +64,40 @@ class _BookList extends StatefulWidget {
 class _BookListState extends State<_BookList> {
   final ScrollController _scrollController = ScrollController();
 
+  int _booksLength = 0;
+
+  void _onScroll() {
+    if (_isBottom) context.read<HomeBloc>().add(const LoadBooksEvent());
+  }
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+
+    final double maxScroll = _scrollController.position.maxScrollExtent;
+    final double currentScroll = _scrollController.offset;
+
+    final double pxPerCard = maxScroll / _booksLength;
+
+    return currentScroll >= (maxScroll - (pxPerCard * 3));
+  }
+
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      if (context.read<HomeBloc>().state.requestParameterChanged) _scrollController.jumpTo(0);
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
+
+    super.dispose();
   }
 
   @override
@@ -81,7 +111,7 @@ class _BookListState extends State<_BookList> {
         buildWhen: (HomeState oldState, HomeState newState) {
           return (oldState.books != newState.books) ||
               (oldState.bookDownloadStatus != newState.bookDownloadStatus) ||
-              (oldState.hasReachedMax != newState.hasReachedMax);
+              (oldState.booksPeaked != newState.booksPeaked);
         },
         builder: (BuildContext context, HomeState state) {
           if (state.bookDownloadStatus.isInitial) {
@@ -107,10 +137,8 @@ class _BookListState extends State<_BookList> {
 
           final List<BookModel> books = state.books;
 
-          if (state.bookDownloadStatus.isSuccess && books.isNotEmpty) {
-            SchedulerBinding.instance.addPostFrameCallback((_) {
-              if (state.requestParameterChanged) _scrollController.jumpTo(0);
-            });
+          if (state.isBookLoadedSuccessfully) {
+            _booksLength = books.length;
 
             return ListView.separated(
               itemBuilder: (BuildContext context, int index) {
@@ -119,7 +147,7 @@ class _BookListState extends State<_BookList> {
                     : BookTile.fromModel(books[index]);
               },
               separatorBuilder: (BuildContext context, int index) => const Divider(height: 1),
-              itemCount: state.hasReachedMax ? books.length : books.length + 1,
+              itemCount: state.booksPeaked ? books.length : books.length + 1,
               controller: _scrollController,
               physics: const BouncingScrollPhysics(),
             );
@@ -128,28 +156,6 @@ class _BookListState extends State<_BookList> {
         },
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _scrollController
-      ..removeListener(_onScroll)
-      ..dispose();
-
-    super.dispose();
-  }
-
-  void _onScroll() {
-    if (_isBottom) context.read<HomeBloc>().add(const LoadBooksEvent());
-  }
-
-  bool get _isBottom {
-    if (!_scrollController.hasClients) return false;
-
-    final double maxScroll = _scrollController.position.maxScrollExtent;
-    final double currentScroll = _scrollController.offset;
-
-    return currentScroll >= (maxScroll * 0.85);
   }
 }
 

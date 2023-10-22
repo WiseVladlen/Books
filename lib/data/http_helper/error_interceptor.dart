@@ -14,6 +14,6 @@ class ErrorInterceptor extends Interceptor {
   @override
   Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
     onResponseErrorHandler(err.message, err.error, err.stackTrace);
-    handler.next(err);
+    handler.reject(err);
   }
 }
