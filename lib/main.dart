@@ -1,12 +1,9 @@
 import 'dart:async';
 
-import 'package:books/data/http_helper/error_interceptor.dart';
-import 'package:books/data/remote_data_source/book_remote_data_source.dart';
-import 'package:books/data/repository/book_repository.dart';
-import 'package:books/domain/data_source/book_remote_data_source.dart';
-import 'package:books/domain/repository/book_repository.dart';
-import 'package:books/presentation/home/home_page.dart';
-import 'package:books/app/theme_data.dart';
+import 'package:books/data/data.dart';
+import 'package:books/domain/domain.dart';
+import 'package:books/presentation/presentation.dart';
+import 'package:books/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

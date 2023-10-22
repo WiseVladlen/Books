@@ -1,4 +1,4 @@
-import 'package:books/utils/text_style.dart';
+import 'package:books/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 @immutable

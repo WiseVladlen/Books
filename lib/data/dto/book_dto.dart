@@ -1,5 +1,5 @@
-import 'package:books/data/converter/date_converter.dart';
-import 'package:books/domain/model/book_model.dart';
+import 'package:books/data/converter/converter.dart';
+import 'package:books/domain/model/model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'book_dto.g.dart';

@@ -1,5 +1,4 @@
-import 'package:books/domain/model/book_model.dart';
-import 'package:books/domain/model/enum/download_status.dart';
+import 'package:books/domain/domain.dart';
 import 'package:equatable/equatable.dart';
 
 class HomeState extends Equatable {

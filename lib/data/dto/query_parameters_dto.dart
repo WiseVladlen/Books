@@ -1,5 +1,5 @@
-import 'package:books/data/converter/num_converter.dart';
-import 'package:books/domain/model/query_parameters.dart';
+import 'package:books/data/converter/converter.dart';
+import 'package:books/domain/model/model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'query_parameters_dto.g.dart';

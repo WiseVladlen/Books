@@ -1,8 +1,6 @@
-import 'package:books/app/widget/book_placeholder.dart';
-import 'package:books/app/widget/custom_network_image.dart';
-import 'package:books/domain/model/book_model.dart';
-import 'package:books/utils/build_context.dart';
-import 'package:books/utils/text_format.dart';
+import 'package:books/app/app.dart';
+import 'package:books/domain/model/model.dart';
+import 'package:books/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class BookTile extends StatelessWidget {

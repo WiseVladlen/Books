@@ -2,12 +2,8 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:books/domain/model/book_model.dart';
-import 'package:books/domain/model/enum/download_status.dart';
-import 'package:books/domain/model/query_parameters.dart';
-import 'package:books/domain/repository/book_repository.dart';
-import 'package:books/presentation/home/bloc/home_event.dart';
-import 'package:books/presentation/home/bloc/home_state.dart';
+import 'package:books/domain/domain.dart';
+import 'package:books/presentation/home/home.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 const String tag = 'HomeBloc';

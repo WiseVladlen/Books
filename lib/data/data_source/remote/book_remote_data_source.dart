@@ -1,10 +1,5 @@
-import 'package:books/data/dto/book_dto.dart';
-import 'package:books/data/dto/query_parameters_dto.dart';
-import 'package:books/data/http_helper/error_interceptor.dart';
-import 'package:books/data/http_helper/rest_path.dart';
-import 'package:books/domain/data_source/book_remote_data_source.dart';
-import 'package:books/domain/model/book_model.dart';
-import 'package:books/domain/model/query_parameters.dart';
+import 'package:books/data/data.dart';
+import 'package:books/domain/domain.dart';
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 

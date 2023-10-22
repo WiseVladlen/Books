@@ -1,4 +1,4 @@
-import 'package:books/app/widget/book_placeholder.dart';
+import 'package:books/app/app.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
