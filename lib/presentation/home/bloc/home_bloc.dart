@@ -1,9 +1,9 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:books/domain/domain.dart';
 import 'package:books/presentation/home/home.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 const String tag = 'HomeBloc';
@@ -15,12 +15,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<RefreshBooksEvent>(_refreshBooks);
   }
 
-  final List<BookModel> errorTemplate = const <BookModel>[];
-
   final IBookRepository bookRepository;
 
   Future<void> _loadBooks(LoadBooksEvent event, Emitter<HomeState> emit) async {
-    if (state.booksPeaked) return;
+    if (state.booksHavePeaked) return;
 
     if (state.query.isNotEmpty) {
       final List<BookModel> books = await _runSafely(
@@ -31,17 +29,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             startIndex: state.lastBookIndex,
           ),
         ),
-        onError: () => errorTemplate,
       );
-
-      if (books == errorTemplate) return;
 
       emit(
         state.copyWith(
           books: <BookModel>[...state.books, ...books],
           bookDownloadStatus: DownloadStatus.success,
           lastBookIndex: state.lastBookIndex + books.length,
-          booksPeaked: books.length < QueryParameters.pageSize,
+          booksHavePeaked: books.length < QueryParameters.pageSize,
           requestParameterChanged: false,
         ),
       );
@@ -60,7 +55,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           books: <BookModel>[],
           bookDownloadStatus: DownloadStatus.initial,
           lastBookIndex: 0,
-          booksPeaked: false,
+          booksHavePeaked: false,
           requestParameterChanged: true,
         ),
       );
@@ -79,17 +74,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       () => bookRepository.getBooks(
         queryParameters: QueryParameters(query: query),
       ),
-      onError: () => errorTemplate,
     );
-
-    if (books == errorTemplate) return;
 
     emit(
       state.copyWith(
         books: books,
         bookDownloadStatus: DownloadStatus.success,
         lastBookIndex: books.length,
-        booksPeaked: books.length < QueryParameters.pageSize,
+        booksHavePeaked: books.length < QueryParameters.pageSize,
       ),
     );
   }
@@ -103,17 +95,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         () => bookRepository.getBooks(
           queryParameters: QueryParameters(query: state.query),
         ),
-        onError: () => errorTemplate,
       );
 
-      if (books == errorTemplate) return;
+      event.completer.complete(true);
 
       emit(
         state.copyWith(
           books: books,
           lastBookIndex: books.length,
-          booksPeaked: books.length < QueryParameters.pageSize,
-          refreshed: true,
+          booksHavePeaked: books.length < QueryParameters.pageSize,
           requestParameterChanged: true,
         ),
       );
@@ -122,24 +112,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   T _runSafely<T>(
     Emitter<HomeState> emit,
-    T Function() query, {
-    required T Function() onError,
-  }) {
+    T Function() query,
+  ) {
     try {
       return query();
-    } on IOException catch (error, stack) {
+    } on DioException catch (error, stack) {
       _handleException(emit: emit, message: tag, error: error, stackTrace: stack);
-    } on Exception catch (error, stack) {
-      _handleException(emit: emit, message: tag, error: error, stackTrace: stack);
-    } catch (error, stack) {
-      _handleException(
-        emit: emit,
-        message: '$tag - Unspecified type exception',
-        error: error,
-        stackTrace: stack,
-      );
+      rethrow;
     }
-    return onError();
   }
 
   void _handleException({

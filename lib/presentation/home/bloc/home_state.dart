@@ -7,8 +7,7 @@ class HomeState extends Equatable {
     this.books = const <BookModel>[],
     this.bookDownloadStatus = DownloadStatus.initial,
     this.lastBookIndex = 0,
-    this.booksPeaked = false,
-    this.refreshed = false,
+    this.booksHavePeaked = false,
     this.requestParameterChanged = false,
   });
 
@@ -16,19 +15,17 @@ class HomeState extends Equatable {
   final List<BookModel> books;
   final DownloadStatus bookDownloadStatus;
   final int lastBookIndex;
-  final bool booksPeaked;
-  final bool refreshed;
+  final bool booksHavePeaked;
   final bool requestParameterChanged;
 
-  bool get isBookLoadedSuccessfully => bookDownloadStatus.isSuccess && books.isNotEmpty;
+  bool get isBooksLoadedSuccessfully => bookDownloadStatus.isSuccess && books.isNotEmpty;
 
   HomeState copyWith({
     String? query,
     List<BookModel>? books,
     DownloadStatus? bookDownloadStatus,
     int? lastBookIndex,
-    bool? booksPeaked,
-    bool? refreshed,
+    bool? booksHavePeaked,
     bool? requestParameterChanged,
   }) {
     return HomeState(
@@ -36,8 +33,7 @@ class HomeState extends Equatable {
       books: books ?? this.books,
       bookDownloadStatus: bookDownloadStatus ?? this.bookDownloadStatus,
       lastBookIndex: lastBookIndex ?? this.lastBookIndex,
-      booksPeaked: booksPeaked ?? this.booksPeaked,
-      refreshed: refreshed ?? false,
+      booksHavePeaked: booksHavePeaked ?? this.booksHavePeaked,
       requestParameterChanged: requestParameterChanged ?? this.requestParameterChanged,
     );
   }
@@ -48,8 +44,7 @@ class HomeState extends Equatable {
         books,
         bookDownloadStatus,
         lastBookIndex,
-        booksPeaked,
-        refreshed,
+        booksHavePeaked,
         requestParameterChanged,
       ];
 }

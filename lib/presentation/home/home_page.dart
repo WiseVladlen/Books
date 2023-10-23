@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:books/domain/domain.dart';
 import 'package:books/presentation/home/home.dart';
 import 'package:books/utils/utils.dart';
@@ -99,14 +101,15 @@ class _BookListState extends State<_BookList> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        final HomeBloc bloc = context.read<HomeBloc>()..add(const RefreshBooksEvent());
-        await bloc.stream.firstWhere((HomeState element) => element.refreshed);
+        final Completer<bool> completer = Completer<bool>();
+        context.read<HomeBloc>().add(RefreshBooksEvent(completer));
+        await completer.future;
       },
       child: BlocBuilder<HomeBloc, HomeState>(
         buildWhen: (HomeState oldState, HomeState newState) {
           return (oldState.books != newState.books) ||
               (oldState.bookDownloadStatus != newState.bookDownloadStatus) ||
-              (oldState.booksPeaked != newState.booksPeaked);
+              (oldState.booksHavePeaked != newState.booksHavePeaked);
         },
         builder: (BuildContext context, HomeState state) {
           if (state.bookDownloadStatus.isInitial) {
@@ -132,7 +135,7 @@ class _BookListState extends State<_BookList> {
 
           final List<BookModel> books = state.books;
 
-          if (state.isBookLoadedSuccessfully) {
+          if (state.isBooksLoadedSuccessfully) {
             _booksLength = books.length;
 
             return ListView.separated(
@@ -142,7 +145,7 @@ class _BookListState extends State<_BookList> {
                     : BookTile.fromModel(books[index]);
               },
               separatorBuilder: (BuildContext context, int index) => const Divider(height: 1),
-              itemCount: state.booksPeaked ? books.length : books.length + 1,
+              itemCount: state.booksHavePeaked ? books.length : books.length + 1,
               controller: _scrollController,
               physics: const BouncingScrollPhysics(),
             );
