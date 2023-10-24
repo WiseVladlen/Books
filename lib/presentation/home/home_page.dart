@@ -61,40 +61,13 @@ class _BookList extends StatefulWidget {
 class _BookListState extends State<_BookList> {
   final ScrollController _scrollController = ScrollController();
 
-  int _booksLength = 0;
-
-  void _onScroll() {
-    if (_isBottom) context.read<HomeBloc>().add(const LoadBooksEvent());
-  }
-
-  bool get _isBottom {
-    if (!_scrollController.hasClients) return false;
-
-    final double maxScroll = _scrollController.position.maxScrollExtent;
-    final double currentScroll = _scrollController.offset;
-
-    final double pxPerCard = maxScroll / _booksLength;
-
-    return currentScroll >= (maxScroll - (pxPerCard * 3));
-  }
-
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_onScroll);
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
       if (context.read<HomeBloc>().state.requestParameterChanged) _scrollController.jumpTo(0);
     });
-  }
-
-  @override
-  void dispose() {
-    _scrollController
-      ..removeListener(_onScroll)
-      ..dispose();
-
-    super.dispose();
   }
 
   @override
@@ -136,17 +109,16 @@ class _BookListState extends State<_BookList> {
           final List<BookModel> books = state.books;
 
           if (state.isBooksLoadedSuccessfully) {
-            _booksLength = books.length;
-
             return ListView.separated(
               itemBuilder: (BuildContext context, int index) {
-                return index == books.length
-                    ? const _BottomLoader()
-                    : BookTile.fromModel(books[index]);
+                if (index == books.length) {
+                  context.read<HomeBloc>().add(const LoadBooksEvent());
+                  return const _BottomLoader();
+                }
+                return BookTile.fromModel(books[index]);
               },
               separatorBuilder: (BuildContext context, int index) => const Divider(height: 1),
               itemCount: state.booksHavePeaked ? books.length : books.length + 1,
-              controller: _scrollController,
               physics: const BouncingScrollPhysics(),
             );
           }
