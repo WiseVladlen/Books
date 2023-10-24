@@ -17,5 +17,5 @@ final class SearchQueryChangedEvent extends HomeEvent {
 final class RefreshBooksEvent extends HomeEvent {
   const RefreshBooksEvent(this.completer);
 
-  final Completer<bool> completer;
+  final Completer<void> completer;
 }

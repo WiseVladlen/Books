@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:books/domain/domain.dart';
@@ -22,13 +23,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     if (state.query.isNotEmpty) {
       final List<BookModel> books = await _runSafely(
-        emit,
         () => bookRepository.getBooks(
           queryParameters: QueryParameters(
             query: state.query,
             startIndex: state.lastBookIndex,
           ),
         ),
+        emit: emit,
       );
 
       emit(
@@ -70,10 +71,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
 
     final List<BookModel> books = await _runSafely(
-      emit,
       () => bookRepository.getBooks(
         queryParameters: QueryParameters(query: query),
       ),
+      emit: emit,
     );
 
     emit(
@@ -91,13 +92,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     if (state.query.isNotEmpty) {
       final List<BookModel> books = await _runSafely(
-        emit,
         () => bookRepository.getBooks(
           queryParameters: QueryParameters(query: state.query),
         ),
+        emit: emit,
+        onComplete: () => event.completer.complete(),
       );
-
-      event.completer.complete(true);
 
       emit(
         state.copyWith(
@@ -111,14 +111,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Future<T> _runSafely<T>(
-    Emitter<HomeState> emit,
-    Future<T> Function() query,
-  ) async {
+    Future<T> Function() query, {
+    required Emitter<HomeState> emit,
+    VoidCallback? onComplete,
+  }) async {
     try {
       return await query();
     } on DioException catch (error, stack) {
       _handleException(emit: emit, message: tag, error: error, stackTrace: stack);
       rethrow;
+    } finally {
+      onComplete?.call();
     }
   }
 

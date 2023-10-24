@@ -71,10 +71,17 @@ class _BookListState extends State<_BookList> {
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        final Completer<bool> completer = Completer<bool>();
+        final Completer<void> completer = Completer<void>();
         context.read<HomeBloc>().add(RefreshBooksEvent(completer));
         await completer.future;
       },
