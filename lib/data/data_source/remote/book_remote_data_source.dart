@@ -5,7 +5,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 class GoogleBooksDataSourceImpl implements IBookRemoteDataSource {
   GoogleBooksDataSourceImpl({required ErrorInterceptor errorInterceptor}) {
-    _dio = Dio()
+    _dio = Dio(BaseOptions(baseUrl: RestPaths.baseUrl))
       ..interceptors.addAll(<Interceptor>[
         PrettyDioLogger(
           requestHeader: true,
@@ -21,7 +21,7 @@ class GoogleBooksDataSourceImpl implements IBookRemoteDataSource {
   @override
   Future<List<BookModel>> getBooks({required QueryParameters queryParameters}) async {
     final Response<dynamic> response = await _dio.get(
-      RestPaths.baseUrl,
+      RestPaths.booksPath,
       queryParameters: queryParameters.dto.toJson(),
     );
     return BookResponseDTO.fromJson(response.data as Map<String, dynamic>)

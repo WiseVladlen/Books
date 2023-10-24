@@ -110,12 +110,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
   }
 
-  T _runSafely<T>(
+  Future<T> _runSafely<T>(
     Emitter<HomeState> emit,
-    T Function() query,
-  ) {
+    Future<T> Function() query,
+  ) async {
     try {
-      return query();
+      return await query();
     } on DioException catch (error, stack) {
       _handleException(emit: emit, message: tag, error: error, stackTrace: stack);
       rethrow;

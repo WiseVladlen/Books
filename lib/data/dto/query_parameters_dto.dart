@@ -1,4 +1,3 @@
-import 'package:books/data/converter/converter.dart';
 import 'package:books/domain/model/model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -15,10 +14,10 @@ final class QueryParametersDTO {
   @JsonKey(name: 'q')
   final String query;
 
-  @JsonKey(name: 'startIndex', toJson: NumConverter.toJson)
+  @JsonKey(name: 'startIndex')
   final int startIndex;
 
-  @JsonKey(name: 'maxResults', toJson: NumConverter.toJson)
+  @JsonKey(name: 'maxResults')
   final int maxResults;
 
   Map<String, dynamic> toJson() => _$QueryParametersDTOToJson(this);

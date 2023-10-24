@@ -41,7 +41,7 @@ final class VolumeInfoDTO {
   @JsonKey(name: 'publisher')
   final String? publisher;
 
-  @JsonKey(name: 'publishedDate', fromJson: DateConverter.fromJson)
+  @JsonKey(name: 'publishedDate', fromJson: DateConverter.toDateTime)
   final DateTime? publishedDate;
 
   @JsonKey(name: 'description')

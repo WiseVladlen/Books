@@ -1,5 +1,5 @@
 class DateConverter {
-  static DateTime? fromJson(String? value) {
+  static DateTime? toDateTime(String? value) {
     return value != null ? DateTime.tryParse(value) : null;
   }
 }

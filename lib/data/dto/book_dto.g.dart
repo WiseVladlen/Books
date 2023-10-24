@@ -15,7 +15,7 @@ VolumeInfoDTO _$VolumeInfoDTOFromJson(Map<String, dynamic> json) => VolumeInfoDT
       authors: (json['authors'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
       pageCount: json['pageCount'] as int?,
       publisher: json['publisher'] as String?,
-      publishedDate: DateConverter.fromJson(json['publishedDate'] as String?),
+      publishedDate: DateConverter.toDateTime(json['publishedDate'] as String?),
       description: json['description'] as String?,
       imageLinks: json['imageLinks'] == null
           ? null
