@@ -61,9 +61,13 @@ class _BookList extends StatefulWidget {
 class _BookListState extends State<_BookList> {
   final ScrollController _scrollController = ScrollController();
 
+  int _booksLength = 0;
+
   @override
   void initState() {
     super.initState();
+
+    _scrollController.addListener(_onScroll);
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
       if (context.read<HomeBloc>().state.requestParameterChanged) _scrollController.jumpTo(0);
@@ -72,9 +76,26 @@ class _BookListState extends State<_BookList> {
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
 
     super.dispose();
+  }
+
+  void _onScroll() {
+    if (_isBottom) context.read<HomeBloc>().add(const LoadBooksEvent());
+  }
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+
+    final double maxScroll = _scrollController.position.maxScrollExtent;
+    final double currentScroll = _scrollController.offset;
+
+    final double pxPerCard = maxScroll / _booksLength;
+
+    return currentScroll >= (maxScroll - (pxPerCard * 3));
   }
 
   @override
@@ -82,7 +103,7 @@ class _BookListState extends State<_BookList> {
     return RefreshIndicator(
       onRefresh: () async {
         final Completer<void> completer = Completer<void>();
-        context.read<HomeBloc>().add(RefreshBooksEvent(completer));
+        context.read<HomeBloc>().add(RefreshBooksEvent(() => completer.complete()));
         await completer.future;
       },
       child: BlocBuilder<HomeBloc, HomeState>(
@@ -116,6 +137,8 @@ class _BookListState extends State<_BookList> {
           final List<BookModel> books = state.books;
 
           if (state.isBooksLoadedSuccessfully) {
+            _booksLength = books.length;
+
             return ListView.separated(
               itemBuilder: (BuildContext context, int index) {
                 if (index == books.length) {

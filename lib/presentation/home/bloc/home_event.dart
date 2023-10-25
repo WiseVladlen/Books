@@ -1,4 +1,4 @@
-import 'dart:async';
+part of 'home_bloc.dart';
 
 abstract class HomeEvent {
   const HomeEvent();
@@ -15,7 +15,7 @@ final class SearchQueryChangedEvent extends HomeEvent {
 }
 
 final class RefreshBooksEvent extends HomeEvent {
-  const RefreshBooksEvent(this.completer);
+  const RefreshBooksEvent(this.onComplete);
 
-  final Completer<void> completer;
+  final VoidCallback onComplete;
 }

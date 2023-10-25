@@ -14,7 +14,7 @@ final class ImageLinksDTO {
   final String thumbnail;
 }
 
-@JsonSerializable(explicitToJson: true, createToJson: false)
+@JsonSerializable(createToJson: false)
 final class VolumeInfoDTO {
   const VolumeInfoDTO({
     required this.title,

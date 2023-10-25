@@ -1,5 +1,4 @@
-import 'package:books/domain/domain.dart';
-import 'package:equatable/equatable.dart';
+part of 'home_bloc.dart';
 
 class HomeState extends Equatable {
   const HomeState({
