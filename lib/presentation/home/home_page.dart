@@ -59,9 +59,9 @@ class _BookList extends StatefulWidget {
 }
 
 class _BookListState extends State<_BookList> {
-  final ScrollController _scrollController = ScrollController();
+  static const int _scrollPadding = 400;
 
-  int _booksLength = 0;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -93,9 +93,7 @@ class _BookListState extends State<_BookList> {
     final double maxScroll = _scrollController.position.maxScrollExtent;
     final double currentScroll = _scrollController.offset;
 
-    final double pxPerCard = maxScroll / _booksLength;
-
-    return currentScroll >= (maxScroll - (pxPerCard * 3));
+    return currentScroll >= (maxScroll - _scrollPadding);
   }
 
   @override
@@ -137,15 +135,11 @@ class _BookListState extends State<_BookList> {
           final List<BookModel> books = state.books;
 
           if (state.isBooksLoadedSuccessfully) {
-            _booksLength = books.length;
-
             return ListView.separated(
               itemBuilder: (BuildContext context, int index) {
-                if (index == books.length) {
-                  context.read<HomeBloc>().add(const LoadBooksEvent());
-                  return const _BottomLoader();
-                }
-                return BookTile.fromModel(books[index]);
+                return index == books.length
+                    ? const _BottomLoader()
+                    : BookTile.fromModel(books[index]);
               },
               separatorBuilder: (BuildContext context, int index) => const Divider(height: 1),
               itemCount: state.booksHavePeaked ? books.length : books.length + 1,
