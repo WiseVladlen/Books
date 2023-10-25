@@ -30,5 +30,45 @@
   "languageHeader": "Language",
   "@languageHeader": {
     "description": "Header of the \"Language\" section"
+  },
+  "logInHeader": "Log In",
+  "@logInHeader": {
+    "description": "Header of login in the system"
+  },
+  "signUpHeader": "Sign Up",
+  "@signUpHeader": {
+    "description": "Header of authorization in the system"
+  },
+  "emailLabel": "Email",
+  "@emailLabel": {
+    "description": "The text of the label that identifies the user's email"
+  },
+  "passwordLabel": "Password",
+  "@passwordLabel": {
+    "description": "The text of the label that identifies the user's password"
+  },
+  "nameLabel": "Name",
+  "@nameLabel": {
+    "description": "The text of the label that identifies the user's name"
+  },
+  "invalidEmailMessage": "Invalid email",
+  "@invalidEmailMessage": {
+    "description": "Message about an incorrectly entered email"
+  },
+  "invalidPasswordMessage": "Invalid password",
+  "@invalidPasswordMessage": {
+    "description": "Message about an incorrectly entered password"
+  },
+  "invalidNameMessage": "Invalid name",
+  "@invalidNameMessage": {
+    "description": "Message about an incorrectly entered name"
+  },
+  "notAccountQuestion": "Don't have an account?",
+  "@notAccountQuestion": {
+    "description": "Question about the absence of a user account"
+  },
+  "alreadyHaveAccountQuestion": "Already have an account?",
+  "@alreadyHaveAccountQuestion": {
+    "description": "Question about the existence of an existing user account"
   }
 }
