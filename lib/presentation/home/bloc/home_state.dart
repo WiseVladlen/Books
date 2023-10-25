@@ -1,27 +1,49 @@
-import 'package:books/domain/model/book_model.dart';
-import 'package:books/domain/model/download_status.dart';
-import 'package:equatable/equatable.dart';
+part of 'home_bloc.dart';
 
 class HomeState extends Equatable {
   const HomeState({
-    this.books,
+    this.query = '',
+    this.books = const <BookModel>[],
     this.bookDownloadStatus = DownloadStatus.initial,
+    this.lastBookIndex = 0,
+    this.booksHavePeaked = false,
+    this.requestParameterChanged = false,
   });
 
-  final List<BookModel>? books;
+  final String query;
+  final List<BookModel> books;
   final DownloadStatus bookDownloadStatus;
+  final int lastBookIndex;
+  final bool booksHavePeaked;
+  final bool requestParameterChanged;
+
+  bool get isBooksLoadedSuccessfully => bookDownloadStatus.isSuccess && books.isNotEmpty;
 
   HomeState copyWith({
+    String? query,
     List<BookModel>? books,
     DownloadStatus? bookDownloadStatus,
-    String? errorMessage,
+    int? lastBookIndex,
+    bool? booksHavePeaked,
+    bool? requestParameterChanged,
   }) {
     return HomeState(
+      query: query ?? this.query,
       books: books ?? this.books,
       bookDownloadStatus: bookDownloadStatus ?? this.bookDownloadStatus,
+      lastBookIndex: lastBookIndex ?? this.lastBookIndex,
+      booksHavePeaked: booksHavePeaked ?? this.booksHavePeaked,
+      requestParameterChanged: requestParameterChanged ?? this.requestParameterChanged,
     );
   }
 
   @override
-  List<Object?> get props => [books, bookDownloadStatus];
+  List<Object> get props => <Object>[
+        query,
+        books,
+        bookDownloadStatus,
+        lastBookIndex,
+        booksHavePeaked,
+        requestParameterChanged,
+      ];
 }
