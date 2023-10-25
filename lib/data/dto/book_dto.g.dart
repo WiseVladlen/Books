@@ -8,7 +8,7 @@ part of 'book_dto.dart';
 
 ImageLinksDTO _$ImageLinksDTOFromJson(Map<String, dynamic> json) =>
     ImageLinksDTO(
-      thumbnail: json['thumbnail'] as String,
+      thumbnail: json['thumbnail'] as String? ?? '',
     );
 
 VolumeInfoDTO _$VolumeInfoDTOFromJson(Map<String, dynamic> json) =>
@@ -19,9 +19,9 @@ VolumeInfoDTO _$VolumeInfoDTOFromJson(Map<String, dynamic> json) =>
               .toList() ??
           [],
       pageCount: json['pageCount'] as int?,
-      publisher: json['publisher'] as String?,
+      publisher: json['publisher'] as String? ?? '',
       publishedDate: DateConverter.toDateTime(json['publishedDate'] as String?),
-      description: json['description'] as String?,
+      description: json['description'] as String? ?? '',
       imageLinks: json['imageLinks'] == null
           ? null
           : ImageLinksDTO.fromJson(json['imageLinks'] as Map<String, dynamic>),
