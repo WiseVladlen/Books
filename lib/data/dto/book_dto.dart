@@ -10,19 +10,19 @@ final class ImageLinksDTO {
 
   factory ImageLinksDTO.fromJson(Map<String, dynamic> json) => _$ImageLinksDTOFromJson(json);
 
-  @JsonKey(name: 'thumbnail')
+  @JsonKey(name: 'thumbnail', defaultValue: '')
   final String thumbnail;
 }
 
-@JsonSerializable(explicitToJson: true, createToJson: false)
+@JsonSerializable(createToJson: false)
 final class VolumeInfoDTO {
   const VolumeInfoDTO({
     required this.title,
     required this.authors,
     this.pageCount,
-    this.publisher,
+    required this.publisher,
     this.publishedDate,
-    this.description,
+    required this.description,
     required this.imageLinks,
     required this.language,
   });
@@ -38,14 +38,14 @@ final class VolumeInfoDTO {
   @JsonKey(name: 'pageCount')
   final int? pageCount;
 
-  @JsonKey(name: 'publisher')
-  final String? publisher;
+  @JsonKey(name: 'publisher', defaultValue: '')
+  final String publisher;
 
   @JsonKey(name: 'publishedDate', fromJson: DateConverter.toDateTime)
   final DateTime? publishedDate;
 
-  @JsonKey(name: 'description')
-  final String? description;
+  @JsonKey(name: 'description', defaultValue: '')
+  final String description;
 
   @JsonKey(name: 'imageLinks')
   final ImageLinksDTO? imageLinks;
@@ -54,7 +54,7 @@ final class VolumeInfoDTO {
   final String language;
 }
 
-@JsonSerializable(explicitToJson: true, createToJson: false)
+@JsonSerializable(createToJson: false)
 class BookDTO {
   const BookDTO({required this.id, required this.volumeInfo});
 
@@ -67,7 +67,7 @@ class BookDTO {
   final VolumeInfoDTO volumeInfo;
 }
 
-@JsonSerializable(explicitToJson: true, createToJson: false)
+@JsonSerializable(createToJson: false)
 class BookResponseDTO {
   const BookResponseDTO({required this.books});
 

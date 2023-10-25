@@ -59,11 +59,15 @@ class _BookList extends StatefulWidget {
 }
 
 class _BookListState extends State<_BookList> {
+  static const int _scrollPadding = 400;
+
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
+
+    _scrollController.addListener(_onScroll);
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
       if (context.read<HomeBloc>().state.requestParameterChanged) _scrollController.jumpTo(0);
@@ -72,9 +76,24 @@ class _BookListState extends State<_BookList> {
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
 
     super.dispose();
+  }
+
+  void _onScroll() {
+    if (_isBottom) context.read<HomeBloc>().add(const LoadBooksEvent());
+  }
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+
+    final double maxScroll = _scrollController.position.maxScrollExtent;
+    final double currentScroll = _scrollController.offset;
+
+    return currentScroll >= (maxScroll - _scrollPadding);
   }
 
   @override
@@ -82,7 +101,7 @@ class _BookListState extends State<_BookList> {
     return RefreshIndicator(
       onRefresh: () async {
         final Completer<void> completer = Completer<void>();
-        context.read<HomeBloc>().add(RefreshBooksEvent(completer));
+        context.read<HomeBloc>().add(RefreshBooksEvent(() => completer.complete()));
         await completer.future;
       },
       child: BlocBuilder<HomeBloc, HomeState>(
@@ -118,11 +137,9 @@ class _BookListState extends State<_BookList> {
           if (state.isBooksLoadedSuccessfully) {
             return ListView.separated(
               itemBuilder: (BuildContext context, int index) {
-                if (index == books.length) {
-                  context.read<HomeBloc>().add(const LoadBooksEvent());
-                  return const _BottomLoader();
-                }
-                return BookTile.fromModel(books[index]);
+                return index == books.length
+                    ? const _BottomLoader()
+                    : BookTile.fromModel(books[index]);
               },
               separatorBuilder: (BuildContext context, int index) => const Divider(height: 1),
               itemCount: state.booksHavePeaked ? books.length : books.length + 1,

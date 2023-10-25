@@ -1,11 +1,15 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:ui';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:books/domain/domain.dart';
-import 'package:books/presentation/home/home.dart';
 import 'package:dio/dio.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+part 'home_event.dart';
+part 'home_state.dart';
 
 const String tag = 'HomeBloc';
 
@@ -96,7 +100,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           queryParameters: QueryParameters(query: state.query),
         ),
         emit: emit,
-        onComplete: () => event.completer.complete(),
+        onComplete: () => event.onComplete(),
       );
 
       emit(

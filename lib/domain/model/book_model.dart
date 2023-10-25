@@ -6,9 +6,9 @@ final class BookModel extends Equatable {
     required this.title,
     this.authors = const <String>[],
     this.pageCount,
-    this.publisher,
+    required this.publisher,
     this.publishedDate,
-    this.description,
+    required this.description,
     this.imageLink,
     required this.language,
   });
@@ -17,9 +17,9 @@ final class BookModel extends Equatable {
   final String title;
   final List<String> authors;
   final int? pageCount;
-  final String? publisher;
+  final String publisher;
   final DateTime? publishedDate;
-  final String? description;
+  final String description;
   final String? imageLink;
   final String language;
 
