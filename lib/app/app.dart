@@ -1,3 +1,3 @@
 //GENERATED BARREL FILE
-export './user_authentication_bloc/user_authentication_bloc.dart';
+export './user_auth_bloc/user_auth_bloc.dart';
 export './widget/widget.dart';

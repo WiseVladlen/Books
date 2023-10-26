@@ -1,9 +1,8 @@
-import 'package:books/domain/model/model.dart';
-import 'package:equatable/equatable.dart';
+part of 'user_auth_bloc.dart';
 
 final class UserAuthState extends Equatable {
   const UserAuthState._({
-    this.user = UserModel.proxy,
+    this.user,
     this.status = AuthenticationStatus.unauthenticated,
   });
 
@@ -15,9 +14,9 @@ final class UserAuthState extends Equatable {
           status: AuthenticationStatus.authenticated,
         );
 
-  final UserModel user;
+  final UserModel? user;
   final AuthenticationStatus status;
 
   @override
-  List<Object> get props => <Object>[user, status];
+  List<Object?> get props => <Object?>[user, status];
 }

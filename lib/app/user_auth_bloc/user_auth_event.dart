@@ -1,4 +1,4 @@
-part of 'user_bloc.dart';
+part of 'user_auth_bloc.dart';
 
 abstract class UserAuthEvent {
   const UserAuthEvent();

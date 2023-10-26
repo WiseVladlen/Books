@@ -1,10 +1,11 @@
 import 'dart:async';
 
-import 'package:books/app/user_authentication_bloc/user_authentication_bloc.dart';
 import 'package:books/domain/domain.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-part 'user_event.dart';
+part 'user_auth_event.dart';
+part 'user_auth_state.dart';
 
 class UserAuthBloc extends Bloc<UserAuthEvent, UserAuthState> {
   UserAuthBloc({required this.authRepository}) : super(const UserAuthState.unauthenticated()) {
@@ -25,7 +26,11 @@ class UserAuthBloc extends Bloc<UserAuthEvent, UserAuthState> {
       case AuthenticationStatus.unauthenticated:
         emit(const UserAuthState.unauthenticated());
       case AuthenticationStatus.authenticated:
-        emit(const UserAuthState.authenticated(user: UserModel.proxy));
+        emit(
+          const UserAuthState.authenticated(
+            user: UserModel(id: 0, email: 'email', name: 'name'),
+          ),
+        );
     }
   }
 
