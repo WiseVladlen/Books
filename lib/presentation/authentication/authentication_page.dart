@@ -17,13 +17,12 @@ class AuthenticationPage extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 24),
+                    padding: const EdgeInsets.only(bottom: 16),
                     child: Text(
                       context.l10n.appName,
                       style: context.textStyles.appTitleLarge,
                     ),
                   ),
-                  //const Divider(height: 24, color: Colors.transparent),
                   ChangeNotifierProvider<AuthenticationPageModel>(
                     create: (_) => AuthenticationPageModel(),
                     child: Builder(
