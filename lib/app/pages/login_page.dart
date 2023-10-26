@@ -25,7 +25,7 @@ class LoginPage extends StatelessWidget {
             builder: (BuildContext context, LoginState state) {
               return OutlinedTextField(
                 key: const Key('loginPage_emailInput_textField'),
-                onChanged: (String value) => context.read<LoginCubit>().emailChanged(value),
+                valueChanged: (String value) => context.read<LoginCubit>().emailChanged(value),
                 labelText: context.l10n.emailLabel,
                 errorText: state.email.hasError ? context.l10n.invalidEmailMessage : null,
                 padding: const EdgeInsets.symmetric(vertical: 8),
@@ -39,7 +39,7 @@ class LoginPage extends StatelessWidget {
             builder: (BuildContext context, LoginState state) {
               return OutlinedTextField(
                 key: const Key('loginPage_passwordInput_textField'),
-                onChanged: (String value) => context.read<LoginCubit>().passwordChanged(value),
+                valueChanged: (String value) => context.read<LoginCubit>().passwordChanged(value),
                 labelText: context.l10n.passwordLabel,
                 errorText: state.password.hasError ? context.l10n.invalidPasswordMessage : null,
                 padding: const EdgeInsets.symmetric(vertical: 8),

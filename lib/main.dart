@@ -30,16 +30,18 @@ void main() {
     remoteDataSource: bookRemoteDataSource,
   );
 
+  final IRepositoryStorage repositoryStorage = RepositoryStorageImpl(
+    authenticationRepository: authRepository,
+    bookRepository: bookRepository,
+  );
+
   FlutterError.onError = (FlutterErrorDetails details) {
     // TODO: handle error
   };
 
   runZonedGuarded(
     () => runApp(
-      App(
-        authRepository: authRepository,
-        bookRepository: bookRepository,
-      ),
+      App(repositoryStorage: repositoryStorage),
     ),
     (Object error, StackTrace stack) {
       // TODO: handle error
@@ -48,21 +50,20 @@ void main() {
 }
 
 class App extends StatelessWidget {
-  const App({
-    super.key,
-    required this.authRepository,
-    required this.bookRepository,
-  });
+  const App({super.key, required this.repositoryStorage});
 
-  final IAuthenticationRepository authRepository;
-  final IBookRepository bookRepository;
+  final IRepositoryStorage repositoryStorage;
 
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: <SingleChildWidget>[
-        RepositoryProvider<IAuthenticationRepository>.value(value: authRepository),
-        RepositoryProvider<IBookRepository>.value(value: bookRepository),
+        RepositoryProvider<IAuthenticationRepository>.value(
+          value: repositoryStorage.authenticationRepository,
+        ),
+        RepositoryProvider<IBookRepository>.value(
+          value: repositoryStorage.bookRepository,
+        ),
       ],
       child: BlocProvider<UserAuthBloc>(
         create: (BuildContext context) => UserAuthBloc(

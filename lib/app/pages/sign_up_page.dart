@@ -25,7 +25,7 @@ class SignUpPage extends StatelessWidget {
             builder: (BuildContext context, SignUpState state) {
               return OutlinedTextField(
                 key: const Key('signUpPage_nameInput_textField'),
-                onChanged: (String value) => context.read<SignUpCubit>().nameChanged(value),
+                valueChanged: (String value) => context.read<SignUpCubit>().nameChanged(value),
                 labelText: context.l10n.nameLabel,
                 errorText: state.name.hasError ? context.l10n.invalidNameMessage : null,
                 padding: const EdgeInsets.symmetric(vertical: 8),
@@ -39,7 +39,7 @@ class SignUpPage extends StatelessWidget {
             builder: (BuildContext context, SignUpState state) {
               return OutlinedTextField(
                 key: const Key('signUpPage_emailInput_textField'),
-                onChanged: (String value) => context.read<SignUpCubit>().emailChanged(value),
+                valueChanged: (String value) => context.read<SignUpCubit>().emailChanged(value),
                 labelText: context.l10n.emailLabel,
                 errorText: state.email.hasError ? context.l10n.invalidEmailMessage : null,
                 padding: const EdgeInsets.symmetric(vertical: 8),
@@ -53,7 +53,7 @@ class SignUpPage extends StatelessWidget {
             builder: (BuildContext context, SignUpState state) {
               return OutlinedTextField(
                 key: const Key('signUpPage_passwordInput_textField'),
-                onChanged: (String value) => context.read<SignUpCubit>().passwordChanged(value),
+                valueChanged: (String value) => context.read<SignUpCubit>().passwordChanged(value),
                 labelText: context.l10n.passwordLabel,
                 errorText: state.password.hasError ? context.l10n.invalidPasswordMessage : null,
                 padding: const EdgeInsets.symmetric(vertical: 8),

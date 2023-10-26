@@ -10,7 +10,7 @@ class OutlinedTextField extends StatelessWidget {
     this.borderWidth = 2,
     this.primaryColor = ThemeDataX.outlinedTextFieldPrimaryColor,
     this.padding = EdgeInsets.zero,
-    required this.onChanged,
+    required this.valueChanged,
   });
 
   final String labelText;
@@ -23,14 +23,14 @@ class OutlinedTextField extends StatelessWidget {
 
   final EdgeInsets padding;
 
-  final void Function(String value) onChanged;
+  final void Function(String value) valueChanged;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: padding,
       child: TextField(
-        onChanged: (String value) => onChanged(value),
+        onChanged: valueChanged,
         decoration: InputDecoration(
           labelText: labelText,
           errorText: errorText,
