@@ -1,8 +1,10 @@
 import 'package:books/domain/domain.dart';
-import 'package:books/presentation/authentication/login/cubit/cubit.dart';
 import 'package:books/utils/form/form.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+
+part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit({required this.authenticationRepository}) : super(const LoginState());
