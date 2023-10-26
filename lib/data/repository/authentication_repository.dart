@@ -7,9 +7,7 @@ class AuthenticationRepository implements IAuthenticationRepository {
       StreamController<AuthenticationStatus>();
 
   @override
-  Stream<AuthenticationStatus> get statusStream async* {
-    yield* _statusStreamController.stream;
-  }
+  Stream<AuthenticationStatus> get statusStream => _statusStreamController.stream;
 
   @override
   Future<void> signUp({required RegistrationDataModel model}) async {
