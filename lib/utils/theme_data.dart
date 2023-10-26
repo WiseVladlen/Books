@@ -19,4 +19,6 @@ class ThemeDataX {
           TextStyles(),
         ],
       );
+
+  static const Color outlinedTextFieldPrimaryColor = Colors.green;
 }
