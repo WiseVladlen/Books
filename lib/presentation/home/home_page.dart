@@ -143,6 +143,7 @@ class _BookListState extends State<_BookList> {
               },
               separatorBuilder: (BuildContext context, int index) => const Divider(height: 1),
               itemCount: state.booksHavePeaked ? books.length : books.length + 1,
+              controller: _scrollController,
               physics: const BouncingScrollPhysics(),
             );
           }
