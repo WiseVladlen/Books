@@ -11,16 +11,19 @@ class AuthenticationRepository implements IAuthenticationRepository {
 
   @override
   Future<void> signUp({required RegistrationDataModel model}) async {
+    // TODO
     await logIn(model: LoginDataModel(email: model.email, password: model.password));
   }
 
   @override
   Future<void> logIn({required LoginDataModel model}) async {
-    _statusStreamController.sink.add(AuthenticationStatus.authenticated);
+    // TODO
+    _statusStreamController.add(AuthenticationStatus.authenticated);
   }
 
   @override
   Future<void> logOut() async {
-    _statusStreamController.sink.add(AuthenticationStatus.unauthenticated);
+    // TODO
+    _statusStreamController.add(AuthenticationStatus.unauthenticated);
   }
 }

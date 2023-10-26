@@ -13,3 +13,11 @@ final class _AuthenticationStatusChanged extends UserAuthEvent {
 final class LogoutRequested extends UserAuthEvent {
   const LogoutRequested();
 }
+
+final class SwitchToLoginPage extends UserAuthEvent {
+  const SwitchToLoginPage();
+}
+
+final class SwitchToSignUpPage extends UserAuthEvent {
+  const SwitchToSignUpPage();
+}

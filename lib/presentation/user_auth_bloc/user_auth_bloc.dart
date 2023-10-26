@@ -11,6 +11,8 @@ class UserAuthBloc extends Bloc<UserAuthEvent, UserAuthState> {
   UserAuthBloc({required this.authRepository}) : super(const UserAuthState.unauthenticated()) {
     on<_AuthenticationStatusChanged>(_statusChanged);
     on<LogoutRequested>(_logoutRequested);
+    on<SwitchToLoginPage>(_switchToLoginPage);
+    on<SwitchToSignUpPage>(_switchToSignUpPage);
 
     _statusSubscription = authRepository.statusStream.listen((AuthenticationStatus status) {
       add(_AuthenticationStatusChanged(status));
@@ -28,6 +30,7 @@ class UserAuthBloc extends Bloc<UserAuthEvent, UserAuthState> {
       case AuthenticationStatus.authenticated:
         emit(
           const UserAuthState.authenticated(
+            // TODO
             user: UserModel(id: 0, email: 'email', name: 'name'),
           ),
         );
@@ -42,5 +45,13 @@ class UserAuthBloc extends Bloc<UserAuthEvent, UserAuthState> {
   Future<void> close() {
     _statusSubscription.cancel();
     return super.close();
+  }
+
+  void _switchToLoginPage(SwitchToLoginPage event, Emitter<UserAuthState> emit) {
+    emit(const UserAuthState.unauthenticated());
+  }
+
+  void _switchToSignUpPage(SwitchToSignUpPage event, Emitter<UserAuthState> emit) {
+    emit(const UserAuthState.unauthenticated(isLoginPage: false));
   }
 }

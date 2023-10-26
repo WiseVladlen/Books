@@ -1,5 +1,3 @@
 //GENERATED BARREL FILE
-export './login/login.dart';
-export './notifier_model/notifier_model.dart';
-export './sign_up/sign_up.dart';
-export 'authentication_page.dart';
+export './login_cubit/login_cubit.dart';
+export './sign_up_cubit/sign_up_cubit.dart';

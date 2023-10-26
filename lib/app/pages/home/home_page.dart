@@ -1,7 +1,8 @@
 import 'dart:async';
 
+import 'package:books/app/pages/home/book_tile.dart';
 import 'package:books/domain/domain.dart';
-import 'package:books/presentation/home/home.dart';
+import 'package:books/presentation/home_bloc/home_bloc.dart';
 import 'package:books/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';

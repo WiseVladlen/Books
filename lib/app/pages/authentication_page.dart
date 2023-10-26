@@ -1,7 +1,8 @@
-import 'package:books/presentation/authentication/authentication.dart';
+import 'package:books/app/pages/pages.dart';
+import 'package:books/presentation/presentation.dart';
 import 'package:books/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthenticationPage extends StatelessWidget {
   const AuthenticationPage({super.key});
@@ -23,14 +24,13 @@ class AuthenticationPage extends StatelessWidget {
                       style: context.textStyles.appTitleLarge,
                     ),
                   ),
-                  ChangeNotifierProvider<AuthenticationPageModel>(
-                    create: (_) => AuthenticationPageModel(),
-                    child: Builder(
-                      builder: (BuildContext context) =>
-                          context.watch<AuthenticationPageModel>().isLoginPage
-                              ? const LoginPage()
-                              : const SignUpPage(),
-                    ),
+                  BlocBuilder<UserAuthBloc, UserAuthState>(
+                    buildWhen: (UserAuthState oldState, UserAuthState newState) {
+                      return oldState.isLoginPage != newState.isLoginPage;
+                    },
+                    builder: (BuildContext context, UserAuthState state) {
+                      return state.isLoginPage ? const LoginPage() : const SignUpPage();
+                    },
                   ),
                 ],
               ),
