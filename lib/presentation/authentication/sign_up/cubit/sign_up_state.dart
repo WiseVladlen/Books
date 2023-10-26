@@ -1,6 +1,4 @@
-import 'package:books/utils/form/form.dart';
-import 'package:equatable/equatable.dart';
-import 'package:formz/formz.dart';
+part of 'sign_up_cubit.dart';
 
 final class SignUpState extends Equatable {
   const SignUpState({
@@ -34,5 +32,5 @@ final class SignUpState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [name, email, password, status, isValid];
+  List<Object> get props => <Object>[name, email, password, status, isValid];
 }
