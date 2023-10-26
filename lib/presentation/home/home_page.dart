@@ -101,7 +101,7 @@ class _BookListState extends State<_BookList> {
     return RefreshIndicator(
       onRefresh: () async {
         final Completer<void> completer = Completer<void>();
-        context.read<HomeBloc>().add(RefreshBooksEvent(() => completer.complete()));
+        context.read<HomeBloc>().add(RefreshBooksEvent(onComplete: () => completer.complete()));
         await completer.future;
       },
       child: BlocBuilder<HomeBloc, HomeState>(
