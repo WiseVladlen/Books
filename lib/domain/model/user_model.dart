@@ -7,8 +7,6 @@ class UserModel extends Equatable {
     required this.name,
   });
 
-  static const UserModel proxy = UserModel(id: 0, email: 'email', name: 'name');
-
   final int id;
   final String email;
   final String name;
