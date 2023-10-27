@@ -6,7 +6,7 @@ class ListConverter<T> extends TypeConverter<List<T>, String> {
 
   @override
   List<T> fromSql(String? fromDb) {
-    return fromDb == null ? <T>[] : List<T>.from(json.decode(fromDb) as Iterable<T>);
+    return fromDb == null ? <T>[] : List<T>.from(json.decode(fromDb) as List<dynamic>);
   }
 
   @override
