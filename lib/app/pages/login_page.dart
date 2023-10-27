@@ -25,10 +25,11 @@ class LoginPage extends StatelessWidget {
             builder: (BuildContext context, LoginState state) {
               return OutlinedTextField(
                 key: const Key('loginPage_emailInput_textField'),
-                valueChanged: (String value) => context.read<LoginCubit>().emailChanged(value),
+                keyboardType: TextInputType.emailAddress,
                 labelText: context.l10n.emailLabel,
                 errorText: state.email.hasError ? context.l10n.invalidEmailMessage : null,
                 padding: const EdgeInsets.symmetric(vertical: 8),
+                valueChanged: (String value) => context.read<LoginCubit>().emailChanged(value),
               );
             },
           ),
@@ -39,10 +40,11 @@ class LoginPage extends StatelessWidget {
             builder: (BuildContext context, LoginState state) {
               return OutlinedTextField(
                 key: const Key('loginPage_passwordInput_textField'),
-                valueChanged: (String value) => context.read<LoginCubit>().passwordChanged(value),
+                obscureText: true,
                 labelText: context.l10n.passwordLabel,
                 errorText: state.password.hasError ? context.l10n.invalidPasswordMessage : null,
                 padding: const EdgeInsets.symmetric(vertical: 8),
+                valueChanged: (String value) => context.read<LoginCubit>().passwordChanged(value),
               );
             },
           ),

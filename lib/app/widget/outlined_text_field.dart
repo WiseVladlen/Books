@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 class OutlinedTextField extends StatelessWidget {
   const OutlinedTextField({
     super.key,
+    this.keyboardType = TextInputType.text,
+    this.obscureText = false,
     required this.labelText,
     this.errorText,
     this.borderWidth = 2,
@@ -12,6 +14,10 @@ class OutlinedTextField extends StatelessWidget {
     this.padding = EdgeInsets.zero,
     required this.valueChanged,
   });
+
+  final TextInputType keyboardType;
+
+  final bool obscureText;
 
   final String labelText;
 
@@ -30,7 +36,8 @@ class OutlinedTextField extends StatelessWidget {
     return Padding(
       padding: padding,
       child: TextField(
-        onChanged: valueChanged,
+        keyboardType: keyboardType,
+        obscureText: obscureText,
         decoration: InputDecoration(
           labelText: labelText,
           errorText: errorText,
@@ -39,6 +46,7 @@ class OutlinedTextField extends StatelessWidget {
             borderSide: BorderSide(width: borderWidth, color: primaryColor),
           ),
         ),
+        onChanged: valueChanged,
         cursorColor: primaryColor,
       ),
     );
