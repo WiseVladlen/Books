@@ -46,6 +46,7 @@ class SignUpCubit extends Cubit<SignUpState> {
 
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
 
+    // TODO
     await authenticationRepository.signUp(
       model: RegistrationDataModel(
         name: state.name.value,
@@ -53,8 +54,6 @@ class SignUpCubit extends Cubit<SignUpState> {
         password: state.password.value,
       ),
     );
-
-    // TODO
 
     emit(state.copyWith(status: FormzSubmissionStatus.success));
   }
