@@ -47,6 +47,9 @@ dependencies:
 
   json_annotation: 4.8.1
 
+  drift: 2.11.1
+  sqlite3_flutter_libs: 0.5.17
+
   cached_network_image: 3.3.0
 
   formz: 0.6.1
@@ -62,6 +65,8 @@ dev_dependencies:
     sdk: flutter
 
   build_runner: 2.4.6
+
+  drift_dev: 2.11.1
 
   json_serializable: 6.7.1
 
