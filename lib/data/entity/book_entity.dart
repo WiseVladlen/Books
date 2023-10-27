@@ -17,3 +17,17 @@ class BookEntity extends Table {
   TextColumn get imageLink => text().withDefault(const Constant<String>(''))();
   TextColumn get language => text()();
 }
+
+extension BookModelToBookTableCompanionMapper on BookModel {
+  Book toDatabaseBook() => Book(
+        id: id,
+        title: title,
+        authors: authors,
+        pageCount: pageCount,
+        publisher: publisher,
+        publishedDate: publishedDate,
+        description: description,
+        imageLink: imageLink,
+        language: language,
+      );
+}

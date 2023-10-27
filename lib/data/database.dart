@@ -1,15 +1,15 @@
 import 'dart:io';
 
 import 'package:books/data/data.dart';
+import 'package:books/domain/model/model.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
+part 'database.g.dart';
 part 'entity/book_entity.dart';
 part 'entity/user_entity.dart';
-
-part 'database.g.dart';
 
 const String _databaseName = 'db.sqlite';
 
