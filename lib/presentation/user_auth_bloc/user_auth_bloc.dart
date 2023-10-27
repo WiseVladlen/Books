@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:books/data/cache_storage.dart';
 import 'package:books/domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +9,7 @@ part 'user_auth_event.dart';
 part 'user_auth_state.dart';
 
 class UserAuthBloc extends Bloc<UserAuthEvent, UserAuthState> {
-  UserAuthBloc({required this.authRepository}) : super(const UserAuthState.unauthenticated()) {
+  UserAuthBloc({required this.authRepository}) : super(_buildState) {
     on<_AuthenticationStatusChanged>(_statusChanged);
     on<LogoutRequested>(_logoutRequested);
     on<SwitchToLoginPage>(_switchToLoginPage);
@@ -17,6 +18,14 @@ class UserAuthBloc extends Bloc<UserAuthEvent, UserAuthState> {
     _statusSubscription = authRepository.statusStream.listen((AuthStatus status) {
       add(_AuthenticationStatusChanged(status));
     });
+  }
+
+  /// Returns the auth state according to the current authenticated user
+  static UserAuthState get _buildState {
+    return switch (CacheStorage().readUser()) {
+      final UserModel user => UserAuthState.authenticated(user: user),
+      (_) => const UserAuthState.unauthenticated(),
+    };
   }
 
   late final StreamSubscription<AuthStatus> _statusSubscription;
@@ -28,12 +37,7 @@ class UserAuthBloc extends Bloc<UserAuthEvent, UserAuthState> {
       case AuthStatus.unauthenticated:
         emit(const UserAuthState.unauthenticated());
       case AuthStatus.authenticated:
-        emit(
-          const UserAuthState.authenticated(
-            // TODO
-            user: UserModel(id: 0, email: 'email', name: 'name'),
-          ),
-        );
+        emit(_buildState);
     }
   }
 

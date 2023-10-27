@@ -49,6 +49,8 @@ Future<void> main() async {
     localDataSource: userLocalDataSource,
   );
 
+  await userRepository.fetchAuthenticatedUser();
+
   final IRepositoryStorage repositoryStorage = RepositoryStorageImpl(
     authRepository: authRepository,
     bookRepository: bookRepository,
