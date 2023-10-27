@@ -9,7 +9,7 @@ final class BookModel extends Equatable {
     required this.publisher,
     this.publishedDate,
     required this.description,
-    this.imageLink,
+    required this.imageLink,
     required this.language,
   });
 
@@ -20,7 +20,7 @@ final class BookModel extends Equatable {
   final String publisher;
   final DateTime? publishedDate;
   final String description;
-  final String? imageLink;
+  final String imageLink;
   final String language;
 
   @override

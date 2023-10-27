@@ -8,6 +8,8 @@ part 'book_dto.g.dart';
 final class ImageLinksDTO {
   const ImageLinksDTO({required this.thumbnail});
 
+  factory ImageLinksDTO.defaultValue() => const ImageLinksDTO(thumbnail: '');
+
   factory ImageLinksDTO.fromJson(Map<String, dynamic> json) => _$ImageLinksDTOFromJson(json);
 
   @JsonKey(name: 'thumbnail', defaultValue: '')
@@ -47,8 +49,8 @@ final class VolumeInfoDTO {
   @JsonKey(name: 'description', defaultValue: '')
   final String description;
 
-  @JsonKey(name: 'imageLinks')
-  final ImageLinksDTO? imageLinks;
+  @JsonKey(name: 'imageLinks', defaultValue: ImageLinksDTO.defaultValue)
+  final ImageLinksDTO imageLinks;
 
   @JsonKey(name: 'language')
   final String language;
@@ -86,7 +88,7 @@ extension BookDTOToBookModelMapper on BookDTO {
         publisher: volumeInfo.publisher,
         publishedDate: volumeInfo.publishedDate,
         description: volumeInfo.description,
-        imageLink: volumeInfo.imageLinks?.thumbnail,
+        imageLink: volumeInfo.imageLinks.thumbnail,
         language: volumeInfo.language,
       );
 }
