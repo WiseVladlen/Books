@@ -36,6 +36,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         emit: emit,
       );
 
+      bookRepository.upsertBooks(books);
+
       emit(
         state.copyWith(
           books: <BookModel>[...state.books, ...books],
@@ -81,6 +83,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit: emit,
     );
 
+    bookRepository.upsertBooks(books);
+
     emit(
       state.copyWith(
         books: books,
@@ -102,6 +106,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         emit: emit,
         onComplete: () => event.onComplete(),
       );
+
+      bookRepository.upsertBooks(books);
 
       emit(
         state.copyWith(
