@@ -41,17 +41,17 @@ class UserAuthBloc extends Bloc<UserAuthEvent, UserAuthState> {
     authRepository.logOut();
   }
 
-  @override
-  Future<void> close() {
-    _statusSubscription.cancel();
-    return super.close();
-  }
-
   void _switchToLoginPage(SwitchToLoginPage event, Emitter<UserAuthState> emit) {
     emit(const UserAuthState.unauthenticated());
   }
 
   void _switchToSignUpPage(SwitchToSignUpPage event, Emitter<UserAuthState> emit) {
     emit(const UserAuthState.unauthenticated(isLoginPage: false));
+  }
+
+  @override
+  Future<void> close() {
+    _statusSubscription.cancel();
+    return super.close();
   }
 }
