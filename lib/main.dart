@@ -11,7 +11,19 @@ import 'package:nested/nested.dart';
 
 import 'app/pages/pages.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  FlutterError.onError = (FlutterErrorDetails details) {
+    // TODO: handle error
+  };
+
+  final Database database = Database();
+
+  final IBookLocalDataSource bookLocalDataSource = BookLocalDataSourceImpl(db: database);
+  final IAuthLocalDataSource authLocalDataSource = AuthLocalDataSourceImpl(db: database);
+  final IUserLocalDataSource userLocalDataSource = UserLocalDataSourceImpl(db: database);
+
   final IBookRemoteDataSource bookRemoteDataSource = GoogleBooksDataSourceImpl(
     errorInterceptor: ErrorInterceptor(
       onResponseErrorHandler: (
@@ -24,20 +36,24 @@ void main() {
     ),
   );
 
-  final IAuthRepository authRepository = AuthRepositoryImpl();
+  final IAuthRepository authRepository = AuthRepositoryImpl(
+    localDataSource: authLocalDataSource,
+  );
 
   final IBookRepository bookRepository = BookRepositoryImpl(
+    localDataSource: bookLocalDataSource,
     remoteDataSource: bookRemoteDataSource,
+  );
+
+  final IUserRepository userRepository = UserRepositoryImpl(
+    localDataSource: userLocalDataSource,
   );
 
   final IRepositoryStorage repositoryStorage = RepositoryStorageImpl(
     authRepository: authRepository,
     bookRepository: bookRepository,
+    userRepository: userRepository,
   );
-
-  FlutterError.onError = (FlutterErrorDetails details) {
-    // TODO: handle error
-  };
 
   runZonedGuarded(
     () => runApp(

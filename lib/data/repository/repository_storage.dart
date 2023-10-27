@@ -4,6 +4,7 @@ class RepositoryStorageImpl implements IRepositoryStorage {
   const RepositoryStorageImpl({
     required this.authRepository,
     required this.bookRepository,
+    required this.userRepository,
   });
 
   @override
@@ -11,4 +12,7 @@ class RepositoryStorageImpl implements IRepositoryStorage {
 
   @override
   final IBookRepository bookRepository;
+
+  @override
+  final IUserRepository userRepository;
 }
