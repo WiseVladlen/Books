@@ -14,20 +14,20 @@ class UserAuthBloc extends Bloc<UserAuthEvent, UserAuthState> {
     on<SwitchToLoginPage>(_switchToLoginPage);
     on<SwitchToSignUpPage>(_switchToSignUpPage);
 
-    _statusSubscription = authRepository.statusStream.listen((AuthenticationStatus status) {
+    _statusSubscription = authRepository.statusStream.listen((AuthStatus status) {
       add(_AuthenticationStatusChanged(status));
     });
   }
 
-  late final StreamSubscription<AuthenticationStatus> _statusSubscription;
+  late final StreamSubscription<AuthStatus> _statusSubscription;
 
-  final IAuthenticationRepository authRepository;
+  final IAuthRepository authRepository;
 
   void _statusChanged(_AuthenticationStatusChanged event, Emitter<UserAuthState> emit) {
     switch (event.status) {
-      case AuthenticationStatus.unauthenticated:
+      case AuthStatus.unauthenticated:
         emit(const UserAuthState.unauthenticated());
-      case AuthenticationStatus.authenticated:
+      case AuthStatus.authenticated:
         emit(
           const UserAuthState.authenticated(
             // TODO

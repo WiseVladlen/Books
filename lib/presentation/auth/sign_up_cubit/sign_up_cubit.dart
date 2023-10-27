@@ -9,7 +9,7 @@ part 'sign_up_state.dart';
 class SignUpCubit extends Cubit<SignUpState> {
   SignUpCubit({required this.authenticationRepository}) : super(const SignUpState());
 
-  final IAuthenticationRepository authenticationRepository;
+  final IAuthRepository authenticationRepository;
 
   void nameChanged(String value) {
     final Name name = Name.dirty(value);

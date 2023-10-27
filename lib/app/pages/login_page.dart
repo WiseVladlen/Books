@@ -1,6 +1,6 @@
 import 'package:books/app/widget/widget.dart';
 import 'package:books/domain/repository/repository.dart';
-import 'package:books/presentation/authentication/authentication.dart';
+import 'package:books/presentation/auth/auth.dart';
 import 'package:books/presentation/user_auth_bloc/user_auth_bloc.dart';
 import 'package:books/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<LoginCubit>(
       create: (_) => LoginCubit(
-        authenticationRepository: context.read<IAuthenticationRepository>(),
+        authenticationRepository: context.read<IAuthRepository>(),
       ),
       child: Column(
         children: <Widget>[

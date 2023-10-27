@@ -7,7 +7,7 @@ abstract class UserAuthEvent {
 final class _AuthenticationStatusChanged extends UserAuthEvent {
   const _AuthenticationStatusChanged(this.status);
 
-  final AuthenticationStatus status;
+  final AuthStatus status;
 }
 
 final class LogoutRequested extends UserAuthEvent {

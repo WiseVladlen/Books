@@ -3,7 +3,7 @@ part of 'user_auth_bloc.dart';
 final class UserAuthState extends Equatable {
   const UserAuthState._({
     this.user,
-    this.status = AuthenticationStatus.unauthenticated,
+    this.status = AuthStatus.unauthenticated,
     this.isLoginPage = true,
   });
 
@@ -12,11 +12,11 @@ final class UserAuthState extends Equatable {
   const UserAuthState.authenticated({required UserModel user})
       : this._(
           user: user,
-          status: AuthenticationStatus.authenticated,
+          status: AuthStatus.authenticated,
         );
 
   final UserModel? user;
-  final AuthenticationStatus status;
+  final AuthStatus status;
   final bool isLoginPage;
 
   @override

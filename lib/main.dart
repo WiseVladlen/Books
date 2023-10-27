@@ -24,14 +24,14 @@ void main() {
     ),
   );
 
-  final IAuthenticationRepository authRepository = AuthenticationRepository();
+  final IAuthRepository authRepository = AuthRepositoryImpl();
 
   final IBookRepository bookRepository = BookRepositoryImpl(
     remoteDataSource: bookRemoteDataSource,
   );
 
   final IRepositoryStorage repositoryStorage = RepositoryStorageImpl(
-    authenticationRepository: authRepository,
+    authRepository: authRepository,
     bookRepository: bookRepository,
   );
 
@@ -58,8 +58,8 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: <SingleChildWidget>[
-        RepositoryProvider<IAuthenticationRepository>.value(
-          value: repositoryStorage.authenticationRepository,
+        RepositoryProvider<IAuthRepository>.value(
+          value: repositoryStorage.authRepository,
         ),
         RepositoryProvider<IBookRepository>.value(
           value: repositoryStorage.bookRepository,
@@ -67,7 +67,7 @@ class App extends StatelessWidget {
       ],
       child: BlocProvider<UserAuthBloc>(
         create: (BuildContext context) => UserAuthBloc(
-          authRepository: context.read<IAuthenticationRepository>(),
+          authRepository: context.read<IAuthRepository>(),
         ),
         child: const _AppView(),
       ),
@@ -89,7 +89,7 @@ class _AppView extends StatelessWidget {
           return oldState.status != newState.status;
         },
         builder: (BuildContext context, UserAuthState state) {
-          return state.status.isAuthenticated ? const HomePage() : const AuthenticationPage();
+          return state.status.isAuthenticated ? const HomePage() : const AuthPage();
         },
       ),
     );

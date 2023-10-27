@@ -2,12 +2,12 @@ import 'package:books/domain/repository/repository.dart';
 
 class RepositoryStorageImpl implements IRepositoryStorage {
   const RepositoryStorageImpl({
-    required this.authenticationRepository,
+    required this.authRepository,
     required this.bookRepository,
   });
 
   @override
-  final IAuthenticationRepository authenticationRepository;
+  final IAuthRepository authRepository;
 
   @override
   final IBookRepository bookRepository;
