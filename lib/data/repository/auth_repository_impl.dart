@@ -27,20 +27,17 @@ class AuthRepositoryImpl implements IAuthRepository {
   Future<void> logIn({required LoginDataModel model}) async {
     final UserModel? user = await authLocalDataSource.logIn(data: model);
 
-    final AuthStatus status = switch (user) {
-      final UserModel _ => AuthStatus.authenticated,
-      (_) => AuthStatus.unauthenticated,
-    };
-
-    _statusController.add(status);
+    _statusController.add(user != null ? AuthStatus.authenticated : AuthStatus.unauthenticated);
   }
 
   @override
   Future<void> logOut() async {
-    if (await userLocalDataSource.getAuthenticatedUser() case final UserModel user) {
-      await authLocalDataSource.logOut(id: user.id);
+    final UserModel? user = await userLocalDataSource.getAuthenticatedUser();
 
-      _statusController.add(AuthStatus.unauthenticated);
-    }
+    if (user == null) return _statusController.add(AuthStatus.unauthenticated);
+
+    await authLocalDataSource.logOut(id: user.id);
+
+    _statusController.add(AuthStatus.authenticated);
   }
 }
