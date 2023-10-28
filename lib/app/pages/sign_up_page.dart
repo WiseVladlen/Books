@@ -28,7 +28,7 @@ class SignUpPage extends StatelessWidget {
                 labelText: context.l10n.nameLabel,
                 errorText: state.name.hasError ? context.l10n.invalidNameMessage : null,
                 padding: const EdgeInsets.symmetric(vertical: 8),
-                valueChanged: (String value) => context.read<SignUpCubit>().nameChanged(value),
+                onChanged: (String value) => context.read<SignUpCubit>().nameChanged(value),
               );
             },
           ),
@@ -43,7 +43,7 @@ class SignUpPage extends StatelessWidget {
                 labelText: context.l10n.emailLabel,
                 errorText: state.email.hasError ? context.l10n.invalidEmailMessage : null,
                 padding: const EdgeInsets.symmetric(vertical: 8),
-                valueChanged: (String value) => context.read<SignUpCubit>().emailChanged(value),
+                onChanged: (String value) => context.read<SignUpCubit>().emailChanged(value),
               );
             },
           ),
@@ -58,7 +58,7 @@ class SignUpPage extends StatelessWidget {
                 labelText: context.l10n.passwordLabel,
                 errorText: state.password.hasError ? context.l10n.invalidPasswordMessage : null,
                 padding: const EdgeInsets.symmetric(vertical: 8),
-                valueChanged: (String value) => context.read<SignUpCubit>().passwordChanged(value),
+                onChanged: (String value) => context.read<SignUpCubit>().passwordChanged(value),
               );
             },
           ),
