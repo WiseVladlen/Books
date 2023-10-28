@@ -1,4 +1,3 @@
 //GENERATED BARREL FILE
-export 'auth_repository.dart';
-export 'book_repository.dart';
-export 'repository_storage.dart';
+export 'auth_repository_impl.dart';
+export 'book_repository_impl.dart';

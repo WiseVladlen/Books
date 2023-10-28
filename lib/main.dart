@@ -30,7 +30,7 @@ void main() {
     remoteDataSource: bookRemoteDataSource,
   );
 
-  final IRepositoryStorage repositoryStorage = RepositoryStorageImpl(
+  final RepositoryStorage repositoryStorage = RepositoryStorage(
     authRepository: authRepository,
     bookRepository: bookRepository,
   );
@@ -52,7 +52,7 @@ void main() {
 class App extends StatelessWidget {
   const App({super.key, required this.repositoryStorage});
 
-  final IRepositoryStorage repositoryStorage;
+  final RepositoryStorage repositoryStorage;
 
   @override
   Widget build(BuildContext context) {
