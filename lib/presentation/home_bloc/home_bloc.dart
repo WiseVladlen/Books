@@ -25,29 +25,20 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future<void> _loadBooks(LoadBooksEvent event, Emitter<HomeState> emit) async {
     if (state.booksHavePeaked) return;
 
-    if (state.query.isNotEmpty) {
-      final List<BookModel> books = await _runSafely(
-        () => bookRepository.getBooks(
-          queryParameters: QueryParameters(
-            query: state.query,
-            startIndex: state.lastBookIndex,
-          ),
-        ),
-        emit: emit,
-      );
+    final List<BookModel> books = await _bookSearch(
+      queryParameters: QueryParameters(query: state.query),
+      emit: emit,
+    );
 
-      bookRepository.upsertBooks(books);
-
-      emit(
-        state.copyWith(
-          books: <BookModel>[...state.books, ...books],
-          bookDownloadStatus: DownloadStatus.success,
-          lastBookIndex: state.lastBookIndex + books.length,
-          booksHavePeaked: books.length < QueryParameters.pageSize,
-          requestParameterChanged: false,
-        ),
-      );
-    }
+    emit(
+      state.copyWith(
+        books: <BookModel>[...state.books, ...books],
+        bookDownloadStatus: DownloadStatus.success,
+        lastBookIndex: state.lastBookIndex + books.length,
+        booksHavePeaked: books.length < QueryParameters.pageSize,
+        requestParameterChanged: false,
+      ),
+    );
   }
 
   Future<void> _searchQueryChanged(SearchQueryChangedEvent event, Emitter<HomeState> emit) async {
@@ -59,7 +50,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       return emit(
         state.copyWith(
           query: query,
-          books: <BookModel>[],
+          books: const <BookModel>[],
           bookDownloadStatus: DownloadStatus.initial,
           lastBookIndex: 0,
           booksHavePeaked: false,
@@ -76,14 +67,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       ),
     );
 
-    final List<BookModel> books = await _runSafely(
-      () => bookRepository.getBooks(
-        queryParameters: QueryParameters(query: query),
-      ),
+    final List<BookModel> books = await _bookSearch(
+      queryParameters: QueryParameters(query: query),
       emit: emit,
     );
-
-    bookRepository.upsertBooks(books);
 
     emit(
       state.copyWith(
@@ -98,26 +85,39 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future<void> _refreshBooks(RefreshBooksEvent event, Emitter<HomeState> emit) async {
     if (state.bookDownloadStatus.isInProgress) return;
 
-    if (state.query.isNotEmpty) {
-      final List<BookModel> books = await _runSafely(
-        () => bookRepository.getBooks(
-          queryParameters: QueryParameters(query: state.query),
-        ),
-        emit: emit,
-        onComplete: () => event.onComplete(),
-      );
+    final List<BookModel> books = await _bookSearch(
+      queryParameters: QueryParameters(query: state.query),
+      emit: emit,
+      onComplete: () => event.onComplete(),
+    );
 
-      bookRepository.upsertBooks(books);
+    emit(
+      state.copyWith(
+        books: books,
+        lastBookIndex: books.length,
+        booksHavePeaked: books.length < QueryParameters.pageSize,
+        requestParameterChanged: true,
+      ),
+    );
+  }
 
-      emit(
-        state.copyWith(
-          books: books,
-          lastBookIndex: books.length,
-          booksHavePeaked: books.length < QueryParameters.pageSize,
-          requestParameterChanged: true,
-        ),
-      );
-    }
+  /// Searches for books according to the search query and returns a list of books
+  Future<List<BookModel>> _bookSearch({
+    required QueryParameters queryParameters,
+    required Emitter<HomeState> emit,
+    VoidCallback? onComplete,
+  }) async {
+    if (state.query.isEmpty) return <BookModel>[];
+
+    final List<BookModel> books = await _runSafely(
+      () => bookRepository.getBooks(queryParameters: queryParameters),
+      emit: emit,
+      onComplete: onComplete,
+    );
+
+    bookRepository.upsertBooks(books);
+
+    return books;
   }
 
   Future<T> _runSafely<T>(
