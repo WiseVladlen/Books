@@ -11,54 +11,14 @@ import 'package:nested/nested.dart';
 
 import 'app/pages/pages.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
+void main() {
   FlutterError.onError = (FlutterErrorDetails details) {
     // TODO: handle error
   };
 
-  final Database database = Database();
-
-  final IBookLocalDataSource bookLocalDataSource = BookLocalDataSourceImpl(db: database);
-  final IAuthLocalDataSource authLocalDataSource = AuthLocalDataSourceImpl(db: database);
-  final IUserLocalDataSource userLocalDataSource = UserLocalDataSourceImpl(db: database);
-
-  final IBookRemoteDataSource bookRemoteDataSource = GoogleBooksDataSourceImpl(
-    errorInterceptor: ErrorInterceptor(
-      onResponseErrorHandler: (
-        String? message,
-        Object? error,
-        StackTrace stakeTrace,
-      ) {
-        // TODO: handle error
-      },
-    ),
-  );
-
-  final IAuthRepository authRepository = AuthRepositoryImpl(
-    authLocalDataSource: authLocalDataSource,
-    userLocalDataSource: userLocalDataSource,
-  );
-
-  final IBookRepository bookRepository = BookRepositoryImpl(
-    localDataSource: bookLocalDataSource,
-    remoteDataSource: bookRemoteDataSource,
-  );
-
-  final IUserRepository userRepository = UserRepositoryImpl(
-    localDataSource: userLocalDataSource,
-  );
-
-  final RepositoryStorage repositoryStorage = RepositoryStorage(
-    authRepository: authRepository,
-    bookRepository: bookRepository,
-    userRepository: userRepository,
-  );
-
   runZonedGuarded(
     () => runApp(
-      App(repositoryStorage: repositoryStorage),
+      App(repositoryStorage: DependencyInitializer.run()),
     ),
     (Object error, StackTrace stack) {
       // TODO: handle error
