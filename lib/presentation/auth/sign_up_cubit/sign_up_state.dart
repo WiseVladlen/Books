@@ -2,23 +2,23 @@ part of 'sign_up_cubit.dart';
 
 final class SignUpState extends Equatable {
   const SignUpState({
-    this.name = const Name.pure(),
-    this.email = const Email.pure(),
-    this.password = const Password.pure(),
+    this.name = const NameValidator.pure(),
+    this.email = const EmailValidator.pure(),
+    this.password = const PasswordValidator.pure(),
     this.status = FormzSubmissionStatus.initial,
     this.isValid = false,
   });
 
-  final Name name;
-  final Email email;
-  final Password password;
+  final NameValidator name;
+  final EmailValidator email;
+  final PasswordValidator password;
   final FormzSubmissionStatus status;
   final bool isValid;
 
   SignUpState copyWith({
-    Name? name,
-    Email? email,
-    Password? password,
+    NameValidator? name,
+    EmailValidator? email,
+    PasswordValidator? password,
     FormzSubmissionStatus? status,
     bool? isValid,
   }) {
