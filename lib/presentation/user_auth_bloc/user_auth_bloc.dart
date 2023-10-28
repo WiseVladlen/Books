@@ -51,14 +51,7 @@ class UserAuthBloc extends Bloc<UserAuthEvent, UserAuthState> {
     }
   }
 
-  Future<void> _userLoading(UserLoadingEvent event, Emitter<UserAuthState> emit) async {
-    switch (await userRepository.fetchAuthenticatedUser()) {
-      case final UserModel user:
-        emit(UserAuthState.authenticated(user: user));
-      default:
-        emit(const UserAuthState.unauthenticated());
-    }
-  }
+  Future<void> _userLoading(UserLoadingEvent event, Emitter<UserAuthState> emit) => _buildState();
 
   void _logoutRequested(LogoutRequested event, Emitter<UserAuthState> emit) {
     authRepository.logOut();
