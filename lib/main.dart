@@ -37,7 +37,8 @@ Future<void> main() async {
   );
 
   final IAuthRepository authRepository = AuthRepositoryImpl(
-    localDataSource: authLocalDataSource,
+    authLocalDataSource: authLocalDataSource,
+    userLocalDataSource: userLocalDataSource,
   );
 
   final IBookRepository bookRepository = BookRepositoryImpl(
@@ -49,9 +50,7 @@ Future<void> main() async {
     localDataSource: userLocalDataSource,
   );
 
-  await userRepository.fetchAuthenticatedUser();
-
-  final IRepositoryStorage repositoryStorage = RepositoryStorageImpl(
+  final RepositoryStorage repositoryStorage = RepositoryStorage(
     authRepository: authRepository,
     bookRepository: bookRepository,
     userRepository: userRepository,
@@ -70,7 +69,7 @@ Future<void> main() async {
 class App extends StatelessWidget {
   const App({super.key, required this.repositoryStorage});
 
-  final IRepositoryStorage repositoryStorage;
+  final RepositoryStorage repositoryStorage;
 
   @override
   Widget build(BuildContext context) {
@@ -82,10 +81,14 @@ class App extends StatelessWidget {
         RepositoryProvider<IBookRepository>.value(
           value: repositoryStorage.bookRepository,
         ),
+        RepositoryProvider<IUserRepository>.value(
+          value: repositoryStorage.userRepository,
+        ),
       ],
       child: BlocProvider<UserAuthBloc>(
         create: (BuildContext context) => UserAuthBloc(
           authRepository: context.read<IAuthRepository>(),
+          userRepository: context.read<IUserRepository>(),
         ),
         child: const _AppView(),
       ),
@@ -104,9 +107,10 @@ class _AppView extends StatelessWidget {
       theme: ThemeDataX.from(brightness: Brightness.light),
       home: BlocBuilder<UserAuthBloc, UserAuthState>(
         buildWhen: (UserAuthState oldState, UserAuthState newState) {
-          return oldState.status != newState.status;
+          return (oldState.status != newState.status);
         },
         builder: (BuildContext context, UserAuthState state) {
+          if (state.status.isInitial) return const Center(child: CircularProgressIndicator());
           return state.status.isAuthenticated ? const HomePage() : const AuthPage();
         },
       ),

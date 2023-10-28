@@ -1,4 +1,3 @@
-import 'package:books/data/data.dart';
 import 'package:books/domain/domain.dart';
 
 class UserRepositoryImpl implements IUserRepository {
@@ -7,7 +6,5 @@ class UserRepositoryImpl implements IUserRepository {
   final IUserLocalDataSource localDataSource;
 
   @override
-  Future<void> fetchAuthenticatedUser() async {
-    CacheStorage().writeUser(await localDataSource.getAuthenticatedUser());
-  }
+  Future<UserModel?> fetchAuthenticatedUser() => localDataSource.getAuthenticatedUser();
 }

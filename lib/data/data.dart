@@ -4,5 +4,4 @@ export './data_source/data_source.dart';
 export './dto/dto.dart';
 export './http_helper/http_helper.dart';
 export './repository/repository.dart';
-export 'cache_storage.dart';
 export 'database.dart';
