@@ -9,10 +9,10 @@ class BookTile extends StatelessWidget {
     required this.title,
     this.authors = const <String>[],
     this.pageCount,
-    this.publisher = '',
+    required this.publisher,
     this.publishedDate,
-    this.description = '',
-    this.imageLink = '',
+    required this.description,
+    required this.imageLink,
     required this.language,
   });
 
@@ -22,10 +22,10 @@ class BookTile extends StatelessWidget {
       title: model.title,
       authors: model.authors,
       pageCount: model.pageCount,
-      publisher: model.publisher ?? '',
+      publisher: model.publisher,
       publishedDate: model.publishedDate,
-      description: model.description ?? '',
-      imageLink: model.imageLink ?? '',
+      description: model.description,
+      imageLink: model.imageLink,
       language: model.language,
     );
   }

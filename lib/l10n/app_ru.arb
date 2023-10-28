@@ -6,5 +6,15 @@
   "authorsHeader": "Авторы",
   "publisherHeader": "Издательство",
   "pageCountHeader": "Кол-во страниц",
-  "languageHeader": "Язык"
+  "languageHeader": "Язык",
+  "logInHeader": "Войти",
+  "signUpHeader": "Зарегистрироваться",
+  "emailLabel": "Email",
+  "passwordLabel": "Пароль",
+  "nameLabel": "Имя",
+  "invalidEmailMessage": "Неверный email",
+  "invalidPasswordMessage": "Неверный пароль",
+  "invalidNameMessage": "Неверное имя",
+  "notAccountQuestion": "Нет учетной записи?",
+  "alreadyHaveAccountQuestion": "Уже есть аккаунт?"
 }

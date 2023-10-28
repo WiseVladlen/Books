@@ -23,7 +23,7 @@ VolumeInfoDTO _$VolumeInfoDTOFromJson(Map<String, dynamic> json) =>
       publishedDate: DateConverter.toDateTime(json['publishedDate'] as String?),
       description: json['description'] as String? ?? '',
       imageLinks: json['imageLinks'] == null
-          ? null
+          ? ImageLinksDTO.defaultValue()
           : ImageLinksDTO.fromJson(json['imageLinks'] as Map<String, dynamic>),
       language: json['language'] as String,
     );

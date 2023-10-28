@@ -1,7 +1,8 @@
 import 'dart:async';
 
+import 'package:books/app/pages/home/book_tile.dart';
 import 'package:books/domain/domain.dart';
-import 'package:books/presentation/home/home.dart';
+import 'package:books/presentation/home_bloc/home_bloc.dart';
 import 'package:books/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -101,7 +102,7 @@ class _BookListState extends State<_BookList> {
     return RefreshIndicator(
       onRefresh: () async {
         final Completer<void> completer = Completer<void>();
-        context.read<HomeBloc>().add(RefreshBooksEvent(() => completer.complete()));
+        context.read<HomeBloc>().add(RefreshBooksEvent(onComplete: () => completer.complete()));
         await completer.future;
       },
       child: BlocBuilder<HomeBloc, HomeState>(
@@ -143,6 +144,7 @@ class _BookListState extends State<_BookList> {
               },
               separatorBuilder: (BuildContext context, int index) => const Divider(height: 1),
               itemCount: state.booksHavePeaked ? books.length : books.length + 1,
+              controller: _scrollController,
               physics: const BouncingScrollPhysics(),
             );
           }
