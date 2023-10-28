@@ -12,7 +12,7 @@ class OutlinedTextField extends StatelessWidget {
     this.borderWidth = 2,
     this.primaryColor = ThemeDataX.outlinedTextFieldPrimaryColor,
     this.padding = EdgeInsets.zero,
-    required this.valueChanged,
+    required this.onChanged,
   });
 
   final TextInputType keyboardType;
@@ -29,7 +29,7 @@ class OutlinedTextField extends StatelessWidget {
 
   final EdgeInsets padding;
 
-  final void Function(String value) valueChanged;
+  final ValueChanged<String> onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class OutlinedTextField extends StatelessWidget {
             borderSide: BorderSide(width: borderWidth, color: primaryColor),
           ),
         ),
-        onChanged: valueChanged,
+        onChanged: onChanged,
         cursorColor: primaryColor,
       ),
     );

@@ -1,5 +1,5 @@
 import 'package:books/domain/domain.dart';
-import 'package:books/utils/form/form.dart';
+import 'package:books/utils/validator/validator.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -12,7 +12,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   final IAuthRepository authenticationRepository;
 
   void nameChanged(String value) {
-    final Name name = Name.dirty(value);
+    final NameValidator name = NameValidator.dirty(value);
     emit(
       state.copyWith(
         name: name,
@@ -22,7 +22,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   }
 
   void emailChanged(String value) {
-    final Email email = Email.dirty(value);
+    final EmailValidator email = EmailValidator.dirty(value);
     emit(
       state.copyWith(
         email: email,
@@ -32,7 +32,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   }
 
   void passwordChanged(String value) {
-    final Password password = Password.dirty(value);
+    final PasswordValidator password = PasswordValidator.dirty(value);
     emit(
       state.copyWith(
         password: password,

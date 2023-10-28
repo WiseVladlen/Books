@@ -1,7 +1,13 @@
 import 'package:books/domain/repository/repository.dart';
 
-abstract interface class IRepositoryStorage {
-  abstract final IAuthRepository authRepository;
-  abstract final IBookRepository bookRepository;
-  abstract final IUserRepository userRepository;
+class RepositoryStorage {
+  const RepositoryStorage({
+    required this.authRepository,
+    required this.bookRepository,
+    required this.userRepository,
+  });
+
+  final IAuthRepository authRepository;
+  final IBookRepository bookRepository;
+  final IUserRepository userRepository;
 }

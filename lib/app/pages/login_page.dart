@@ -29,7 +29,7 @@ class LoginPage extends StatelessWidget {
                 labelText: context.l10n.emailLabel,
                 errorText: state.email.hasError ? context.l10n.invalidEmailMessage : null,
                 padding: const EdgeInsets.symmetric(vertical: 8),
-                valueChanged: (String value) => context.read<LoginCubit>().emailChanged(value),
+                onChanged: (String value) => context.read<LoginCubit>().emailChanged(value),
               );
             },
           ),
@@ -44,7 +44,7 @@ class LoginPage extends StatelessWidget {
                 labelText: context.l10n.passwordLabel,
                 errorText: state.password.hasError ? context.l10n.invalidPasswordMessage : null,
                 padding: const EdgeInsets.symmetric(vertical: 8),
-                valueChanged: (String value) => context.read<LoginCubit>().passwordChanged(value),
+                onChanged: (String value) => context.read<LoginCubit>().passwordChanged(value),
               );
             },
           ),

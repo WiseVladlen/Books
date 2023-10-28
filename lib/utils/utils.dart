@@ -1,5 +1,5 @@
 //GENERATED BARREL FILE
-export './form/form.dart';
+export './validator/validator.dart';
 export 'build_context.dart';
 export 'delayed_action.dart';
 export 'resource.dart';
