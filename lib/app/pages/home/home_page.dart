@@ -15,8 +15,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<HomeBloc>(
       create: (_) {
-        return HomeBloc(bookRepository: context.read<IBookRepository>())
-          ..add(const LoadBooksEvent());
+        return HomeBloc(bookRepository: context.read<IBookRepository>());
       },
       child: Scaffold(
         appBar: AppBar(
