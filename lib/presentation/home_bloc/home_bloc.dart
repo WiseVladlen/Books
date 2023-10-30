@@ -9,6 +9,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'home_event.dart';
+
 part 'home_state.dart';
 
 const String tag = 'HomeBloc';
@@ -26,7 +27,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (state.booksHavePeaked) return;
 
     final List<BookModel> books = await _bookSearch(
-      queryParameters: QueryParameters(query: state.query),
+      queryParameters: QueryParameters(
+        query: state.query,
+        startIndex: state.lastBookIndex,
+      ),
       emit: emit,
     );
 

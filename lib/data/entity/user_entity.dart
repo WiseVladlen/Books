@@ -1,6 +1,5 @@
 part of '../database.dart';
 
-@DataClassName('User')
 class UserEntity extends Table {
   IntColumn get id => integer().autoIncrement()();
 
@@ -11,7 +10,7 @@ class UserEntity extends Table {
 }
 
 extension UserModelToUserTableCompanionMapper on RegistrationDataModel {
-  UserEntityCompanion toDatabaseUser() {
+  UserEntityCompanion toUserEntityCompanion() {
     return UserEntityCompanion(
       email: Value<String>(email),
       name: Value<String>(name),
@@ -21,7 +20,7 @@ extension UserModelToUserTableCompanionMapper on RegistrationDataModel {
   }
 }
 
-extension DatabaseUserToUserModelMapper on User {
+extension UserEntityDataToUserModelMapper on UserEntityData {
   UserModel toUserModel() {
     return UserModel(
       id: id,

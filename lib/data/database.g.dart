@@ -4,7 +4,7 @@ part of 'database.dart';
 
 // ignore_for_file: type=lint
 class $UserEntityTable extends UserEntity
-    with TableInfo<$UserEntityTable, User> {
+    with TableInfo<$UserEntityTable, UserEntityData> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -51,7 +51,7 @@ class $UserEntityTable extends UserEntity
   @override
   String get actualTableName => 'user_entity';
   @override
-  VerificationContext validateIntegrity(Insertable<User> instance,
+  VerificationContext validateIntegrity(Insertable<UserEntityData> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -90,9 +90,9 @@ class $UserEntityTable extends UserEntity
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  User map(Map<String, dynamic> data, {String? tablePrefix}) {
+  UserEntityData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return User(
+    return UserEntityData(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       email: attachedDatabase.typeMapping
@@ -112,13 +112,13 @@ class $UserEntityTable extends UserEntity
   }
 }
 
-class User extends DataClass implements Insertable<User> {
+class UserEntityData extends DataClass implements Insertable<UserEntityData> {
   final int id;
   final String email;
   final String name;
   final String password;
   final bool isAuthenticated;
-  const User(
+  const UserEntityData(
       {required this.id,
       required this.email,
       required this.name,
@@ -145,10 +145,10 @@ class User extends DataClass implements Insertable<User> {
     );
   }
 
-  factory User.fromJson(Map<String, dynamic> json,
+  factory UserEntityData.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return User(
+    return UserEntityData(
       id: serializer.fromJson<int>(json['id']),
       email: serializer.fromJson<String>(json['email']),
       name: serializer.fromJson<String>(json['name']),
@@ -168,13 +168,13 @@ class User extends DataClass implements Insertable<User> {
     };
   }
 
-  User copyWith(
+  UserEntityData copyWith(
           {int? id,
           String? email,
           String? name,
           String? password,
           bool? isAuthenticated}) =>
-      User(
+      UserEntityData(
         id: id ?? this.id,
         email: email ?? this.email,
         name: name ?? this.name,
@@ -183,7 +183,7 @@ class User extends DataClass implements Insertable<User> {
       );
   @override
   String toString() {
-    return (StringBuffer('User(')
+    return (StringBuffer('UserEntityData(')
           ..write('id: $id, ')
           ..write('email: $email, ')
           ..write('name: $name, ')
@@ -198,7 +198,7 @@ class User extends DataClass implements Insertable<User> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is User &&
+      (other is UserEntityData &&
           other.id == this.id &&
           other.email == this.email &&
           other.name == this.name &&
@@ -206,7 +206,7 @@ class User extends DataClass implements Insertable<User> {
           other.isAuthenticated == this.isAuthenticated);
 }
 
-class UserEntityCompanion extends UpdateCompanion<User> {
+class UserEntityCompanion extends UpdateCompanion<UserEntityData> {
   final Value<int> id;
   final Value<String> email;
   final Value<String> name;
@@ -229,7 +229,7 @@ class UserEntityCompanion extends UpdateCompanion<User> {
         name = Value(name),
         password = Value(password),
         isAuthenticated = Value(isAuthenticated);
-  static Insertable<User> custom({
+  static Insertable<UserEntityData> custom({
     Expression<int>? id,
     Expression<String>? email,
     Expression<String>? name,
@@ -294,8 +294,182 @@ class UserEntityCompanion extends UpdateCompanion<User> {
   }
 }
 
+class $AuthorEntityTable extends AuthorEntity
+    with TableInfo<$AuthorEntityTable, AuthorEntityData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AuthorEntityTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
+  @override
+  List<GeneratedColumn> get $columns => [id, name];
+  @override
+  String get aliasedName => _alias ?? 'author_entity';
+  @override
+  String get actualTableName => 'author_entity';
+  @override
+  VerificationContext validateIntegrity(Insertable<AuthorEntityData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  AuthorEntityData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return AuthorEntityData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+    );
+  }
+
+  @override
+  $AuthorEntityTable createAlias(String alias) {
+    return $AuthorEntityTable(attachedDatabase, alias);
+  }
+}
+
+class AuthorEntityData extends DataClass
+    implements Insertable<AuthorEntityData> {
+  final int id;
+  final String name;
+  const AuthorEntityData({required this.id, required this.name});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
+    return map;
+  }
+
+  AuthorEntityCompanion toCompanion(bool nullToAbsent) {
+    return AuthorEntityCompanion(
+      id: Value(id),
+      name: Value(name),
+    );
+  }
+
+  factory AuthorEntityData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return AuthorEntityData(
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
+    };
+  }
+
+  AuthorEntityData copyWith({int? id, String? name}) => AuthorEntityData(
+        id: id ?? this.id,
+        name: name ?? this.name,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('AuthorEntityData(')
+          ..write('id: $id, ')
+          ..write('name: $name')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, name);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is AuthorEntityData &&
+          other.id == this.id &&
+          other.name == this.name);
+}
+
+class AuthorEntityCompanion extends UpdateCompanion<AuthorEntityData> {
+  final Value<int> id;
+  final Value<String> name;
+  const AuthorEntityCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+  });
+  AuthorEntityCompanion.insert({
+    this.id = const Value.absent(),
+    required String name,
+  }) : name = Value(name);
+  static Insertable<AuthorEntityData> custom({
+    Expression<int>? id,
+    Expression<String>? name,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+    });
+  }
+
+  AuthorEntityCompanion copyWith({Value<int>? id, Value<String>? name}) {
+    return AuthorEntityCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AuthorEntityCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class $BookEntityTable extends BookEntity
-    with TableInfo<$BookEntityTable, Book> {
+    with TableInfo<$BookEntityTable, BookEntityData> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -310,13 +484,6 @@ class $BookEntityTable extends BookEntity
   late final GeneratedColumn<String> title = GeneratedColumn<String>(
       'title', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _authorsMeta =
-      const VerificationMeta('authors');
-  @override
-  late final GeneratedColumnWithTypeConverter<List<String>, String> authors =
-      GeneratedColumn<String>('authors', aliasedName, false,
-              type: DriftSqlType.string, requiredDuringInsert: true)
-          .withConverter<List<String>>($BookEntityTable.$converterauthors);
   static const VerificationMeta _pageCountMeta =
       const VerificationMeta('pageCount');
   @override
@@ -363,7 +530,6 @@ class $BookEntityTable extends BookEntity
   List<GeneratedColumn> get $columns => [
         id,
         title,
-        authors,
         pageCount,
         publisher,
         publishedDate,
@@ -376,7 +542,7 @@ class $BookEntityTable extends BookEntity
   @override
   String get actualTableName => 'book_entity';
   @override
-  VerificationContext validateIntegrity(Insertable<Book> instance,
+  VerificationContext validateIntegrity(Insertable<BookEntityData> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -391,7 +557,6 @@ class $BookEntityTable extends BookEntity
     } else if (isInserting) {
       context.missing(_titleMeta);
     }
-    context.handle(_authorsMeta, const VerificationResult.success());
     if (data.containsKey('page_count')) {
       context.handle(_pageCountMeta,
           pageCount.isAcceptableOrUnknown(data['page_count']!, _pageCountMeta));
@@ -428,16 +593,13 @@ class $BookEntityTable extends BookEntity
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Book map(Map<String, dynamic> data, {String? tablePrefix}) {
+  BookEntityData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Book(
+    return BookEntityData(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       title: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
-      authors: $BookEntityTable.$converterauthors.fromSql(attachedDatabase
-          .typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}authors'])!),
       pageCount: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}page_count']),
       publisher: attachedDatabase.typeMapping
@@ -457,25 +619,20 @@ class $BookEntityTable extends BookEntity
   $BookEntityTable createAlias(String alias) {
     return $BookEntityTable(attachedDatabase, alias);
   }
-
-  static TypeConverter<List<String>, String> $converterauthors =
-      const ListConverter();
 }
 
-class Book extends DataClass implements Insertable<Book> {
+class BookEntityData extends DataClass implements Insertable<BookEntityData> {
   final String id;
   final String title;
-  final List<String> authors;
   final int? pageCount;
   final String publisher;
   final DateTime? publishedDate;
   final String description;
   final String imageLink;
   final String language;
-  const Book(
+  const BookEntityData(
       {required this.id,
       required this.title,
-      required this.authors,
       this.pageCount,
       required this.publisher,
       this.publishedDate,
@@ -487,10 +644,6 @@ class Book extends DataClass implements Insertable<Book> {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
     map['title'] = Variable<String>(title);
-    {
-      final converter = $BookEntityTable.$converterauthors;
-      map['authors'] = Variable<String>(converter.toSql(authors));
-    }
     if (!nullToAbsent || pageCount != null) {
       map['page_count'] = Variable<int>(pageCount);
     }
@@ -508,7 +661,6 @@ class Book extends DataClass implements Insertable<Book> {
     return BookEntityCompanion(
       id: Value(id),
       title: Value(title),
-      authors: Value(authors),
       pageCount: pageCount == null && nullToAbsent
           ? const Value.absent()
           : Value(pageCount),
@@ -522,13 +674,12 @@ class Book extends DataClass implements Insertable<Book> {
     );
   }
 
-  factory Book.fromJson(Map<String, dynamic> json,
+  factory BookEntityData.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Book(
+    return BookEntityData(
       id: serializer.fromJson<String>(json['id']),
       title: serializer.fromJson<String>(json['title']),
-      authors: serializer.fromJson<List<String>>(json['authors']),
       pageCount: serializer.fromJson<int?>(json['pageCount']),
       publisher: serializer.fromJson<String>(json['publisher']),
       publishedDate: serializer.fromJson<DateTime?>(json['publishedDate']),
@@ -543,7 +694,6 @@ class Book extends DataClass implements Insertable<Book> {
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
       'title': serializer.toJson<String>(title),
-      'authors': serializer.toJson<List<String>>(authors),
       'pageCount': serializer.toJson<int?>(pageCount),
       'publisher': serializer.toJson<String>(publisher),
       'publishedDate': serializer.toJson<DateTime?>(publishedDate),
@@ -553,20 +703,18 @@ class Book extends DataClass implements Insertable<Book> {
     };
   }
 
-  Book copyWith(
+  BookEntityData copyWith(
           {String? id,
           String? title,
-          List<String>? authors,
           Value<int?> pageCount = const Value.absent(),
           String? publisher,
           Value<DateTime?> publishedDate = const Value.absent(),
           String? description,
           String? imageLink,
           String? language}) =>
-      Book(
+      BookEntityData(
         id: id ?? this.id,
         title: title ?? this.title,
-        authors: authors ?? this.authors,
         pageCount: pageCount.present ? pageCount.value : this.pageCount,
         publisher: publisher ?? this.publisher,
         publishedDate:
@@ -577,10 +725,9 @@ class Book extends DataClass implements Insertable<Book> {
       );
   @override
   String toString() {
-    return (StringBuffer('Book(')
+    return (StringBuffer('BookEntityData(')
           ..write('id: $id, ')
           ..write('title: $title, ')
-          ..write('authors: $authors, ')
           ..write('pageCount: $pageCount, ')
           ..write('publisher: $publisher, ')
           ..write('publishedDate: $publishedDate, ')
@@ -592,15 +739,14 @@ class Book extends DataClass implements Insertable<Book> {
   }
 
   @override
-  int get hashCode => Object.hash(id, title, authors, pageCount, publisher,
+  int get hashCode => Object.hash(id, title, pageCount, publisher,
       publishedDate, description, imageLink, language);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Book &&
+      (other is BookEntityData &&
           other.id == this.id &&
           other.title == this.title &&
-          other.authors == this.authors &&
           other.pageCount == this.pageCount &&
           other.publisher == this.publisher &&
           other.publishedDate == this.publishedDate &&
@@ -609,10 +755,9 @@ class Book extends DataClass implements Insertable<Book> {
           other.language == this.language);
 }
 
-class BookEntityCompanion extends UpdateCompanion<Book> {
+class BookEntityCompanion extends UpdateCompanion<BookEntityData> {
   final Value<String> id;
   final Value<String> title;
-  final Value<List<String>> authors;
   final Value<int?> pageCount;
   final Value<String> publisher;
   final Value<DateTime?> publishedDate;
@@ -623,7 +768,6 @@ class BookEntityCompanion extends UpdateCompanion<Book> {
   const BookEntityCompanion({
     this.id = const Value.absent(),
     this.title = const Value.absent(),
-    this.authors = const Value.absent(),
     this.pageCount = const Value.absent(),
     this.publisher = const Value.absent(),
     this.publishedDate = const Value.absent(),
@@ -635,7 +779,6 @@ class BookEntityCompanion extends UpdateCompanion<Book> {
   BookEntityCompanion.insert({
     required String id,
     required String title,
-    required List<String> authors,
     this.pageCount = const Value.absent(),
     this.publisher = const Value.absent(),
     this.publishedDate = const Value.absent(),
@@ -645,12 +788,10 @@ class BookEntityCompanion extends UpdateCompanion<Book> {
     this.rowid = const Value.absent(),
   })  : id = Value(id),
         title = Value(title),
-        authors = Value(authors),
         language = Value(language);
-  static Insertable<Book> custom({
+  static Insertable<BookEntityData> custom({
     Expression<String>? id,
     Expression<String>? title,
-    Expression<String>? authors,
     Expression<int>? pageCount,
     Expression<String>? publisher,
     Expression<DateTime>? publishedDate,
@@ -662,7 +803,6 @@ class BookEntityCompanion extends UpdateCompanion<Book> {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (title != null) 'title': title,
-      if (authors != null) 'authors': authors,
       if (pageCount != null) 'page_count': pageCount,
       if (publisher != null) 'publisher': publisher,
       if (publishedDate != null) 'published_date': publishedDate,
@@ -676,7 +816,6 @@ class BookEntityCompanion extends UpdateCompanion<Book> {
   BookEntityCompanion copyWith(
       {Value<String>? id,
       Value<String>? title,
-      Value<List<String>>? authors,
       Value<int?>? pageCount,
       Value<String>? publisher,
       Value<DateTime?>? publishedDate,
@@ -687,7 +826,6 @@ class BookEntityCompanion extends UpdateCompanion<Book> {
     return BookEntityCompanion(
       id: id ?? this.id,
       title: title ?? this.title,
-      authors: authors ?? this.authors,
       pageCount: pageCount ?? this.pageCount,
       publisher: publisher ?? this.publisher,
       publishedDate: publishedDate ?? this.publishedDate,
@@ -706,10 +844,6 @@ class BookEntityCompanion extends UpdateCompanion<Book> {
     }
     if (title.present) {
       map['title'] = Variable<String>(title.value);
-    }
-    if (authors.present) {
-      final converter = $BookEntityTable.$converterauthors;
-      map['authors'] = Variable<String>(converter.toSql(authors.value));
     }
     if (pageCount.present) {
       map['page_count'] = Variable<int>(pageCount.value);
@@ -740,7 +874,6 @@ class BookEntityCompanion extends UpdateCompanion<Book> {
     return (StringBuffer('BookEntityCompanion(')
           ..write('id: $id, ')
           ..write('title: $title, ')
-          ..write('authors: $authors, ')
           ..write('pageCount: $pageCount, ')
           ..write('publisher: $publisher, ')
           ..write('publishedDate: $publishedDate, ')
@@ -753,13 +886,238 @@ class BookEntityCompanion extends UpdateCompanion<Book> {
   }
 }
 
+class $BookAuthorEntityTable extends BookAuthorEntity
+    with TableInfo<$BookAuthorEntityTable, BookAuthorEntityData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $BookAuthorEntityTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _authorIdMeta =
+      const VerificationMeta('authorId');
+  @override
+  late final GeneratedColumn<int> authorId = GeneratedColumn<int>(
+      'author_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES author_entity (id)'));
+  static const VerificationMeta _bookIdMeta = const VerificationMeta('bookId');
+  @override
+  late final GeneratedColumn<String> bookId = GeneratedColumn<String>(
+      'book_id', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES book_entity (id)'));
+  @override
+  List<GeneratedColumn> get $columns => [id, authorId, bookId];
+  @override
+  String get aliasedName => _alias ?? 'book_author_entity';
+  @override
+  String get actualTableName => 'book_author_entity';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<BookAuthorEntityData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('author_id')) {
+      context.handle(_authorIdMeta,
+          authorId.isAcceptableOrUnknown(data['author_id']!, _authorIdMeta));
+    } else if (isInserting) {
+      context.missing(_authorIdMeta);
+    }
+    if (data.containsKey('book_id')) {
+      context.handle(_bookIdMeta,
+          bookId.isAcceptableOrUnknown(data['book_id']!, _bookIdMeta));
+    } else if (isInserting) {
+      context.missing(_bookIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+        {authorId, bookId},
+      ];
+  @override
+  BookAuthorEntityData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return BookAuthorEntityData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      authorId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}author_id'])!,
+      bookId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}book_id'])!,
+    );
+  }
+
+  @override
+  $BookAuthorEntityTable createAlias(String alias) {
+    return $BookAuthorEntityTable(attachedDatabase, alias);
+  }
+}
+
+class BookAuthorEntityData extends DataClass
+    implements Insertable<BookAuthorEntityData> {
+  final int id;
+  final int authorId;
+  final String bookId;
+  const BookAuthorEntityData(
+      {required this.id, required this.authorId, required this.bookId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['author_id'] = Variable<int>(authorId);
+    map['book_id'] = Variable<String>(bookId);
+    return map;
+  }
+
+  BookAuthorEntityCompanion toCompanion(bool nullToAbsent) {
+    return BookAuthorEntityCompanion(
+      id: Value(id),
+      authorId: Value(authorId),
+      bookId: Value(bookId),
+    );
+  }
+
+  factory BookAuthorEntityData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return BookAuthorEntityData(
+      id: serializer.fromJson<int>(json['id']),
+      authorId: serializer.fromJson<int>(json['authorId']),
+      bookId: serializer.fromJson<String>(json['bookId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'authorId': serializer.toJson<int>(authorId),
+      'bookId': serializer.toJson<String>(bookId),
+    };
+  }
+
+  BookAuthorEntityData copyWith({int? id, int? authorId, String? bookId}) =>
+      BookAuthorEntityData(
+        id: id ?? this.id,
+        authorId: authorId ?? this.authorId,
+        bookId: bookId ?? this.bookId,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('BookAuthorEntityData(')
+          ..write('id: $id, ')
+          ..write('authorId: $authorId, ')
+          ..write('bookId: $bookId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, authorId, bookId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is BookAuthorEntityData &&
+          other.id == this.id &&
+          other.authorId == this.authorId &&
+          other.bookId == this.bookId);
+}
+
+class BookAuthorEntityCompanion extends UpdateCompanion<BookAuthorEntityData> {
+  final Value<int> id;
+  final Value<int> authorId;
+  final Value<String> bookId;
+  const BookAuthorEntityCompanion({
+    this.id = const Value.absent(),
+    this.authorId = const Value.absent(),
+    this.bookId = const Value.absent(),
+  });
+  BookAuthorEntityCompanion.insert({
+    this.id = const Value.absent(),
+    required int authorId,
+    required String bookId,
+  })  : authorId = Value(authorId),
+        bookId = Value(bookId);
+  static Insertable<BookAuthorEntityData> custom({
+    Expression<int>? id,
+    Expression<int>? authorId,
+    Expression<String>? bookId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (authorId != null) 'author_id': authorId,
+      if (bookId != null) 'book_id': bookId,
+    });
+  }
+
+  BookAuthorEntityCompanion copyWith(
+      {Value<int>? id, Value<int>? authorId, Value<String>? bookId}) {
+    return BookAuthorEntityCompanion(
+      id: id ?? this.id,
+      authorId: authorId ?? this.authorId,
+      bookId: bookId ?? this.bookId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (authorId.present) {
+      map['author_id'] = Variable<int>(authorId.value);
+    }
+    if (bookId.present) {
+      map['book_id'] = Variable<String>(bookId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BookAuthorEntityCompanion(')
+          ..write('id: $id, ')
+          ..write('authorId: $authorId, ')
+          ..write('bookId: $bookId')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$Database extends GeneratedDatabase {
   _$Database(QueryExecutor e) : super(e);
   late final $UserEntityTable userEntity = $UserEntityTable(this);
+  late final $AuthorEntityTable authorEntity = $AuthorEntityTable(this);
   late final $BookEntityTable bookEntity = $BookEntityTable(this);
+  late final $BookAuthorEntityTable bookAuthorEntity =
+      $BookAuthorEntityTable(this);
+  late final AuthorDao authorDao = AuthorDao(this as Database);
+  late final BookAuthorDao bookAuthorDao = BookAuthorDao(this as Database);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [userEntity, bookEntity];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [userEntity, authorEntity, bookEntity, bookAuthorEntity];
 }
