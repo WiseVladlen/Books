@@ -12,36 +12,13 @@ import 'package:nested/nested.dart';
 import 'app/pages/pages.dart';
 
 void main() {
-  final IBookRemoteDataSource bookRemoteDataSource = GoogleBooksDataSourceImpl(
-    errorInterceptor: ErrorInterceptor(
-      onResponseErrorHandler: (
-        String? message,
-        Object? error,
-        StackTrace stakeTrace,
-      ) {
-        // TODO: handle error
-      },
-    ),
-  );
-
-  final IAuthRepository authRepository = AuthRepositoryImpl();
-
-  final IBookRepository bookRepository = BookRepositoryImpl(
-    remoteDataSource: bookRemoteDataSource,
-  );
-
-  final RepositoryStorage repositoryStorage = RepositoryStorage(
-    authRepository: authRepository,
-    bookRepository: bookRepository,
-  );
-
   FlutterError.onError = (FlutterErrorDetails details) {
     // TODO: handle error
   };
 
   runZonedGuarded(
     () => runApp(
-      App(repositoryStorage: repositoryStorage),
+      App(repositoryStorage: DependencyInitializer.run()),
     ),
     (Object error, StackTrace stack) {
       // TODO: handle error
@@ -64,10 +41,14 @@ class App extends StatelessWidget {
         RepositoryProvider<IBookRepository>.value(
           value: repositoryStorage.bookRepository,
         ),
+        RepositoryProvider<IUserRepository>.value(
+          value: repositoryStorage.userRepository,
+        ),
       ],
       child: BlocProvider<UserAuthBloc>(
         create: (BuildContext context) => UserAuthBloc(
           authRepository: context.read<IAuthRepository>(),
+          userRepository: context.read<IUserRepository>(),
         ),
         child: const _AppView(),
       ),
@@ -86,10 +67,14 @@ class _AppView extends StatelessWidget {
       theme: ThemeDataX.from(brightness: Brightness.light),
       home: BlocBuilder<UserAuthBloc, UserAuthState>(
         buildWhen: (UserAuthState oldState, UserAuthState newState) {
-          return oldState.status != newState.status;
+          return (oldState.status != newState.status);
         },
         builder: (BuildContext context, UserAuthState state) {
-          return state.status.isAuthenticated ? const HomePage() : const AuthPage();
+          return switch (state.status) {
+            AuthStatus.initial => const Center(child: CircularProgressIndicator()),
+            AuthStatus.unauthenticated => const AuthPage(),
+            AuthStatus.authenticated => const HomePage(),
+          };
         },
       ),
     );

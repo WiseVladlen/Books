@@ -4,6 +4,10 @@ abstract class UserAuthEvent {
   const UserAuthEvent();
 }
 
+final class UserLoadingEvent extends UserAuthEvent {
+  const UserLoadingEvent();
+}
+
 final class _AuthenticationStatusChanged extends UserAuthEvent {
   const _AuthenticationStatusChanged(this.status);
 
