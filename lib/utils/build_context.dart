@@ -6,4 +6,6 @@ extension BuildContextX on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this);
 
   TextStyles get textStyles => Theme.of(this).extension<TextStyles>()!;
+
+  ButtonStyles get buttonStyles => Theme.of(this).extension<ButtonStyles>()!;
 }
