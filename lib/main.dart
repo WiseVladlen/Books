@@ -70,8 +70,11 @@ class _AppView extends StatelessWidget {
           return (oldState.status != newState.status);
         },
         builder: (BuildContext context, UserAuthState state) {
-          if (state.status.isInitial) return const Center(child: CircularProgressIndicator());
-          return state.status.isAuthenticated ? const HomePage() : const AuthPage();
+          return switch (state.status) {
+            AuthStatus.initial => const Center(child: CircularProgressIndicator()),
+            AuthStatus.unauthenticated => const AuthPage(),
+            AuthStatus.authenticated => const HomePage(),
+          };
         },
       ),
     );

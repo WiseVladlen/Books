@@ -32,7 +32,6 @@ class UserAuthBloc extends Bloc<UserAuthEvent, UserAuthState> {
 
   Future<UserAuthState> _buildState() async {
     final UserModel? user = await userRepository.fetchAuthenticatedUser();
-
     return user != null
         ? UserAuthState.authenticated(user: user)
         : const UserAuthState.unauthenticated();
