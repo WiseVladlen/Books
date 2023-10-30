@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:books/app/pages/home/book_tile.dart';
+import 'package:books/app/app.dart';
 import 'package:books/domain/domain.dart';
 import 'package:books/presentation/home_bloc/home_bloc.dart';
 import 'package:books/utils/utils.dart';
@@ -20,6 +20,9 @@ class HomePage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const _SearchInput(),
+          actions: const <Widget>[
+            _AppBarMoreButton(),
+          ],
           elevation: 0,
         ),
         body: const _BookList(),
@@ -47,6 +50,22 @@ class _SearchInput extends StatelessWidget {
         border: InputBorder.none,
       ),
       cursorColor: Colors.white,
+    );
+  }
+}
+
+class _AppBarMoreButton extends StatelessWidget {
+  const _AppBarMoreButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<void>(
+      itemBuilder: (_) => <PopupMenuEntry<void>>[
+        PopupMenuItem<void>(
+          child: Text(context.l10n.logOutHeader),
+          onTap: () => showLogOutDialog(context),
+        ),
+      ],
     );
   }
 }

@@ -36,7 +36,7 @@ class LoginCubit extends Cubit<LoginState> {
 
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
 
-    // TODO
+    // TODO: handle possible error
     await authenticationRepository.logIn(
       model: LoginDataModel(
         email: state.email.value,

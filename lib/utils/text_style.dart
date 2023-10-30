@@ -13,13 +13,30 @@ class TextStyles extends ThemeExtension<TextStyles> {
     ),
     this.appBarTextField = const TextStyle(color: Colors.white),
     this.inputDecorationHint = const TextStyle(color: Color(0xFFDCDCDC)),
+    this.dialogTitle = const TextStyle(
+      color: Colors.black,
+      fontSize: 18,
+      fontWeight: FontWeight.w500,
+    ),
   });
+
+  const TextStyles.light() : this();
+
+  const TextStyles.dark()
+      : this(
+          dialogTitle: const TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+        );
 
   final TextStyle appTitleLarge;
   final TextStyle searchLogoMedium;
   final TextStyle cardTitleMedium;
   final TextStyle appBarTextField;
   final TextStyle inputDecorationHint;
+  final TextStyle dialogTitle;
 
   @override
   ThemeExtension<TextStyles> copyWith({
@@ -28,6 +45,7 @@ class TextStyles extends ThemeExtension<TextStyles> {
     TextStyle? cardTitleMedium,
     TextStyle? appBarTextField,
     TextStyle? inputDecorationHint,
+    TextStyle? dialogTitle,
   }) {
     return TextStyles(
       appTitleLarge: appTitleLarge ?? this.appTitleLarge,
@@ -35,6 +53,7 @@ class TextStyles extends ThemeExtension<TextStyles> {
       cardTitleMedium: cardTitleMedium ?? this.cardTitleMedium,
       appBarTextField: appBarTextField ?? this.appBarTextField,
       inputDecorationHint: inputDecorationHint ?? this.inputDecorationHint,
+      dialogTitle: dialogTitle ?? this.dialogTitle,
     );
   }
 
@@ -48,6 +67,7 @@ class TextStyles extends ThemeExtension<TextStyles> {
       cardTitleMedium: TextStyle.lerp(cardTitleMedium, other.cardTitleMedium, t)!,
       appBarTextField: TextStyle.lerp(appBarTextField, other.appBarTextField, t)!,
       inputDecorationHint: TextStyle.lerp(inputDecorationHint, other.inputDecorationHint, t)!,
+      dialogTitle: TextStyle.lerp(dialogTitle, other.dialogTitle, t)!,
     );
   }
 }

@@ -46,7 +46,7 @@ class SignUpCubit extends Cubit<SignUpState> {
 
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
 
-    // TODO
+    // TODO: handle possible error
     await authenticationRepository.signUp(
       model: RegistrationDataModel(
         name: state.name.value,

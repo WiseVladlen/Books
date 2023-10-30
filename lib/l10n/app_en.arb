@@ -39,6 +39,10 @@
   "@signUpHeader": {
     "description": "Header of authorization in the system"
   },
+  "logOutHeader": "Log Out",
+  "@logOutHeader": {
+    "description": "Header of logout from the system"
+  },
   "emailLabel": "Email",
   "@emailLabel": {
     "description": "The text of the label that identifies the user's email"
@@ -70,5 +74,17 @@
   "alreadyHaveAccountQuestion": "Already have an account?",
   "@alreadyHaveAccountQuestion": {
     "description": "Question about the existence of an existing user account"
+  },
+  "logOutQuestion": "Log out of the account?",
+  "@logOutQuestion": {
+    "description": "Question about logging out of an account"
+  },
+  "positiveDialogButton": "Ok",
+  "@positiveDialogButton": {
+    "description": "Positive text of the dialog box"
+  },
+  "negativeDialogButton": "No",
+  "@negativeDialogButton": {
+    "description": "Negative text of the dialog box"
   }
 }
