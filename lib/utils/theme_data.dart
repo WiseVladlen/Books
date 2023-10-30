@@ -17,12 +17,12 @@ class ThemeDataX {
         ),
         extensions: brightness == Brightness.light
             ? const <ThemeExtension<dynamic>>[
-                TextStyles.light,
-                ButtonStyles(),
+                TextStyles.light(),
+                ButtonStyles.light(),
               ]
             : const <ThemeExtension<dynamic>>[
-                TextStyles.dark,
-                ButtonStyles(),
+                TextStyles.dark(),
+                ButtonStyles.dark(),
               ],
       );
 

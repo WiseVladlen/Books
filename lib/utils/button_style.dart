@@ -10,6 +10,10 @@ class ButtonStyles extends ThemeExtension<ButtonStyles> {
     ),
   });
 
+  const ButtonStyles.light() : this();
+
+  const ButtonStyles.dark() : this();
+
   final ButtonStyle positiveDialogButton;
   final ButtonStyle negativeDialogButton;
 

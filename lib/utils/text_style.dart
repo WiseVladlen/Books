@@ -20,15 +20,16 @@ class TextStyles extends ThemeExtension<TextStyles> {
     ),
   });
 
-  static const TextStyles light = TextStyles();
+  const TextStyles.light() : this();
 
-  static const TextStyles dark = TextStyles(
-    dialogTitle: TextStyle(
-      color: Colors.white,
-      fontSize: 18,
-      fontWeight: FontWeight.w500,
-    ),
-  );
+  const TextStyles.dark()
+      : this(
+          dialogTitle: const TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
+        );
 
   final TextStyle appTitleLarge;
   final TextStyle searchLogoMedium;

@@ -59,9 +59,9 @@ class _AppBarMoreButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton<dynamic>(
-      itemBuilder: (_) => <PopupMenuEntry<dynamic>>[
-        PopupMenuItem<dynamic>(
+    return PopupMenuButton<void>(
+      itemBuilder: (_) => <PopupMenuEntry<void>>[
+        PopupMenuItem<void>(
           child: Text(context.l10n.logOutHeader),
           onTap: () => showLogOutDialog(context),
         ),

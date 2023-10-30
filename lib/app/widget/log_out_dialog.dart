@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class _LogOutAlertDialog extends StatelessWidget {
-  const _LogOutAlertDialog({required this.dialogContext});
-
-  final BuildContext dialogContext;
+  const _LogOutAlertDialog();
 
   @override
   Widget build(BuildContext context) {
@@ -16,14 +14,14 @@ class _LogOutAlertDialog extends StatelessWidget {
       titleTextStyle: context.textStyles.dialogTitle,
       actions: <Widget>[
         TextButton(
-          onPressed: () => Navigator.of(dialogContext).pop(),
+          onPressed: () => Navigator.pop(context),
           style: context.buttonStyles.negativeDialogButton,
           child: Text(context.l10n.negativeDialogButton),
         ),
         TextButton(
           onPressed: () {
             context.read<UserAuthBloc>().add(const LogoutRequested());
-            Navigator.of(dialogContext).pop();
+            Navigator.pop(context);
           },
           style: context.buttonStyles.positiveDialogButton,
           child: Text(context.l10n.positiveDialogButton),
@@ -36,6 +34,6 @@ class _LogOutAlertDialog extends StatelessWidget {
 Future<void> showLogOutDialog(BuildContext context) {
   return showDialog(
     context: context,
-    builder: (BuildContext dialogContext) => _LogOutAlertDialog(dialogContext: dialogContext),
+    builder: (BuildContext dialogContext) => const _LogOutAlertDialog(),
   );
 }
