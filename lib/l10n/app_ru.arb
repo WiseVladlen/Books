@@ -9,6 +9,7 @@
   "languageHeader": "Язык",
   "logInHeader": "Войти",
   "signUpHeader": "Зарегистрироваться",
+  "logOutHeader": "Выйти",
   "emailLabel": "Email",
   "passwordLabel": "Пароль",
   "nameLabel": "Имя",
@@ -16,5 +17,8 @@
   "invalidPasswordMessage": "Неверный пароль",
   "invalidNameMessage": "Неверное имя",
   "notAccountQuestion": "Нет учетной записи?",
-  "alreadyHaveAccountQuestion": "Уже есть аккаунт?"
+  "alreadyHaveAccountQuestion": "Уже есть аккаунт?",
+  "logOutQuestion": "Выйти из аккаунта?",
+  "positiveDialogButton": "Да",
+  "negativeDialogButton": "Нет"
 }
