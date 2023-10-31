@@ -1,4 +1,4 @@
-part of 'favorites_cubit.dart';
+part of 'favorites_bloc.dart';
 
 class FavoritesState extends Equatable {
   const FavoritesState({

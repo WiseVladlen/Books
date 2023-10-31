@@ -136,23 +136,6 @@ class _BookListState extends State<_BookList> {
               (oldState.booksHavePeaked != newState.booksHavePeaked);
         },
         builder: (BuildContext context, SearchState state) {
-          if (state.bookDownloadStatus.isInitial) {
-            return Center(
-              child: Wrap(
-                crossAxisAlignment: WrapCrossAlignment.center,
-                direction: Axis.vertical,
-                spacing: 16,
-                children: <Widget>[
-                  const Icon(Icons.search, size: 28),
-                  Text(
-                    context.l10n.searchBooksMessage,
-                    style: context.textStyles.searchLogoMedium,
-                  ),
-                ],
-              ),
-            );
-          }
-
           if (state.bookDownloadStatus.isInProgress) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -172,7 +155,18 @@ class _BookListState extends State<_BookList> {
               physics: const BouncingScrollPhysics(),
             );
           }
-          return Center(child: Text(context.l10n.noResultsMessage));
+
+          return NoResultsBackground(
+            icon: state.bookDownloadStatus.isInitial
+                ? const Icon(Icons.search, size: 28)
+                : const Icon(Icons.question_mark, size: 28),
+            text: Text(
+              state.bookDownloadStatus.isInitial
+                  ? context.l10n.searchBooksMessage
+                  : context.l10n.noResultsMessage,
+              style: context.textStyles.backgroundLogoMedium,
+            ),
+          );
         },
       ),
     );

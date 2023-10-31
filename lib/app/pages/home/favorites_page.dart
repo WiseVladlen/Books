@@ -1,4 +1,5 @@
 import 'package:books/app/pages/home/book_tile.dart';
+import 'package:books/app/widget/widget.dart';
 import 'package:books/domain/domain.dart';
 import 'package:books/presentation/presentation.dart';
 import 'package:books/utils/utils.dart';
@@ -10,9 +11,9 @@ class FavouritesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<FavoritesCubit>(
-      create: (_) => FavoritesCubit(
-        user: context.read<UserAuthBloc>().state.user,
+    return BlocProvider<FavoritesBloc>(
+      create: (_) => FavoritesBloc(
+        user: context.read<UserAuthBloc>().state.user!,
         bookRepository: context.read<IBookRepository>(),
       ),
       child: const _BookList(),
@@ -37,7 +38,7 @@ class _BookList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FavoritesCubit, FavoritesState>(
+    return BlocBuilder<FavoritesBloc, FavoritesState>(
       builder: (BuildContext context, FavoritesState state) {
         if (state.bookDownloadStatus.isInProgress) {
           return const Center(child: CircularProgressIndicator());
@@ -53,7 +54,14 @@ class _BookList extends StatelessWidget {
             physics: const BouncingScrollPhysics(),
           );
         }
-        return Center(child: Text(context.l10n.noResultsMessage));
+
+        return NoResultsBackground(
+          icon: const Icon(Icons.info_outline, size: 28),
+          text: Text(
+            context.l10n.noFavouriteBooksMessage,
+            style: context.textStyles.backgroundLogoMedium,
+          ),
+        );
       },
     );
   }
