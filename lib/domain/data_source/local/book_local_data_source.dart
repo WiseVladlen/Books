@@ -6,7 +6,7 @@ abstract interface class IBookLocalDataSource {
   Future<Iterable<BookModel>> getBooks({required QueryParameters queryParameters});
 
   Future<void> addBookToFavourites({required int userId, required String bookId});
-  Future<void> deleteBookFromFavourites({required int id});
+  Future<void> deleteBookFromFavourites({required int userId, required String bookId});
 
-  Stream<List<BookModel>> getUserBooksStream({required int userId});
+  Stream<List<BookModel>> getBookStream({required int userId});
 }

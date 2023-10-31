@@ -23,12 +23,12 @@ class BookRepositoryImpl implements IBookRepository {
   }
 
   @override
-  Future<void> deleteBookFromFavourites({required int id}) {
-    return localDataSource.deleteBookFromFavourites(id: id);
+  Future<void> deleteBookFromFavourites({required int userId, required String bookId}) {
+    return localDataSource.deleteBookFromFavourites(userId: userId, bookId: bookId);
   }
 
   @override
-  Stream<List<BookModel>> getUserBooksStream({required int userId}) {
-    return localDataSource.getUserBooksStream(userId: userId);
+  Stream<List<BookModel>> getBookStream({required int userId}) {
+    return localDataSource.getBookStream(userId: userId);
   }
 }

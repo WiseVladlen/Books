@@ -77,16 +77,16 @@ class BookLocalDataSourceImpl implements IBookLocalDataSource {
   }
 
   @override
-  Future<void> deleteBookFromFavourites({required int id}) async {
+  Future<void> deleteBookFromFavourites({required int userId, required String bookId}) async {
     await (db.delete(db.userBookEntity)
-          ..where(
-            ($UserBookEntityTable userBook) => userBook.id.equals(id),
-          ))
+          ..where(($UserBookEntityTable userBook) {
+            return userBook.userId.equals(userId) & userBook.bookId.equals(bookId);
+          }))
         .go();
   }
 
   @override
-  Stream<List<BookModel>> getUserBooksStream({required int userId}) {
+  Stream<List<BookModel>> getBookStream({required int userId}) {
     final Expression<bool> expression = db.userBookEntity.userId.equals(userId);
 
     final List<Join<HasResultSet, dynamic>> joins = <Join<HasResultSet, dynamic>>[
