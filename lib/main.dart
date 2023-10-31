@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:books/app/pages/pages.dart';
 import 'package:books/data/data.dart';
 import 'package:books/domain/domain.dart';
 import 'package:books/presentation/presentation.dart';
@@ -8,8 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nested/nested.dart';
-
-import 'app/pages/pages.dart';
 
 void main() {
   FlutterError.onError = (FlutterErrorDetails details) {

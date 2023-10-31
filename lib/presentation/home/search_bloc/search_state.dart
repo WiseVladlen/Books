@@ -1,7 +1,7 @@
-part of 'home_bloc.dart';
+part of 'search_bloc.dart';
 
-class HomeState extends Equatable {
-  const HomeState({
+class SearchState extends Equatable {
+  const SearchState({
     this.query = '',
     this.books = const <BookModel>[],
     this.bookDownloadStatus = DownloadStatus.initial,
@@ -19,7 +19,7 @@ class HomeState extends Equatable {
 
   bool get isBooksLoadedSuccessfully => bookDownloadStatus.isSuccess && books.isNotEmpty;
 
-  HomeState copyWith({
+  SearchState copyWith({
     String? query,
     List<BookModel>? books,
     DownloadStatus? bookDownloadStatus,
@@ -27,7 +27,7 @@ class HomeState extends Equatable {
     bool? booksHavePeaked,
     bool? requestParameterChanged,
   }) {
-    return HomeState(
+    return SearchState(
       query: query ?? this.query,
       books: books ?? this.books,
       bookDownloadStatus: bookDownloadStatus ?? this.bookDownloadStatus,

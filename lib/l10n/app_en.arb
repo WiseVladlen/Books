@@ -86,5 +86,13 @@
   "negativeDialogButton": "No",
   "@negativeDialogButton": {
     "description": "Negative text of the dialog box"
+  },
+  "searchLabel": "Search",
+  "@searchLabel": {
+    "description": "Bottom navigation bar label describing the search page"
+  },
+  "favoritesLabel": "Favorites",
+  "@favoritesLabel": {
+    "description": "Bottom navigation bar label describing the favorites page"
   }
 }

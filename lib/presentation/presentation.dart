@@ -1,4 +1,4 @@
 //GENERATED BARREL FILE
 export './auth/auth.dart';
-export './home_bloc/home_bloc.dart';
+export './home/home.dart';
 export './user_auth_bloc/user_auth_bloc.dart';

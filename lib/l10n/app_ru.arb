@@ -20,5 +20,7 @@
   "alreadyHaveAccountQuestion": "Уже есть аккаунт?",
   "logOutQuestion": "Выйти из аккаунта?",
   "positiveDialogButton": "Да",
-  "negativeDialogButton": "Нет"
+  "negativeDialogButton": "Нет",
+  "searchLabel": "Поиск",
+  "favoritesLabel": "Избранное"
 }
