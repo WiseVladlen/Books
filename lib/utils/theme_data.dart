@@ -15,16 +15,18 @@ class ThemeDataX {
           selectionColor: Colors.white.withOpacity(0.25),
           selectionHandleColor: Colors.green[300],
         ),
-        extensions: brightness == Brightness.light
-            ? const <ThemeExtension<dynamic>>[
-                TextStyles.light(),
-                ButtonStyles.light(),
-              ]
-            : const <ThemeExtension<dynamic>>[
-                TextStyles.dark(),
-                ButtonStyles.dark(),
-              ],
+        extensions: brightness == Brightness.light ? lightExtensions : darkExtensions,
       );
+
+  static const List<ThemeExtension<dynamic>> lightExtensions = <ThemeExtension<dynamic>>[
+    TextStyles.light(),
+    ButtonStyles.light(),
+  ];
+
+  static const List<ThemeExtension<dynamic>> darkExtensions = <ThemeExtension<dynamic>>[
+    TextStyles.dark(),
+    ButtonStyles.dark(),
+  ];
 
   static const Color outlinedTextFieldPrimaryColor = Colors.green;
 }
