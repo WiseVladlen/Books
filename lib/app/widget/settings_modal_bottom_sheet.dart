@@ -19,18 +19,7 @@ Future<void> showSettingsModalBottomSheet(BuildContext context) {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 6, bottom: 12),
-              child: SizedBox(
-                width: double.maxFinite,
-                child: Center(
-                  child: Text(
-                    context.l10n.dataSourceTypeHeader,
-                    style: context.textStyles.dialogTitle,
-                  ),
-                ),
-              ),
-            ),
+            _DialogTitle(title: context.l10n.dataSourceTypeHeader),
             RadioListTile<DataSourceType>(
               value: DataSourceType.local,
               groupValue: context.read<SearchBloc>().state.dataSourceType,
@@ -50,18 +39,7 @@ Future<void> showSettingsModalBottomSheet(BuildContext context) {
               title: Text(context.l10n.remoteDataSourceHeader),
             ),
             const Divider(),
-            Padding(
-              padding: const EdgeInsets.only(top: 6, bottom: 12),
-              child: SizedBox(
-                width: double.maxFinite,
-                child: Center(
-                  child: Text(
-                    context.l10n.languageHeader,
-                    style: context.textStyles.dialogTitle,
-                  ),
-                ),
-              ),
-            ),
+            _DialogTitle(title: context.l10n.languageHeader),
             for (final LanguageCode languageCode in LanguageCode.values)
               RadioListTile<LanguageCode>(
                 value: languageCode,
@@ -77,4 +55,26 @@ Future<void> showSettingsModalBottomSheet(BuildContext context) {
       );
     },
   );
+}
+
+class _DialogTitle extends StatelessWidget {
+  const _DialogTitle({required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 6, bottom: 12),
+      child: SizedBox(
+        width: double.maxFinite,
+        child: Center(
+          child: Text(
+            title,
+            style: context.textStyles.dialogTitle,
+          ),
+        ),
+      ),
+    );
+  }
 }
