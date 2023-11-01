@@ -1,7 +1,7 @@
-part of 'home_cubit.dart';
+part of 'navigation_cubit.dart';
 
-class HomeState extends Equatable {
-  const HomeState({
+class NavigationState extends Equatable {
+  const NavigationState({
     this.bottomNavigationBarCurrentIndex = 0,
   });
 

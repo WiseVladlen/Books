@@ -1,8 +1,7 @@
 import 'package:books/app/pages/home/book_tile.dart';
 import 'package:books/app/widget/widget.dart';
 import 'package:books/domain/domain.dart';
-import 'package:books/presentation/home/favorites_bloc/favorites_bloc.dart';
-import 'package:books/presentation/user_auth_bloc/user_auth_bloc.dart';
+import 'package:books/presentation/presentation.dart';
 import 'package:books/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

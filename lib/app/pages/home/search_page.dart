@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:books/app/app.dart';
 import 'package:books/domain/domain.dart';
-import 'package:books/presentation/home/search_bloc/search_bloc.dart';
-import 'package:books/presentation/user_auth_bloc/user_auth_bloc.dart';
+import 'package:books/presentation/presentation.dart';
 import 'package:books/utils/utils.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';

@@ -1,5 +1,5 @@
 import 'package:books/app/pages/home/home.dart';
-import 'package:books/presentation/home/cubit/home_cubit.dart';
+import 'package:books/presentation/navigation_cubit/navigation_cubit.dart';
 import 'package:books/utils/build_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,10 +9,10 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<HomeCubit>(
-      create: (_) => HomeCubit(),
-      child: BlocBuilder<HomeCubit, HomeState>(
-        builder: (BuildContext context, HomeState state) {
+    return BlocProvider<NavigationCubit>(
+      create: (_) => NavigationCubit(),
+      child: BlocBuilder<NavigationCubit, NavigationState>(
+        builder: (BuildContext context, NavigationState state) {
           return Scaffold(
             body: state.bottomNavigationBarCurrentIndex == 0
                 ? const FavouritesPage()
@@ -30,7 +30,7 @@ class HomePage extends StatelessWidget {
                   label: context.l10n.searchLabel,
                 ),
               ],
-              onTap: context.read<HomeCubit>().clickOnBottomNavigationBarItem,
+              onTap: context.read<NavigationCubit>().clickOnBottomNavigationBarItem,
             ),
           );
         },
