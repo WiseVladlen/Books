@@ -6,6 +6,8 @@ class SearchState extends Equatable {
     this.books = const <BookModel>[],
     this.userBooks = const <BookModel>[],
     this.bookDownloadStatus = DownloadStatus.initial,
+    this.dataSourceType = DataSourceType.remote,
+    this.languageCode = LanguageCode.en,
     this.lastBookIndex = 0,
     this.booksHavePeaked = false,
     this.requestParameterChanged = false,
@@ -15,6 +17,8 @@ class SearchState extends Equatable {
   final List<BookModel> books;
   final List<BookModel> userBooks;
   final DownloadStatus bookDownloadStatus;
+  final DataSourceType dataSourceType;
+  final LanguageCode languageCode;
   final int lastBookIndex;
   final bool booksHavePeaked;
   final bool requestParameterChanged;
@@ -26,6 +30,8 @@ class SearchState extends Equatable {
     List<BookModel>? books,
     List<BookModel>? userBooks,
     DownloadStatus? bookDownloadStatus,
+    DataSourceType? dataSourceType,
+    LanguageCode? languageCode,
     int? lastBookIndex,
     bool? booksHavePeaked,
     bool? requestParameterChanged,
@@ -35,6 +41,8 @@ class SearchState extends Equatable {
       books: books ?? this.books,
       userBooks: userBooks ?? this.userBooks,
       bookDownloadStatus: bookDownloadStatus ?? this.bookDownloadStatus,
+      dataSourceType: dataSourceType ?? this.dataSourceType,
+      languageCode: languageCode ?? this.languageCode,
       lastBookIndex: lastBookIndex ?? this.lastBookIndex,
       booksHavePeaked: booksHavePeaked ?? this.booksHavePeaked,
       requestParameterChanged: requestParameterChanged ?? this.requestParameterChanged,
@@ -47,6 +55,8 @@ class SearchState extends Equatable {
         books,
         userBooks,
         bookDownloadStatus,
+        dataSourceType,
+        languageCode,
         lastBookIndex,
         booksHavePeaked,
         requestParameterChanged,

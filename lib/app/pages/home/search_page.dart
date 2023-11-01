@@ -64,6 +64,11 @@ class _AppBarMoreButton extends StatelessWidget {
     return PopupMenuButton<void>(
       itemBuilder: (_) => <PopupMenuEntry<void>>[
         PopupMenuItem<void>(
+          child: Text(context.l10n.settingsHeader),
+          onTap: () => showSettingsModalBottomSheet(context),
+        ),
+        const PopupMenuDivider(),
+        PopupMenuItem<void>(
           child: Text(context.l10n.logOutHeader),
           onTap: () => showLogOutDialog(context),
         ),

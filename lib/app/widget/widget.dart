@@ -4,3 +4,4 @@ export 'custom_network_image.dart';
 export 'log_out_dialog.dart';
 export 'no_results_background.dart';
 export 'outlined_text_field.dart';
+export 'settings_modal_bottom_sheet.dart';
