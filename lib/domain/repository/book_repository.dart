@@ -1,7 +1,10 @@
 import 'package:books/domain/domain.dart';
 
 abstract interface class IBookRepository {
-  Future<List<BookModel>> getBooks({required QueryParameters queryParameters});
+  Future<List<BookModel>> getBooks({
+    required QueryParameters queryParameters,
+    required DataSourceType dataSourceType,
+  });
 
   Future<void> upsertBooks(List<BookModel> books);
 

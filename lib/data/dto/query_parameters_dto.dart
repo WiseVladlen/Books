@@ -7,12 +7,16 @@ part 'query_parameters_dto.g.dart';
 final class QueryParametersDTO {
   const QueryParametersDTO({
     required this.query,
+    required this.languageCode,
     required this.startIndex,
     required this.maxResults,
   });
 
   @JsonKey(name: 'q')
   final String query;
+
+  @JsonKey(name: 'langRestrict')
+  final String languageCode;
 
   @JsonKey(name: 'startIndex')
   final int startIndex;
@@ -28,5 +32,6 @@ extension QueryParametersToQueryParametersDTOMapper on QueryParameters {
         query: query,
         startIndex: startIndex,
         maxResults: maxResults,
+        languageCode: languageCode.name,
       );
 }

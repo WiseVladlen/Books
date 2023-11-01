@@ -10,8 +10,14 @@ class BookRepositoryImpl implements IBookRepository {
   final IBookRemoteDataSource remoteDataSource;
 
   @override
-  Future<List<BookModel>> getBooks({required QueryParameters queryParameters}) async {
-    return remoteDataSource.getBooks(queryParameters: queryParameters);
+  Future<List<BookModel>> getBooks({
+    required QueryParameters queryParameters,
+    required DataSourceType dataSourceType,
+  }) async {
+    return switch (dataSourceType) {
+      DataSourceType.remote => remoteDataSource.getBooks(queryParameters: queryParameters),
+      DataSourceType.local => localDataSource.getBooks(queryParameters: queryParameters),
+    };
   }
 
   @override
