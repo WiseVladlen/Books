@@ -4,12 +4,6 @@ abstract class SearchEvent {
   const SearchEvent();
 }
 
-final class _FavouriteBooksChangedEvent extends SearchEvent {
-  const _FavouriteBooksChangedEvent(this.books);
-
-  final List<BookModel> books;
-}
-
 final class LoadBooksEvent extends SearchEvent {
   const LoadBooksEvent();
 }
@@ -24,10 +18,4 @@ final class RefreshBooksEvent extends SearchEvent {
   const RefreshBooksEvent({required this.onComplete});
 
   final VoidCallback onComplete;
-}
-
-final class FavouriteButtonClickedEvent extends SearchEvent {
-  const FavouriteButtonClickedEvent({required this.bookId});
-
-  final String bookId;
 }

@@ -29,7 +29,7 @@ class BookLocalDataSourceImpl implements IBookLocalDataSource {
   }
 
   @override
-  Future<Iterable<BookModel>> getBooks({required QueryParameters queryParameters}) async {
+  Future<List<BookModel>> getBooks({required QueryParameters queryParameters}) async {
     final String substring = queryParameters.query.toLowerCase();
 
     final List<Join<HasResultSet, dynamic>> joins = <Join<HasResultSet, dynamic>>[
@@ -55,7 +55,7 @@ class BookLocalDataSourceImpl implements IBookLocalDataSource {
     final Iterable<BookAuthorEntityData> bookAuthorEntity =
         result.map((TypedResult e) => e.readTable(db.bookAuthorEntity));
 
-    return bookEntity.map((BookEntityData book) {
+    final Iterable<BookModel> books = bookEntity.map((BookEntityData book) {
       final Iterable<int> authorIds = bookAuthorEntity
           .where((BookAuthorEntityData bookAuthor) => bookAuthor.bookId == book.id)
           .map((BookAuthorEntityData bookAuthor) => bookAuthor.authorId);
@@ -65,6 +65,8 @@ class BookLocalDataSourceImpl implements IBookLocalDataSource {
 
       return (book: book, authors: authors).model;
     });
+
+    return books.toSet().toList(growable: false);
   }
 
   @override

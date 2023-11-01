@@ -1,11 +1,15 @@
 import 'package:books/app/app.dart';
 import 'package:books/domain/model/model.dart';
+import 'package:books/presentation/favorites_bloc/favorites_bloc.dart';
 import 'package:books/utils/utils.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BookTile extends StatelessWidget {
   const BookTile({
     super.key,
+    required this.bookId,
     required this.title,
     this.authors = const <String>[],
     this.pageCount,
@@ -14,17 +18,15 @@ class BookTile extends StatelessWidget {
     required this.description,
     required this.imageLink,
     required this.language,
-    required this.isFavorite,
-    required this.onClickFavouriteButton,
   });
 
-  factory BookTile.fromModel(
-    BookModel model, {
-    required bool isFavorite,
-    required VoidCallback onClickFavouriteButton,
+  factory BookTile.fromModel({
+    required Key key,
+    required BookModel model,
   }) {
     return BookTile(
-      key: ValueKey<String>(model.id),
+      key: key,
+      bookId: model.id,
       title: model.title,
       authors: model.authors,
       pageCount: model.pageCount,
@@ -33,11 +35,10 @@ class BookTile extends StatelessWidget {
       description: model.description,
       imageLink: model.imageLink,
       language: model.language,
-      isFavorite: isFavorite,
-      onClickFavouriteButton: onClickFavouriteButton,
     );
   }
 
+  final String bookId;
   final String title;
   final List<String> authors;
   final int? pageCount;
@@ -47,15 +48,12 @@ class BookTile extends StatelessWidget {
   final String imageLink;
   final String language;
 
-  final bool isFavorite;
-  final VoidCallback onClickFavouriteButton;
-
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       child: Column(
-        children: [
+        children: <Widget>[
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -129,16 +127,50 @@ class BookTile extends StatelessWidget {
             padding: const EdgeInsets.only(top: 12),
             child: Align(
               alignment: Alignment.centerRight,
-              child: IconButton(
-                onPressed: onClickFavouriteButton,
-                splashRadius: 28,
-                color: isFavorite ? Colors.redAccent : Theme.of(context).colorScheme.onSurface,
-                icon: isFavorite ? const Icon(Icons.favorite) : const Icon(Icons.favorite_border),
-              ),
+              child: _FavoriteButton(bookId: bookId),
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class _FavoriteButton extends StatelessWidget {
+  const _FavoriteButton({required this.bookId});
+
+  final String bookId;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<FavoritesBloc, FavoritesState>(
+      buildWhen: (FavoritesState oldState, FavoritesState newState) {
+        final BookModel? bookFromOldList = oldState.books.firstWhereOrNull(
+          (BookModel book) => book.id == bookId,
+        );
+
+        final BookModel? bookFromNewList = newState.books.firstWhereOrNull(
+          (BookModel book) => book.id == bookId,
+        );
+
+        return (bookFromOldList == null && bookFromNewList != null) ||
+            (bookFromOldList != null && bookFromNewList == null);
+      },
+      builder: (BuildContext context, FavoritesState state) {
+        final BookModel? favoriteBook = state.books.firstWhereOrNull(
+          (BookModel book) => book.id == bookId,
+        );
+        final bool isFavorite = favoriteBook != null;
+
+        return IconButton(
+          onPressed: () {
+            context.read<FavoritesBloc>().add(FavouriteButtonClickedEvent(bookId: bookId));
+          },
+          splashRadius: 28,
+          color: isFavorite ? Colors.redAccent : Theme.of(context).colorScheme.onSurface,
+          icon: isFavorite ? const Icon(Icons.favorite) : const Icon(Icons.favorite_border),
+        );
+      },
     );
   }
 }

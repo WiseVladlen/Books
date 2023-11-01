@@ -11,18 +11,12 @@ class FavouritesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<FavoritesBloc>(
-      create: (BuildContext context) => FavoritesBloc(
-        user: context.read<UserAuthBloc>().state.user!,
-        bookRepository: context.read<IBookRepository>(),
+    return Scaffold(
+      appBar: AppBar(
+        title: Center(child: Text(context.l10n.favoritesLabel)),
+        elevation: 0,
       ),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Center(child: Text(context.l10n.favoritesLabel)),
-          elevation: 0,
-        ),
-        body: const _BookList(),
-      ),
+      body: const _BookList(),
     );
   }
 }
@@ -43,11 +37,8 @@ class _BookList extends StatelessWidget {
             itemBuilder: (BuildContext context, int index) {
               final BookModel book = books[index];
               return BookTile.fromModel(
-                books[index],
-                isFavorite: true,
-                onClickFavouriteButton: () {
-                  context.read<FavoritesBloc>().add(DeleteFromFavoritesEvent(bookId: book.id));
-                },
+                key: ValueKey<String>(book.id),
+                model: book,
               );
             },
             separatorBuilder: (BuildContext context, int index) => const Divider(height: 1),

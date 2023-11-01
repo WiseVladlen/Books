@@ -4,7 +4,6 @@ import 'package:books/app/app.dart';
 import 'package:books/domain/domain.dart';
 import 'package:books/presentation/presentation.dart';
 import 'package:books/utils/utils.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +15,6 @@ class SearchPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<SearchBloc>(
       create: (BuildContext context) => SearchBloc(
-        user: context.read<UserAuthBloc>().state.user!,
         bookRepository: context.read<IBookRepository>(),
       ),
       child: Scaffold(
@@ -144,16 +142,9 @@ class _BookListState extends State<_BookList> {
 
                 final BookModel book = books[index];
 
-                final BookModel? userBook = state.userBooks.firstWhereOrNull((BookModel userBook) {
-                  return userBook.id == book.id;
-                });
-
                 return BookTile.fromModel(
-                  books[index],
-                  isFavorite: userBook != null,
-                  onClickFavouriteButton: () {
-                    context.read<SearchBloc>().add(FavouriteButtonClickedEvent(bookId: book.id));
-                  },
+                  key: ValueKey<String>(book.id),
+                  model: book,
                 );
               },
               separatorBuilder: (BuildContext context, int index) => const Divider(height: 1),

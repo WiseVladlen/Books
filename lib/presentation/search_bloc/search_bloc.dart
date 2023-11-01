@@ -4,7 +4,6 @@ import 'dart:ui';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:books/domain/domain.dart';
-import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,26 +14,12 @@ part 'search_state.dart';
 const String tag = 'SearchBloc';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  SearchBloc({
-    required this.user,
-    required this.bookRepository,
-  }) : super(const SearchState()) {
-    on<_FavouriteBooksChangedEvent>(_favouriteBooksChanged);
+  SearchBloc({required this.bookRepository}) : super(const SearchState()) {
     on<LoadBooksEvent>(_loadBooks, transformer: droppable());
     on<SearchQueryChangedEvent>(_searchQueryChanged, transformer: restartable());
     on<RefreshBooksEvent>(_refreshBooks);
-    on<FavouriteButtonClickedEvent>(_favouriteButtonClicked, transformer: droppable());
-
-    _userBooksSubscription = bookRepository.getUserBookStream(userId: user.id).listen((
-      List<BookModel> books,
-    ) {
-      return add(_FavouriteBooksChangedEvent(books));
-    });
   }
 
-  late final StreamSubscription<List<BookModel>> _userBooksSubscription;
-
-  final UserModel user;
   final IBookRepository bookRepository;
 
   Future<void> _loadBooks(LoadBooksEvent event, Emitter<SearchState> emit) async {
@@ -119,22 +104,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     );
   }
 
-  void _favouriteBooksChanged(_FavouriteBooksChangedEvent event, Emitter<SearchState> emit) {
-    emit(state.copyWith(userBooks: event.books));
-  }
-
-  void _favouriteButtonClicked(FavouriteButtonClickedEvent event, Emitter<SearchState> emit) {
-    final BookModel? userBook = state.userBooks.firstWhereOrNull((BookModel userBook) {
-      return userBook.id == event.bookId;
-    });
-
-    if (userBook != null) {
-      bookRepository.deleteBookFromFavourites(userId: user.id, bookId: userBook.id);
-    } else {
-      bookRepository.addBookToFavourites(userId: user.id, bookId: event.bookId);
-    }
-  }
-
   /// Searches for books according to the search query and returns a list of books
   Future<List<BookModel>> _bookSearch({
     required QueryParameters queryParameters,
@@ -177,11 +146,5 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }) {
     log(message, error: error ?? 'Unknown error', stackTrace: stackTrace);
     emit(state.copyWith(bookDownloadStatus: DownloadStatus.failure));
-  }
-
-  @override
-  Future<void> close() {
-    _userBooksSubscription.cancel();
-    return super.close();
   }
 }
