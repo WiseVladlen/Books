@@ -133,9 +133,7 @@ class _BookListState extends State<_BookList> {
               (oldState.booksHavePeaked != newState.booksHavePeaked);
         },
         builder: (BuildContext context, SearchState state) {
-          if (state.bookDownloadStatus.isInProgress) {
-            return const Center(child: CircularProgressIndicator());
-          }
+          if (state.bookDownloadStatus.isInProgress) return const LoadingBackground();
 
           final List<BookModel> books = state.books;
 

@@ -34,9 +34,7 @@ class _BookList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FavoritesBloc, FavoritesState>(
       builder: (BuildContext context, FavoritesState state) {
-        if (state.bookDownloadStatus.isInProgress) {
-          return const Center(child: CircularProgressIndicator());
-        }
+        if (state.bookDownloadStatus.isInProgress) return const LoadingBackground();
 
         final List<BookModel> books = state.books;
 
