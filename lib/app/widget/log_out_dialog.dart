@@ -34,6 +34,6 @@ class _LogOutAlertDialog extends StatelessWidget {
 Future<void> showLogOutDialog(BuildContext context) {
   return showDialog(
     context: context,
-    builder: (BuildContext dialogContext) => const _LogOutAlertDialog(),
+    builder: (BuildContext _) => const _LogOutAlertDialog(),
   );
 }
