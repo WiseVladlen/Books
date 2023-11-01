@@ -14,12 +14,6 @@ class HomePage extends StatelessWidget {
       child: BlocBuilder<HomeCubit, HomeState>(
         builder: (BuildContext context, HomeState state) {
           return Scaffold(
-            appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(56),
-              child: state.bottomNavigationBarCurrentIndex == 0
-                  ? const FavoritesAppBar()
-                  : const SearchPageAppBar(),
-            ),
             body: state.bottomNavigationBarCurrentIndex == 0
                 ? const FavouritesPage()
                 : const SearchPage(),

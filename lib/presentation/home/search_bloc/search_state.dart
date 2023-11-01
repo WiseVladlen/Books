@@ -4,6 +4,7 @@ class SearchState extends Equatable {
   const SearchState({
     this.query = '',
     this.books = const <BookModel>[],
+    this.userBooks = const <BookModel>[],
     this.bookDownloadStatus = DownloadStatus.initial,
     this.lastBookIndex = 0,
     this.booksHavePeaked = false,
@@ -12,6 +13,7 @@ class SearchState extends Equatable {
 
   final String query;
   final List<BookModel> books;
+  final List<BookModel> userBooks;
   final DownloadStatus bookDownloadStatus;
   final int lastBookIndex;
   final bool booksHavePeaked;
@@ -22,6 +24,7 @@ class SearchState extends Equatable {
   SearchState copyWith({
     String? query,
     List<BookModel>? books,
+    List<BookModel>? userBooks,
     DownloadStatus? bookDownloadStatus,
     int? lastBookIndex,
     bool? booksHavePeaked,
@@ -30,6 +33,7 @@ class SearchState extends Equatable {
     return SearchState(
       query: query ?? this.query,
       books: books ?? this.books,
+      userBooks: userBooks ?? this.userBooks,
       bookDownloadStatus: bookDownloadStatus ?? this.bookDownloadStatus,
       lastBookIndex: lastBookIndex ?? this.lastBookIndex,
       booksHavePeaked: booksHavePeaked ?? this.booksHavePeaked,
@@ -41,6 +45,7 @@ class SearchState extends Equatable {
   List<Object> get props => <Object>[
         query,
         books,
+        userBooks,
         bookDownloadStatus,
         lastBookIndex,
         booksHavePeaked,

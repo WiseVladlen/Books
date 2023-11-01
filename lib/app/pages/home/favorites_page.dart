@@ -1,7 +1,8 @@
 import 'package:books/app/pages/home/book_tile.dart';
 import 'package:books/app/widget/widget.dart';
 import 'package:books/domain/domain.dart';
-import 'package:books/presentation/presentation.dart';
+import 'package:books/presentation/home/favorites_bloc/favorites_bloc.dart';
+import 'package:books/presentation/user_auth_bloc/user_auth_bloc.dart';
 import 'package:books/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,23 +13,17 @@ class FavouritesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<FavoritesBloc>(
-      create: (_) => FavoritesBloc(
+      create: (BuildContext context) => FavoritesBloc(
         user: context.read<UserAuthBloc>().state.user!,
         bookRepository: context.read<IBookRepository>(),
       ),
-      child: const _BookList(),
-    );
-  }
-}
-
-class FavoritesAppBar extends StatelessWidget {
-  const FavoritesAppBar({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      title: Center(child: Text(context.l10n.favoritesLabel)),
-      elevation: 0,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Center(child: Text(context.l10n.favoritesLabel)),
+          elevation: 0,
+        ),
+        body: const _BookList(),
+      ),
     );
   }
 }
@@ -48,7 +43,16 @@ class _BookList extends StatelessWidget {
 
         if (state.isBooksLoadedSuccessfully) {
           return ListView.separated(
-            itemBuilder: (BuildContext context, int index) => BookTile.fromModel(books[index]),
+            itemBuilder: (BuildContext context, int index) {
+              final BookModel book = books[index];
+              return BookTile.fromModel(
+                books[index],
+                isFavorite: true,
+                onClickFavouriteButton: () {
+                  context.read<FavoritesBloc>().add(DeleteFromFavoritesEvent(bookId: book.id));
+                },
+              );
+            },
             separatorBuilder: (BuildContext context, int index) => const Divider(height: 1),
             itemCount: books.length,
             physics: const BouncingScrollPhysics(),

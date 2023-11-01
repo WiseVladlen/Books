@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:books/app/app.dart';
 import 'package:books/domain/domain.dart';
 import 'package:books/presentation/home/search_bloc/search_bloc.dart';
+import 'package:books/presentation/user_auth_bloc/user_auth_bloc.dart';
 import 'package:books/utils/utils.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,25 +16,20 @@ class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<SearchBloc>(
-      create: (_) {
-        return SearchBloc(bookRepository: context.read<IBookRepository>());
-      },
-      child: const _BookList(),
-    );
-  }
-}
-
-class SearchPageAppBar extends StatelessWidget {
-  const SearchPageAppBar({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      title: const _SearchInput(),
-      actions: const <Widget>[
-        _AppBarMoreButton(),
-      ],
-      elevation: 0,
+      create: (BuildContext context) => SearchBloc(
+        user: context.read<UserAuthBloc>().state.user!,
+        bookRepository: context.read<IBookRepository>(),
+      ),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const _SearchInput(),
+          actions: const <Widget>[
+            _AppBarMoreButton(),
+          ],
+          elevation: 0,
+        ),
+        body: const _BookList(),
+      ),
     );
   }
 }
@@ -132,6 +129,7 @@ class _BookListState extends State<_BookList> {
       child: BlocBuilder<SearchBloc, SearchState>(
         buildWhen: (SearchState oldState, SearchState newState) {
           return (oldState.books != newState.books) ||
+              (oldState.userBooks != newState.userBooks) ||
               (oldState.bookDownloadStatus != newState.bookDownloadStatus) ||
               (oldState.booksHavePeaked != newState.booksHavePeaked);
         },
@@ -145,9 +143,21 @@ class _BookListState extends State<_BookList> {
           if (state.isBooksLoadedSuccessfully) {
             return ListView.separated(
               itemBuilder: (BuildContext context, int index) {
-                return index == books.length
-                    ? const _BottomLoader()
-                    : BookTile.fromModel(books[index]);
+                if (index == books.length) return const _BottomLoader();
+
+                final BookModel book = books[index];
+
+                final BookModel? userBook = state.userBooks.firstWhereOrNull((BookModel userBook) {
+                  return userBook.id == book.id;
+                });
+
+                return BookTile.fromModel(
+                  books[index],
+                  isFavorite: userBook != null,
+                  onClickFavouriteButton: () {
+                    context.read<SearchBloc>().add(FavouriteButtonClickedEvent(bookId: book.id));
+                  },
+                );
               },
               separatorBuilder: (BuildContext context, int index) => const Divider(height: 1),
               itemCount: state.booksHavePeaked ? books.length : books.length + 1,

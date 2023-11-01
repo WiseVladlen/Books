@@ -28,7 +28,7 @@ class BookRepositoryImpl implements IBookRepository {
   }
 
   @override
-  Stream<List<BookModel>> getBookStream({required int userId}) {
-    return localDataSource.getBookStream(userId: userId);
+  Stream<List<BookModel>> getUserBookStream({required int userId}) {
+    return localDataSource.getUserBookStream(userId: userId);
   }
 }

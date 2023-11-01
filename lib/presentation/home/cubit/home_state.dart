@@ -8,5 +8,5 @@ class HomeState extends Equatable {
   final int bottomNavigationBarCurrentIndex;
 
   @override
-  List<Object> get props => [bottomNavigationBarCurrentIndex];
+  List<Object> get props => <Object>[bottomNavigationBarCurrentIndex];
 }

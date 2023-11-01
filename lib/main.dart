@@ -12,6 +12,7 @@ import 'package:nested/nested.dart';
 
 void main() {
   FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
     // TODO: handle error
   };
 
@@ -21,6 +22,7 @@ void main() {
     ),
     (Object error, StackTrace stack) {
       // TODO: handle error
+      debugPrint('$error - $stack');
     },
   );
 }

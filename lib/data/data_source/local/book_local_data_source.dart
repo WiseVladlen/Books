@@ -86,9 +86,7 @@ class BookLocalDataSourceImpl implements IBookLocalDataSource {
   }
 
   @override
-  Stream<List<BookModel>> getBookStream({required int userId}) {
-    final Expression<bool> expression = db.userBookEntity.userId.equals(userId);
-
+  Stream<List<BookModel>> getUserBookStream({required int userId}) {
     final List<Join<HasResultSet, dynamic>> joins = <Join<HasResultSet, dynamic>>[
       innerJoin(
         db.userBookEntity,
@@ -99,8 +97,7 @@ class BookLocalDataSourceImpl implements IBookLocalDataSource {
       innerJoin(db.authorEntity, db.authorEntity.id.equalsExp(db.bookAuthorEntity.authorId)),
     ];
 
-    final JoinedSelectStatement<HasResultSet, dynamic> query = db.select(db.bookEntity).join(joins)
-      ..where(expression);
+    final JoinedSelectStatement<HasResultSet, dynamic> query = db.select(db.bookEntity).join(joins);
 
     return query.watch().map((List<TypedResult> rows) {
       final Iterable<BookEntityData> bookEntity =
@@ -123,7 +120,7 @@ class BookLocalDataSourceImpl implements IBookLocalDataSource {
         return (book: book, authors: authors).model;
       });
 
-      return books.toList(growable: false);
+      return books.toSet().toList(growable: false);
     });
   }
 }

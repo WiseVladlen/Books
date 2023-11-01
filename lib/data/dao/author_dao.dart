@@ -11,10 +11,16 @@ class AuthorDao extends DatabaseAccessor<Database> with _$AuthorDaoMixin {
   Future<AuthorMap> insertAllReturning(Iterable<String> authors) async {
     final AuthorMap result = <String, AuthorEntityData>{};
     for (final String author in authors) {
-      result[author] = await db.into(db.authorEntity).insertReturning(
-            AuthorEntityCompanion(name: Value<String>(author)),
-            mode: InsertMode.insertOrIgnore,
-          );
+      final AuthorEntityData? authorEntityOrNull = await into(authorEntity).insertReturningOrNull(
+        AuthorEntityCompanion(name: Value<String>(author)),
+        mode: InsertMode.insertOrIgnore,
+      );
+
+      late final Future<AuthorEntityData> nonNullAuthorEntity = (select(authorEntity)
+            ..where(($AuthorEntityTable entity) => entity.name.equals(author)))
+          .getSingle();
+
+      result[author] = authorEntityOrNull ?? await nonNullAuthorEntity;
     }
     return result;
   }
