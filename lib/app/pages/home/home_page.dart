@@ -14,11 +14,12 @@ class HomePage extends StatelessWidget {
       child: BlocBuilder<NavigationCubit, NavigationState>(
         builder: (BuildContext context, NavigationState state) {
           return Scaffold(
-            body: state.bottomNavigationBarCurrentIndex == 0
-                ? const FavouritesPage()
-                : const SearchPage(),
+            body: switch (state.pageViewType) {
+              PageViewType.favourite => const FavouritesPage(),
+              PageViewType.search => const SearchPage(),
+            },
             bottomNavigationBar: BottomNavigationBar(
-              currentIndex: state.bottomNavigationBarCurrentIndex,
+              currentIndex: state.pageViewType.index,
               items: <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
                   icon: const Icon(Icons.favorite_border),
@@ -30,7 +31,7 @@ class HomePage extends StatelessWidget {
                   label: context.l10n.searchLabel,
                 ),
               ],
-              onTap: context.read<NavigationCubit>().clickOnBottomNavigationBarItem,
+              onTap: (int index) => context.read<NavigationCubit>().clickOnPage(index: index),
             ),
           );
         },

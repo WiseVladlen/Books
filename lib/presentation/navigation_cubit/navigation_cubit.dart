@@ -6,7 +6,7 @@ part 'navigation_state.dart';
 class NavigationCubit extends Cubit<NavigationState> {
   NavigationCubit() : super(const NavigationState());
 
-  void clickOnBottomNavigationBarItem(int index) {
-    emit(NavigationState(bottomNavigationBarCurrentIndex: index));
+  void clickOnPage({required int index}) {
+    emit(NavigationState(pageViewType: PageViewType.values[index]));
   }
 }
