@@ -31,14 +31,16 @@ class BookLocalDataSourceImpl implements IBookLocalDataSource {
   @override
   Future<List<BookModel>> getBooks({required QueryParameters queryParameters}) async {
     final String substring = queryParameters.query.toLowerCase();
+    final String langRestrict = queryParameters.languageCode.name;
 
     final List<Join<HasResultSet, dynamic>> joins = <Join<HasResultSet, dynamic>>[
       innerJoin(db.bookAuthorEntity, db.bookAuthorEntity.bookId.equalsExp(db.bookEntity.id)),
       innerJoin(db.authorEntity, db.authorEntity.id.equalsExp(db.bookAuthorEntity.authorId)),
     ];
 
-    final Expression<bool> expression = db.bookEntity.title.lower().contains(substring) |
-        db.bookEntity.description.lower().contains(substring);
+    final Expression<bool> expression = db.bookEntity.language.equals(langRestrict) &
+        (db.bookEntity.title.lower().contains(substring) |
+            db.bookEntity.description.lower().contains(substring));
 
     final JoinedSelectStatement<HasResultSet, dynamic> query = db.select(db.bookEntity).join(joins)
       ..where(expression)
@@ -66,7 +68,7 @@ class BookLocalDataSourceImpl implements IBookLocalDataSource {
       return (book: book, authors: authors).model;
     });
 
-    return books.toList(growable: false);
+    return books.toSet().toList(growable: false);
   }
 
   @override
