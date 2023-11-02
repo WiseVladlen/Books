@@ -29,7 +29,7 @@ extension JoinedSelectStatementMapper on List<TypedResult> {
       return (book: book, authors: authors).model;
     });
 
-    // FIXME: Using join, redundant equivalent entries are mapped to books with multiple authors
+    // FIXME: When using join, books with multiple authors are matched with redundant equivalent entries
     return books.toSet().toList(growable: false);
   }
 }

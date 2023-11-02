@@ -18,6 +18,7 @@ class BookRepositoryImpl implements IBookRepository {
   Future<void> upsertBooks(List<BookModel> books) => localDataSource.upsertBooks(books);
 
   @override
+  // FIXME: Change the source of userId retrieval
   Stream<List<BookModel>> getUserBookStream({required int userId}) {
     return localDataSource.getUserBookStream(userId: userId);
   }

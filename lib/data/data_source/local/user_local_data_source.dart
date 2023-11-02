@@ -8,7 +8,7 @@ class UserLocalDataSourceImpl implements IUserLocalDataSource {
   final Database db;
 
   @override
-  Future<UserModel?> getAuthenticatedUser() async {
+  Future<UserModel?> getAuthenticatedUserOrNull() async {
     final SimpleSelectStatement<$UserEntityTable, UserEntityData> query = db.select(db.userEntity)
       ..where(($UserEntityTable user) => user.isAuthenticated.equals(true));
 
