@@ -12,31 +12,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'search_event.dart';
 part 'search_state.dart';
 
-const String tag = 'SearchBloc';
+final String _tag = (SearchBloc).toString();
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  SearchBloc({
-    required this.user,
-    required this.bookRepository,
-  }) : super(const SearchState()) {
-    on<_FavouriteBooksChangedEvent>(_favouriteBooksChanged);
+  SearchBloc({required this.bookRepository}) : super(const SearchState()) {
     on<LoadBooksEvent>(_loadBooks, transformer: droppable());
     on<SearchQueryChangedEvent>(_searchQueryChanged, transformer: restartable());
     on<RefreshBooksEvent>(_refreshBooks);
-    on<FavouriteButtonClickedEvent>(_favouriteButtonClicked, transformer: droppable());
     on<DataSourceChangedEvent>(_dataSourceChanged);
     on<LanguageChangedEvent>(_languageChanged);
-
-    _userBooksSubscription = bookRepository.getUserBookStream(userId: user.id).listen((
-      List<BookModel> books,
-    ) {
-      return add(_FavouriteBooksChangedEvent(books));
-    });
   }
 
-  late final StreamSubscription<List<BookModel>> _userBooksSubscription;
-
-  final UserModel user;
   final IBookRepository bookRepository;
 
   Future<void> _loadBooks(LoadBooksEvent event, Emitter<SearchState> emit) async {
@@ -45,10 +31,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     final List<BookModel> books = await _bookSearch(
       queryParameters: QueryParameters(
         query: state.query,
-        languageCode: state.languageCode,
         startIndex: state.lastBookIndex,
       ),
-      dataSourceType: state.dataSourceType,
       emit: emit,
     );
 
@@ -131,86 +115,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     );
   }
 
-  void _favouriteBooksChanged(_FavouriteBooksChangedEvent event, Emitter<SearchState> emit) {
-    emit(state.copyWith(userBooks: event.books));
-  }
-
-  void _favouriteButtonClicked(FavouriteButtonClickedEvent event, Emitter<SearchState> emit) {
-    final BookModel? userBook = state.userBooks.firstWhereOrNull((BookModel userBook) {
-      return userBook.id == event.bookId;
-    });
-
-    if (userBook != null) {
-      bookRepository.deleteBookFromFavourites(userId: user.id, bookId: userBook.id);
-    } else {
-      bookRepository.addBookToFavourites(userId: user.id, bookId: event.bookId);
-    }
-  }
-
-  Future<void> _dataSourceChanged(DataSourceChangedEvent event, Emitter<SearchState> emit) async {
-    final DataSourceType? dataSourceType = event.dataSourceType;
-
-    if (dataSourceType == null && dataSourceType == state.dataSourceType) return;
-
-    emit(
-      state.copyWith(
-        books: <BookModel>[],
-        bookDownloadStatus: DownloadStatus.inProgress,
-        dataSourceType: dataSourceType,
-        requestParameterChanged: true,
-      ),
-    );
-
-    final List<BookModel> books = await _bookSearch(
-      queryParameters: QueryParameters(
-        query: state.query,
-        languageCode: state.languageCode,
-      ),
-      dataSourceType: state.dataSourceType,
-      emit: emit,
-    );
-
-    emit(
-      state.copyWith(
-        books: books,
-        bookDownloadStatus: DownloadStatus.success,
-        lastBookIndex: books.length,
-        booksHavePeaked: books.length < QueryParameters.pageSize,
-        requestParameterChanged: true,
-      ),
-    );
-  }
-
-  Future<void> _languageChanged(LanguageChangedEvent event, Emitter<SearchState> emit) async {
-    emit(
-      state.copyWith(
-        books: <BookModel>[],
-        bookDownloadStatus: DownloadStatus.inProgress,
-        languageCode: event.languageCode,
-        requestParameterChanged: true,
-      ),
-    );
-
-    final List<BookModel> books = await _bookSearch(
-      queryParameters: QueryParameters(
-        query: state.query,
-        languageCode: state.languageCode,
-      ),
-      dataSourceType: state.dataSourceType,
-      emit: emit,
-    );
-
-    emit(
-      state.copyWith(
-        books: books,
-        bookDownloadStatus: DownloadStatus.success,
-        lastBookIndex: books.length,
-        booksHavePeaked: books.length < QueryParameters.pageSize,
-        requestParameterChanged: true,
-      ),
-    );
-  }
-
   /// Searches for books according to the search query and returns a list of books
   Future<List<BookModel>> _bookSearch({
     required QueryParameters queryParameters,
@@ -242,7 +146,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     try {
       return await query();
     } on DioException catch (error, stack) {
-      _handleException(emit: emit, message: tag, error: error, stackTrace: stack);
+      _handleException(emit: emit, message: _tag, error: error, stackTrace: stack);
       rethrow;
     } finally {
       onComplete?.call();
@@ -257,11 +161,5 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }) {
     log(message, error: error ?? 'Unknown error', stackTrace: stackTrace);
     emit(state.copyWith(bookDownloadStatus: DownloadStatus.failure));
-  }
-
-  @override
-  Future<void> close() {
-    _userBooksSubscription.cancel();
-    return super.close();
   }
 }

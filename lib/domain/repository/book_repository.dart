@@ -8,8 +8,5 @@ abstract interface class IBookRepository {
 
   Future<void> upsertBooks(List<BookModel> books);
 
-  Future<void> addBookToFavourites({required int userId, required String bookId});
-  Future<void> deleteBookFromFavourites({required int userId, required String bookId});
-
   Stream<List<BookModel>> getUserBookStream({required int userId});
 }

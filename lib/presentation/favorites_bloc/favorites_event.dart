@@ -10,8 +10,8 @@ final class _FavouriteBooksChangedEvent extends FavoritesEvent {
   final List<BookModel> books;
 }
 
-final class DeleteFromFavoritesEvent extends FavoritesEvent {
-  const DeleteFromFavoritesEvent({required this.bookId});
+final class FavouriteButtonClickedEvent extends FavoritesEvent {
+  const FavouriteButtonClickedEvent({required this.bookId});
 
   final String bookId;
 }

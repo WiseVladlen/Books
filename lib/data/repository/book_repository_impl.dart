@@ -24,16 +24,7 @@ class BookRepositoryImpl implements IBookRepository {
   Future<void> upsertBooks(List<BookModel> books) => localDataSource.upsertBooks(books);
 
   @override
-  Future<void> addBookToFavourites({required int userId, required String bookId}) {
-    return localDataSource.addBookToFavourites(userId: userId, bookId: bookId);
-  }
-
-  @override
-  Future<void> deleteBookFromFavourites({required int userId, required String bookId}) {
-    return localDataSource.deleteBookFromFavourites(userId: userId, bookId: bookId);
-  }
-
-  @override
+  // FIXME: Change the source of userId retrieval
   Stream<List<BookModel>> getUserBookStream({required int userId}) {
     return localDataSource.getUserBookStream(userId: userId);
   }

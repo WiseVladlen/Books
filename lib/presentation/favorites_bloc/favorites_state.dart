@@ -11,6 +11,10 @@ class FavoritesState extends Equatable {
 
   bool get isBooksLoadedSuccessfully => bookDownloadStatus.isSuccess && books.isNotEmpty;
 
+  BookModel? getFavoriteBookByIdOrNull(String id) {
+    return books.firstWhereOrNull((BookModel book) => book.id == id);
+  }
+
   FavoritesState copyWith({
     List<BookModel>? books,
     DownloadStatus? bookDownloadStatus,

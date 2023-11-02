@@ -1,12 +1,14 @@
 part of 'navigation_cubit.dart';
 
+enum PageViewType { favourite, search }
+
 class NavigationState extends Equatable {
   const NavigationState({
-    this.bottomNavigationBarCurrentIndex = 0,
+    this.pageViewType = PageViewType.favourite,
   });
 
-  final int bottomNavigationBarCurrentIndex;
+  final PageViewType pageViewType;
 
   @override
-  List<Object> get props => <Object>[bottomNavigationBarCurrentIndex];
+  List<Object> get props => <Object>[pageViewType];
 }

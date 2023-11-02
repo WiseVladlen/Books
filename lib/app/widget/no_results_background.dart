@@ -13,13 +13,18 @@ class NoResultsBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Wrap(
-        crossAxisAlignment: WrapCrossAlignment.center,
-        direction: Axis.vertical,
-        spacing: 16,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          icon,
-          text,
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: icon,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: text,
+          ),
         ],
       ),
     );

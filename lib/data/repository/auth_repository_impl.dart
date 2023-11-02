@@ -32,7 +32,7 @@ class AuthRepositoryImpl implements IAuthRepository {
 
   @override
   Future<void> logOut() async {
-    final UserModel? user = await userLocalDataSource.getAuthenticatedUser();
+    final UserModel? user = await userLocalDataSource.getAuthenticatedUserOrNull();
 
     if (user == null) return _statusController.add(AuthStatus.unauthenticated);
 

@@ -45,6 +45,9 @@ class App extends StatelessWidget {
         RepositoryProvider<IUserRepository>.value(
           value: repositoryStorage.userRepository,
         ),
+        RepositoryProvider<IFavoritesRepository>.value(
+          value: repositoryStorage.favoritesRepository,
+        ),
       ],
       child: BlocProvider<UserAuthBloc>(
         create: (BuildContext context) => UserAuthBloc(
