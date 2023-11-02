@@ -38,8 +38,9 @@ class BookLocalDataSourceImpl implements IBookLocalDataSource {
       innerJoin(db.authorEntity, db.authorEntity.id.equalsExp(db.bookAuthorEntity.authorId)),
     ];
 
-    final Expression<bool> expression = db.bookEntity.title.lower().contains(substring) |
-        db.bookEntity.description.lower().contains(substring);
+    final Expression<bool> expression = db.bookEntity.language.equals(langRestrict) &
+        (db.bookEntity.title.lower().contains(substring) |
+            db.bookEntity.description.lower().contains(substring));
 
     final JoinedSelectStatement<HasResultSet, dynamic> query = db.select(db.bookEntity).join(joins)
       ..where(expression)

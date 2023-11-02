@@ -4,7 +4,6 @@ import 'dart:ui';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:books/domain/domain.dart';
-import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,8 +30,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     final List<BookModel> books = await _bookSearch(
       queryParameters: QueryParameters(
         query: state.query,
+        languageCode: state.languageCode,
         startIndex: state.lastBookIndex,
       ),
+      dataSourceType: state.dataSourceType,
       emit: emit,
     );
 
@@ -111,6 +112,68 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         lastBookIndex: books.length,
         booksHavePeaked: books.length < QueryParameters.pageSize,
         requestParameterChanged: true,
+      ),
+    );
+  }
+
+  Future<void> _dataSourceChanged(DataSourceChangedEvent event, Emitter<SearchState> emit) async {
+    final DataSourceType? dataSourceType = event.dataSourceType;
+
+    if (dataSourceType == null && dataSourceType == state.dataSourceType) return;
+
+    emit(
+      state.copyWith(
+        books: <BookModel>[],
+        bookDownloadStatus: DownloadStatus.inProgress,
+        dataSourceType: dataSourceType,
+        requestParameterChanged: true,
+      ),
+    );
+
+    final List<BookModel> books = await _bookSearch(
+      queryParameters: QueryParameters(
+        query: state.query,
+        languageCode: state.languageCode,
+      ),
+      dataSourceType: state.dataSourceType,
+      emit: emit,
+    );
+
+    emit(
+      state.copyWith(
+        books: books,
+        bookDownloadStatus: DownloadStatus.success,
+        lastBookIndex: books.length,
+        booksHavePeaked: books.length < QueryParameters.pageSize,
+      ),
+    );
+  }
+
+  Future<void> _languageChanged(LanguageChangedEvent event, Emitter<SearchState> emit) async {
+    emit(
+      state.copyWith(
+        books: <BookModel>[],
+        bookDownloadStatus: DownloadStatus.inProgress,
+        languageCode: event.languageCode,
+        requestParameterChanged: true,
+      ),
+    );
+
+    final List<BookModel> books = await _bookSearch(
+      queryParameters: QueryParameters(
+        query: state.query,
+        languageCode: state.languageCode,
+      ),
+      dataSourceType: state.dataSourceType,
+      emit: emit,
+    );
+
+    emit(
+      state.copyWith(
+        books: books,
+        bookDownloadStatus: DownloadStatus.success,
+        lastBookIndex: books.length,
+        booksHavePeaked: books.length < QueryParameters.pageSize,
       ),
     );
   }
