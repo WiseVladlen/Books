@@ -19,13 +19,13 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     on<FavouriteButtonClickedEvent>(_favouriteButtonClicked, transformer: droppable());
 
     _favoriteBooksSubscription = bookRepository.getUserBookStream(userId: user.id).listen((
-      List<BookModel> books,
+      Set<BookModel> books,
     ) {
       add(_FavouriteBooksChangedEvent(books));
     });
   }
 
-  late final StreamSubscription<List<BookModel>> _favoriteBooksSubscription;
+  late final StreamSubscription<Set<BookModel>> _favoriteBooksSubscription;
 
   final UserModel user;
   final IBookRepository bookRepository;
@@ -44,7 +44,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     final BookModel? favoriteBook = state.getFavoriteBookByIdOrNull(event.bookId);
 
     if (favoriteBook != null) {
-      favoritesRepository.deleteBook(userId: user.id, bookId: favoriteBook.id);
+      favoritesRepository.deleteBook(userId: user.id, bookId: event.bookId);
     } else {
       favoritesRepository.addBook(userId: user.id, bookId: event.bookId);
     }

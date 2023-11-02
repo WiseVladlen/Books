@@ -7,7 +7,7 @@ abstract class FavoritesEvent {
 final class _FavouriteBooksChangedEvent extends FavoritesEvent {
   const _FavouriteBooksChangedEvent(this.books);
 
-  final List<BookModel> books;
+  final Set<BookModel> books;
 }
 
 final class FavouriteButtonClickedEvent extends FavoritesEvent {

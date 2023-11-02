@@ -30,12 +30,13 @@ class _BookList extends StatelessWidget {
       builder: (BuildContext context, FavoritesState state) {
         if (state.bookDownloadStatus.isInProgress) return const LoadingBackground();
 
-        final List<BookModel> books = state.books;
+        final Set<BookModel> books = state.books;
 
         if (state.isBooksLoadedSuccessfully) {
           return ListView.separated(
             itemBuilder: (BuildContext context, int index) {
-              final BookModel book = books[index];
+              final BookModel book = books.elementAt(index);
+
               return BookTile.fromModel(
                 key: ValueKey<String>(book.id),
                 model: book,

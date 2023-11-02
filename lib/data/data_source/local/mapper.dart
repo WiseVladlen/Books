@@ -4,7 +4,7 @@ import 'package:drift/drift.dart';
 
 extension JoinedSelectStatementMapper on List<TypedResult> {
   /// The current elements of this iterable are converted into a list of books
-  List<BookModel> mapToBooks({required Database database}) {
+  Set<BookModel> mapToBooks({required Database database}) {
     final Iterable<BookEntityData> bookEntity = map(
       (TypedResult e) => e.readTable(database.bookEntity),
     );
@@ -30,6 +30,6 @@ extension JoinedSelectStatementMapper on List<TypedResult> {
     });
 
     // FIXME: When using join, books with multiple authors are matched with redundant equivalent entries
-    return books.toSet().toList(growable: false);
+    return books.toSet();
   }
 }

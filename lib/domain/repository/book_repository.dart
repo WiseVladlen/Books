@@ -8,5 +8,5 @@ abstract interface class IBookRepository {
 
   Future<void> upsertBooks(List<BookModel> books);
 
-  Stream<List<BookModel>> getUserBookStream({required int userId});
+  Stream<Set<BookModel>> getUserBookStream({required int userId});
 }
