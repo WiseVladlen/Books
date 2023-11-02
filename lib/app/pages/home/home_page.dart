@@ -18,6 +18,7 @@ class HomePage extends StatelessWidget {
           create: (BuildContext context) => FavoritesBloc(
             user: context.read<UserAuthBloc>().state.user!,
             bookRepository: context.read<IBookRepository>(),
+            favoritesRepository: context.read<IFavoritesRepository>(),
           ),
         ),
       ],

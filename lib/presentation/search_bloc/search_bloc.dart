@@ -11,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'search_event.dart';
 part 'search_state.dart';
 
-const String tag = 'SearchBloc';
+final String _tag = (SearchBloc).toString();
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc({required this.bookRepository}) : super(const SearchState()) {
@@ -131,7 +131,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     try {
       return await query();
     } on DioException catch (error, stack) {
-      _handleException(emit: emit, message: tag, error: error, stackTrace: stack);
+      _handleException(emit: emit, message: _tag, error: error, stackTrace: stack);
       rethrow;
     } finally {
       onComplete?.call();

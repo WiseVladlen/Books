@@ -13,6 +13,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   FavoritesBloc({
     required this.user,
     required this.bookRepository,
+    required this.favoritesRepository,
   }) : super(const FavoritesState()) {
     on<_FavouriteBooksChangedEvent>(_favouriteBooksChanged);
     on<FavouriteButtonClickedEvent>(_favouriteButtonClicked, transformer: droppable());
@@ -28,6 +29,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
 
   final UserModel user;
   final IBookRepository bookRepository;
+  final IFavoritesRepository favoritesRepository;
 
   void _favouriteBooksChanged(_FavouriteBooksChangedEvent event, Emitter<FavoritesState> emit) {
     emit(
@@ -39,14 +41,12 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   }
 
   void _favouriteButtonClicked(FavouriteButtonClickedEvent event, Emitter<FavoritesState> emit) {
-    final BookModel? favoriteBook = state.books.firstWhereOrNull(
-      (BookModel book) => book.id == event.bookId,
-    );
+    final BookModel? favoriteBook = state.getFavoriteBookByIdOrNull(event.bookId);
 
     if (favoriteBook != null) {
-      bookRepository.deleteBookFromFavourites(userId: user.id, bookId: favoriteBook.id);
+      favoritesRepository.deleteBook(userId: user.id, bookId: favoriteBook.id);
     } else {
-      bookRepository.addBookToFavourites(userId: user.id, bookId: event.bookId);
+      favoritesRepository.addBook(userId: user.id, bookId: event.bookId);
     }
   }
 

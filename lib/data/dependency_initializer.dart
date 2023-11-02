@@ -36,10 +36,15 @@ abstract class DependencyInitializer {
       localDataSource: userLocalDataSource,
     );
 
+    final IFavoritesRepository favoritesRepository = FavoritesRepositoryImpl(
+      bookLocalDataSource: bookLocalDataSource,
+    );
+
     return RepositoryStorage(
       authRepository: authRepository,
       bookRepository: bookRepository,
       userRepository: userRepository,
+      favoritesRepository: favoritesRepository,
     );
   }
 }

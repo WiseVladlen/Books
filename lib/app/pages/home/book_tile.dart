@@ -2,7 +2,6 @@ import 'package:books/app/app.dart';
 import 'package:books/domain/model/model.dart';
 import 'package:books/presentation/favorites_bloc/favorites_bloc.dart';
 import 'package:books/utils/utils.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -145,22 +144,14 @@ class _FavoriteButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FavoritesBloc, FavoritesState>(
       buildWhen: (FavoritesState oldState, FavoritesState newState) {
-        final BookModel? bookFromOldList = oldState.books.firstWhereOrNull(
-          (BookModel book) => book.id == bookId,
-        );
+        final BookModel? favoriteBookFromOldList = oldState.getFavoriteBookByIdOrNull(bookId);
+        final BookModel? favoriteBookFromNewList = newState.getFavoriteBookByIdOrNull(bookId);
 
-        final BookModel? bookFromNewList = newState.books.firstWhereOrNull(
-          (BookModel book) => book.id == bookId,
-        );
-
-        return (bookFromOldList == null && bookFromNewList != null) ||
-            (bookFromOldList != null && bookFromNewList == null);
+        return (favoriteBookFromOldList == null && favoriteBookFromNewList != null) ||
+            (favoriteBookFromOldList != null && favoriteBookFromNewList == null);
       },
       builder: (BuildContext context, FavoritesState state) {
-        final BookModel? favoriteBook = state.books.firstWhereOrNull(
-          (BookModel book) => book.id == bookId,
-        );
-        final bool isFavorite = favoriteBook != null;
+        final bool isFavorite = state.getFavoriteBookByIdOrNull(bookId) != null;
 
         return IconButton(
           onPressed: () {
