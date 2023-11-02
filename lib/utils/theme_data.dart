@@ -1,15 +1,14 @@
 import 'package:books/utils/utils.dart';
 import 'package:flutter/material.dart';
 
-@immutable
-class ThemeDataX {
+abstract class ThemeDataX {
   /// Returns an instance of the ThemeData class according to the [brightness] parameter
   static ThemeData from({required Brightness brightness}) => ThemeData(
         brightness: brightness,
         colorScheme: ColorScheme.fromSeed(
           brightness: brightness,
           seedColor: Colors.pink,
-          error: Colors.red[400],
+          error: Colors.redAccent,
         ),
         textSelectionTheme: TextSelectionThemeData(
           selectionColor: Colors.white.withOpacity(0.25),
