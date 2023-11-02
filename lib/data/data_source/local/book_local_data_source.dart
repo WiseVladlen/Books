@@ -44,29 +44,9 @@ class BookLocalDataSourceImpl implements IBookLocalDataSource {
       ..where(expression)
       ..limit(queryParameters.maxResults, offset: queryParameters.startIndex);
 
-    final List<TypedResult> result = await query.get();
+    final List<TypedResult> rows = await query.get();
 
-    final Iterable<BookEntityData> bookEntity =
-        result.map((TypedResult e) => e.readTable(db.bookEntity));
-
-    final Iterable<AuthorEntityData> authorEntity =
-        result.map((TypedResult e) => e.readTable(db.authorEntity));
-
-    final Iterable<BookAuthorEntityData> bookAuthorEntity =
-        result.map((TypedResult e) => e.readTable(db.bookAuthorEntity));
-
-    final Iterable<BookModel> books = bookEntity.map((BookEntityData book) {
-      final Iterable<int> authorIds = bookAuthorEntity
-          .where((BookAuthorEntityData bookAuthor) => bookAuthor.bookId == book.id)
-          .map((BookAuthorEntityData bookAuthor) => bookAuthor.authorId);
-
-      final Iterable<AuthorEntityData> authors =
-          authorEntity.where((AuthorEntityData author) => authorIds.contains(author.id));
-
-      return (book: book, authors: authors).model;
-    });
-
-    return books.toSet().toList(growable: false);
+    return rows.mapToBooks(database: db);
   }
 
   @override
@@ -101,28 +81,6 @@ class BookLocalDataSourceImpl implements IBookLocalDataSource {
 
     final JoinedSelectStatement<HasResultSet, dynamic> query = db.select(db.bookEntity).join(joins);
 
-    return query.watch().map((List<TypedResult> rows) {
-      final Iterable<BookEntityData> bookEntity =
-          rows.map((TypedResult e) => e.readTable(db.bookEntity));
-
-      final Iterable<AuthorEntityData> authorEntity =
-          rows.map((TypedResult e) => e.readTable(db.authorEntity));
-
-      final Iterable<BookAuthorEntityData> bookAuthorEntity =
-          rows.map((TypedResult e) => e.readTable(db.bookAuthorEntity));
-
-      final Iterable<BookModel> books = bookEntity.map((BookEntityData book) {
-        final Iterable<int> authorIds = bookAuthorEntity
-            .where((BookAuthorEntityData bookAuthor) => bookAuthor.bookId == book.id)
-            .map((BookAuthorEntityData bookAuthor) => bookAuthor.authorId);
-
-        final Iterable<AuthorEntityData> authors =
-            authorEntity.where((AuthorEntityData author) => authorIds.contains(author.id));
-
-        return (book: book, authors: authors).model;
-      });
-
-      return books.toSet().toList(growable: false);
-    });
+    return query.watch().map((List<TypedResult> rows) => rows.mapToBooks(database: db));
   }
 }
