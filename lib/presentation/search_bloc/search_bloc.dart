@@ -150,11 +150,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   Future<void> _languageChanged(LanguageChangedEvent event, Emitter<SearchState> emit) async {
+    final LanguageCode? languageCode = event.languageCode;
+
+    if (languageCode == null && languageCode == state.languageCode) return;
+
     emit(
       state.copyWith(
         books: <BookModel>[],
         bookDownloadStatus: DownloadStatus.inProgress,
-        languageCode: event.languageCode,
+        languageCode: languageCode,
         requestParameterChanged: true,
       ),
     );

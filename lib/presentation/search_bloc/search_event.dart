@@ -29,5 +29,5 @@ final class DataSourceChangedEvent extends SearchEvent {
 final class LanguageChangedEvent extends SearchEvent {
   const LanguageChangedEvent(this.languageCode);
 
-  final LanguageCode languageCode;
+  final LanguageCode? languageCode;
 }
