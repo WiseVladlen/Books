@@ -8,14 +8,13 @@ import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-part 'home_event.dart';
+part 'search_event.dart';
+part 'search_state.dart';
 
-part 'home_state.dart';
+final String _tag = (SearchBloc).toString();
 
-const String tag = 'HomeBloc';
-
-class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc({required this.bookRepository}) : super(const HomeState()) {
+class SearchBloc extends Bloc<SearchEvent, SearchState> {
+  SearchBloc({required this.bookRepository}) : super(const SearchState()) {
     on<LoadBooksEvent>(_loadBooks, transformer: droppable());
     on<SearchQueryChangedEvent>(_searchQueryChanged, transformer: restartable());
     on<RefreshBooksEvent>(_refreshBooks);
@@ -23,7 +22,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   final IBookRepository bookRepository;
 
-  Future<void> _loadBooks(LoadBooksEvent event, Emitter<HomeState> emit) async {
+  Future<void> _loadBooks(LoadBooksEvent event, Emitter<SearchState> emit) async {
     if (state.booksHavePeaked) return;
 
     final List<BookModel> books = await _bookSearch(
@@ -45,7 +44,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
   }
 
-  Future<void> _searchQueryChanged(SearchQueryChangedEvent event, Emitter<HomeState> emit) async {
+  Future<void> _searchQueryChanged(SearchQueryChangedEvent event, Emitter<SearchState> emit) async {
     final String query = event.query.trim();
 
     if (query == state.query) return;
@@ -86,7 +85,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
   }
 
-  Future<void> _refreshBooks(RefreshBooksEvent event, Emitter<HomeState> emit) async {
+  Future<void> _refreshBooks(RefreshBooksEvent event, Emitter<SearchState> emit) async {
     if (state.bookDownloadStatus.isInProgress) return;
 
     final List<BookModel> books = await _bookSearch(
@@ -108,7 +107,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   /// Searches for books according to the search query and returns a list of books
   Future<List<BookModel>> _bookSearch({
     required QueryParameters queryParameters,
-    required Emitter<HomeState> emit,
+    required Emitter<SearchState> emit,
     VoidCallback? onComplete,
   }) async {
     if (state.query.isEmpty) return <BookModel>[];
@@ -126,13 +125,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   Future<T> _runSafely<T>(
     Future<T> Function() query, {
-    required Emitter<HomeState> emit,
+    required Emitter<SearchState> emit,
     VoidCallback? onComplete,
   }) async {
     try {
       return await query();
     } on DioException catch (error, stack) {
-      _handleException(emit: emit, message: tag, error: error, stackTrace: stack);
+      _handleException(emit: emit, message: _tag, error: error, stackTrace: stack);
       rethrow;
     } finally {
       onComplete?.call();
@@ -140,7 +139,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   void _handleException({
-    required Emitter<HomeState> emit,
+    required Emitter<SearchState> emit,
     required String message,
     Object? error,
     StackTrace? stackTrace,

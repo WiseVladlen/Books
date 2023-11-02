@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:books/app/pages/pages.dart';
 import 'package:books/data/data.dart';
 import 'package:books/domain/domain.dart';
 import 'package:books/presentation/presentation.dart';
@@ -9,10 +10,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nested/nested.dart';
 
-import 'app/pages/pages.dart';
-
 void main() {
   FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
     // TODO: handle error
   };
 
@@ -22,6 +22,7 @@ void main() {
     ),
     (Object error, StackTrace stack) {
       // TODO: handle error
+      debugPrint('$error - $stack');
     },
   );
 }
@@ -43,6 +44,9 @@ class App extends StatelessWidget {
         ),
         RepositoryProvider<IUserRepository>.value(
           value: repositoryStorage.userRepository,
+        ),
+        RepositoryProvider<IFavoritesRepository>.value(
+          value: repositoryStorage.favoritesRepository,
         ),
       ],
       child: BlocProvider<UserAuthBloc>(

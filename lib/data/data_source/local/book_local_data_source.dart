@@ -29,7 +29,7 @@ class BookLocalDataSourceImpl implements IBookLocalDataSource {
   }
 
   @override
-  Future<Iterable<BookModel>> getBooks({required QueryParameters queryParameters}) async {
+  Future<List<BookModel>> getBooks({required QueryParameters queryParameters}) async {
     final String substring = queryParameters.query.toLowerCase();
 
     final List<Join<HasResultSet, dynamic>> joins = <Join<HasResultSet, dynamic>>[
@@ -44,26 +44,43 @@ class BookLocalDataSourceImpl implements IBookLocalDataSource {
       ..where(expression)
       ..limit(queryParameters.maxResults, offset: queryParameters.startIndex);
 
-    final List<TypedResult> result = await query.get();
+    final List<TypedResult> rows = await query.get();
 
-    final Iterable<BookEntityData> bookEntity =
-        result.map((TypedResult e) => e.readTable(db.bookEntity));
+    return rows.mapToBooks(database: db);
+  }
 
-    final Iterable<AuthorEntityData> authorEntity =
-        result.map((TypedResult e) => e.readTable(db.authorEntity));
+  @override
+  Future<void> addBookToFavourites({required int userId, required String bookId}) async {
+    final UserBookEntityCompanion userBook = UserBookEntityCompanion(
+      userId: Value<int>(userId),
+      bookId: Value<String>(bookId),
+    );
+    await db.into(db.userBookEntity).insert(userBook, mode: InsertMode.insertOrIgnore);
+  }
 
-    final Iterable<BookAuthorEntityData> bookAuthorEntity =
-        result.map((TypedResult e) => e.readTable(db.bookAuthorEntity));
+  @override
+  Future<void> deleteBookFromFavourites({required int userId, required String bookId}) async {
+    await (db.delete(db.userBookEntity)
+          ..where(($UserBookEntityTable userBook) {
+            return userBook.userId.equals(userId) & userBook.bookId.equals(bookId);
+          }))
+        .go();
+  }
 
-    return bookEntity.map((BookEntityData book) {
-      final Iterable<int> authorIds = bookAuthorEntity
-          .where((BookAuthorEntityData bookAuthor) => bookAuthor.bookId == book.id)
-          .map((BookAuthorEntityData bookAuthor) => bookAuthor.authorId);
+  @override
+  Stream<List<BookModel>> getUserBookStream({required int userId}) {
+    final List<Join<HasResultSet, dynamic>> joins = <Join<HasResultSet, dynamic>>[
+      innerJoin(
+        db.userBookEntity,
+        db.userBookEntity.userId.equals(userId) &
+            db.userBookEntity.bookId.equalsExp(db.bookEntity.id),
+      ),
+      innerJoin(db.bookAuthorEntity, db.bookAuthorEntity.bookId.equalsExp(db.bookEntity.id)),
+      innerJoin(db.authorEntity, db.authorEntity.id.equalsExp(db.bookAuthorEntity.authorId)),
+    ];
 
-      final Iterable<AuthorEntityData> authors =
-          authorEntity.where((AuthorEntityData author) => authorIds.contains(author.id));
+    final JoinedSelectStatement<HasResultSet, dynamic> query = db.select(db.bookEntity).join(joins);
 
-      return (book: book, authors: authors).model;
-    });
+    return query.watch().map((List<TypedResult> rows) => rows.mapToBooks(database: db));
   }
 }

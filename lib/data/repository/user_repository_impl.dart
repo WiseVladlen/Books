@@ -6,5 +6,5 @@ class UserRepositoryImpl implements IUserRepository {
   final IUserLocalDataSource localDataSource;
 
   @override
-  Future<UserModel?> fetchAuthenticatedUser() => localDataSource.getAuthenticatedUser();
+  Future<UserModel?> getAuthenticatedUserOrNull() => localDataSource.getAuthenticatedUserOrNull();
 }

@@ -12,8 +12,12 @@
     "description": "A message about finding books"
   },
   "noResultsMessage": "No books found",
-  "@noResults": {
+  "@noResultsMessage": {
     "description": "Reporting unsuccessful search results"
+  },
+  "noFavouriteBooksMessage": "Nothing here yet",
+  "@noFavouriteBooksMessage": {
+    "description": "Message about unsuccessful results of downloading favorite books"
   },
   "authorsHeader": "Authors",
   "@authorsHeader": {
@@ -86,5 +90,13 @@
   "negativeDialogButton": "No",
   "@negativeDialogButton": {
     "description": "Negative text of the dialog box"
+  },
+  "searchLabel": "Search",
+  "@searchLabel": {
+    "description": "Bottom navigation bar label describing the search page"
+  },
+  "favoritesLabel": "Favorites",
+  "@favoritesLabel": {
+    "description": "Bottom navigation bar label describing the favorites page"
   }
 }

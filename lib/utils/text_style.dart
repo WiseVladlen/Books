@@ -6,7 +6,7 @@ class TextStyles extends ThemeExtension<TextStyles> {
       fontSize: 64,
       fontWeight: FontWeight.bold,
     ),
-    this.searchLogoMedium = const TextStyle(fontSize: 22),
+    this.backgroundLogoMedium = const TextStyle(fontSize: 22),
     this.cardTitleMedium = const TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.bold,
@@ -32,7 +32,7 @@ class TextStyles extends ThemeExtension<TextStyles> {
         );
 
   final TextStyle appTitleLarge;
-  final TextStyle searchLogoMedium;
+  final TextStyle backgroundLogoMedium;
   final TextStyle cardTitleMedium;
   final TextStyle appBarTextField;
   final TextStyle inputDecorationHint;
@@ -41,7 +41,7 @@ class TextStyles extends ThemeExtension<TextStyles> {
   @override
   ThemeExtension<TextStyles> copyWith({
     TextStyle? appTitleLarge,
-    TextStyle? searchLogoMedium,
+    TextStyle? backgroundLogoMedium,
     TextStyle? cardTitleMedium,
     TextStyle? appBarTextField,
     TextStyle? inputDecorationHint,
@@ -49,7 +49,7 @@ class TextStyles extends ThemeExtension<TextStyles> {
   }) {
     return TextStyles(
       appTitleLarge: appTitleLarge ?? this.appTitleLarge,
-      searchLogoMedium: searchLogoMedium ?? this.searchLogoMedium,
+      backgroundLogoMedium: backgroundLogoMedium ?? this.backgroundLogoMedium,
       cardTitleMedium: cardTitleMedium ?? this.cardTitleMedium,
       appBarTextField: appBarTextField ?? this.appBarTextField,
       inputDecorationHint: inputDecorationHint ?? this.inputDecorationHint,
@@ -63,7 +63,7 @@ class TextStyles extends ThemeExtension<TextStyles> {
 
     return TextStyles(
       appTitleLarge: TextStyle.lerp(appTitleLarge, other.appTitleLarge, t)!,
-      searchLogoMedium: TextStyle.lerp(searchLogoMedium, other.searchLogoMedium, t)!,
+      backgroundLogoMedium: TextStyle.lerp(backgroundLogoMedium, other.backgroundLogoMedium, t)!,
       cardTitleMedium: TextStyle.lerp(cardTitleMedium, other.cardTitleMedium, t)!,
       appBarTextField: TextStyle.lerp(appBarTextField, other.appBarTextField, t)!,
       inputDecorationHint: TextStyle.lerp(inputDecorationHint, other.inputDecorationHint, t)!,

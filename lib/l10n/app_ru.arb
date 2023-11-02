@@ -3,6 +3,7 @@
   "searchHint": "Поиск",
   "searchBooksMessage": "Поиск книг",
   "noResultsMessage": "Книги не найдены",
+  "noFavouriteBooksMessage": "Здесь пока ничего нет",
   "authorsHeader": "Авторы",
   "publisherHeader": "Издательство",
   "pageCountHeader": "Кол-во страниц",
@@ -20,5 +21,7 @@
   "alreadyHaveAccountQuestion": "Уже есть аккаунт?",
   "logOutQuestion": "Выйти из аккаунта?",
   "positiveDialogButton": "Да",
-  "negativeDialogButton": "Нет"
+  "negativeDialogButton": "Нет",
+  "searchLabel": "Поиск",
+  "favoritesLabel": "Избранное"
 }

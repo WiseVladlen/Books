@@ -1105,6 +1105,223 @@ class BookAuthorEntityCompanion extends UpdateCompanion<BookAuthorEntityData> {
   }
 }
 
+class $UserBookEntityTable extends UserBookEntity
+    with TableInfo<$UserBookEntityTable, UserBookEntityData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $UserBookEntityTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  @override
+  late final GeneratedColumn<int> userId = GeneratedColumn<int>(
+      'user_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES user_entity (id)'));
+  static const VerificationMeta _bookIdMeta = const VerificationMeta('bookId');
+  @override
+  late final GeneratedColumn<String> bookId = GeneratedColumn<String>(
+      'book_id', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES book_entity (id)'));
+  @override
+  List<GeneratedColumn> get $columns => [id, userId, bookId];
+  @override
+  String get aliasedName => _alias ?? 'user_book_entity';
+  @override
+  String get actualTableName => 'user_book_entity';
+  @override
+  VerificationContext validateIntegrity(Insertable<UserBookEntityData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('user_id')) {
+      context.handle(_userIdMeta,
+          userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    } else if (isInserting) {
+      context.missing(_userIdMeta);
+    }
+    if (data.containsKey('book_id')) {
+      context.handle(_bookIdMeta,
+          bookId.isAcceptableOrUnknown(data['book_id']!, _bookIdMeta));
+    } else if (isInserting) {
+      context.missing(_bookIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+        {userId, bookId},
+      ];
+  @override
+  UserBookEntityData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return UserBookEntityData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      userId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}user_id'])!,
+      bookId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}book_id'])!,
+    );
+  }
+
+  @override
+  $UserBookEntityTable createAlias(String alias) {
+    return $UserBookEntityTable(attachedDatabase, alias);
+  }
+}
+
+class UserBookEntityData extends DataClass
+    implements Insertable<UserBookEntityData> {
+  final int id;
+  final int userId;
+  final String bookId;
+  const UserBookEntityData(
+      {required this.id, required this.userId, required this.bookId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['user_id'] = Variable<int>(userId);
+    map['book_id'] = Variable<String>(bookId);
+    return map;
+  }
+
+  UserBookEntityCompanion toCompanion(bool nullToAbsent) {
+    return UserBookEntityCompanion(
+      id: Value(id),
+      userId: Value(userId),
+      bookId: Value(bookId),
+    );
+  }
+
+  factory UserBookEntityData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return UserBookEntityData(
+      id: serializer.fromJson<int>(json['id']),
+      userId: serializer.fromJson<int>(json['userId']),
+      bookId: serializer.fromJson<String>(json['bookId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'userId': serializer.toJson<int>(userId),
+      'bookId': serializer.toJson<String>(bookId),
+    };
+  }
+
+  UserBookEntityData copyWith({int? id, int? userId, String? bookId}) =>
+      UserBookEntityData(
+        id: id ?? this.id,
+        userId: userId ?? this.userId,
+        bookId: bookId ?? this.bookId,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('UserBookEntityData(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('bookId: $bookId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, userId, bookId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is UserBookEntityData &&
+          other.id == this.id &&
+          other.userId == this.userId &&
+          other.bookId == this.bookId);
+}
+
+class UserBookEntityCompanion extends UpdateCompanion<UserBookEntityData> {
+  final Value<int> id;
+  final Value<int> userId;
+  final Value<String> bookId;
+  const UserBookEntityCompanion({
+    this.id = const Value.absent(),
+    this.userId = const Value.absent(),
+    this.bookId = const Value.absent(),
+  });
+  UserBookEntityCompanion.insert({
+    this.id = const Value.absent(),
+    required int userId,
+    required String bookId,
+  })  : userId = Value(userId),
+        bookId = Value(bookId);
+  static Insertable<UserBookEntityData> custom({
+    Expression<int>? id,
+    Expression<int>? userId,
+    Expression<String>? bookId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (userId != null) 'user_id': userId,
+      if (bookId != null) 'book_id': bookId,
+    });
+  }
+
+  UserBookEntityCompanion copyWith(
+      {Value<int>? id, Value<int>? userId, Value<String>? bookId}) {
+    return UserBookEntityCompanion(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      bookId: bookId ?? this.bookId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (userId.present) {
+      map['user_id'] = Variable<int>(userId.value);
+    }
+    if (bookId.present) {
+      map['book_id'] = Variable<String>(bookId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UserBookEntityCompanion(')
+          ..write('id: $id, ')
+          ..write('userId: $userId, ')
+          ..write('bookId: $bookId')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$Database extends GeneratedDatabase {
   _$Database(QueryExecutor e) : super(e);
   late final $UserEntityTable userEntity = $UserEntityTable(this);
@@ -1112,6 +1329,7 @@ abstract class _$Database extends GeneratedDatabase {
   late final $BookEntityTable bookEntity = $BookEntityTable(this);
   late final $BookAuthorEntityTable bookAuthorEntity =
       $BookAuthorEntityTable(this);
+  late final $UserBookEntityTable userBookEntity = $UserBookEntityTable(this);
   late final AuthorDao authorDao = AuthorDao(this as Database);
   late final BookAuthorDao bookAuthorDao = BookAuthorDao(this as Database);
   @override
@@ -1119,5 +1337,5 @@ abstract class _$Database extends GeneratedDatabase {
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [userEntity, authorEntity, bookEntity, bookAuthorEntity];
+      [userEntity, authorEntity, bookEntity, bookAuthorEntity, userBookEntity];
 }

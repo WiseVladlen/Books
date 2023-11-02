@@ -14,11 +14,12 @@ part 'entity/author_entity.dart';
 part 'entity/book_author_entity.dart';
 part 'entity/book_entity.dart';
 part 'entity/user_entity.dart';
+part 'entity/user_book_entity.dart';
 
 const String _databaseName = 'db.sqlite';
 
 @DriftDatabase(
-  tables: <Type>[UserEntity, AuthorEntity, BookEntity, BookAuthorEntity],
+  tables: <Type>[UserEntity, AuthorEntity, BookEntity, BookAuthorEntity, UserBookEntity],
   daos: <Type>[AuthorDao, BookAuthorDao],
 )
 class Database extends _$Database {

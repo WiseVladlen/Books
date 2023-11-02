@@ -1,7 +1,7 @@
 import 'package:books/data/data.dart';
 import 'package:books/domain/domain.dart';
 
-class DependencyInitializer {
+abstract class DependencyInitializer {
   /// Initializes dependencies and returns an instance of the [RepositoryStorage] class
   static RepositoryStorage run() {
     final Database database = Database();
@@ -36,10 +36,15 @@ class DependencyInitializer {
       localDataSource: userLocalDataSource,
     );
 
+    final IFavoritesRepository favoritesRepository = FavoritesRepositoryImpl(
+      bookLocalDataSource: bookLocalDataSource,
+    );
+
     return RepositoryStorage(
       authRepository: authRepository,
       bookRepository: bookRepository,
       userRepository: userRepository,
+      favoritesRepository: favoritesRepository,
     );
   }
 }
