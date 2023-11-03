@@ -11,7 +11,7 @@ class _SettingsSection<T> extends StatelessWidget {
     required this.title,
     required this.groupValue,
     required this.onChanged,
-    required this.sectionItems,
+    required this.items,
   });
 
   final String title;
@@ -20,7 +20,7 @@ class _SettingsSection<T> extends StatelessWidget {
 
   final ValueChanged<T?> onChanged;
 
-  final _SettingsSectionItems<T> sectionItems;
+  final _SettingsSectionItems<T> items;
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +38,12 @@ class _SettingsSection<T> extends StatelessWidget {
             ),
           ),
         ),
-        for (final ({String title, T value}) sectionItem in sectionItems)
+        for (final ({String title, T value}) item in items)
           RadioListTile<T>(
-            value: sectionItem.value,
+            value: item.value,
             groupValue: groupValue,
             onChanged: onChanged,
-            title: Text(sectionItem.title),
+            title: Text(item.title),
           ),
       ],
     );
@@ -72,7 +72,7 @@ Future<void> showSettingsModalBottomSheet(BuildContext context) {
                 context.read<SearchBloc>().add(DataSourceChangedEvent(value));
                 Navigator.pop(context);
               },
-              sectionItems: DataSourceType.values.map(
+              items: DataSourceType.values.map(
                 (DataSourceType dataSourceType) => switch (dataSourceType) {
                   DataSourceType.local => (
                       title: context.l10n.localDataSourceHeader,
@@ -93,7 +93,7 @@ Future<void> showSettingsModalBottomSheet(BuildContext context) {
                 context.read<SearchBloc>().add(LanguageChangedEvent(value));
                 Navigator.pop(context);
               },
-              sectionItems: LanguageCode.values.map(
+              items: LanguageCode.values.map(
                 (LanguageCode languageCode) => (
                   title: languageCode.name.toUpperCase(),
                   value: languageCode,
