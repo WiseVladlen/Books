@@ -6,12 +6,15 @@ class AuthRepositoryImpl implements IAuthRepository {
   AuthRepositoryImpl({
     required this.authLocalDataSource,
     required this.userLocalDataSource,
+    required this.preferenceDataSource,
   });
 
   final StreamController<AuthStatus> _statusController = StreamController<AuthStatus>();
 
   final IAuthLocalDataSource authLocalDataSource;
   final IUserLocalDataSource userLocalDataSource;
+
+  final IPreferenceDataSource preferenceDataSource;
 
   @override
   Stream<AuthStatus> get statusStream => _statusController.stream;
@@ -27,17 +30,20 @@ class AuthRepositoryImpl implements IAuthRepository {
   Future<void> logIn({required LoginDataModel model}) async {
     final UserModel? user = await authLocalDataSource.logIn(data: model);
 
+    await preferenceDataSource.writeUser(user);
+
     _statusController.add(user != null ? AuthStatus.authenticated : AuthStatus.unauthenticated);
   }
 
   @override
   Future<void> logOut() async {
-    final UserModel? user = await userLocalDataSource.getAuthenticatedUserOrNull();
+    final UserModel? user = preferenceDataSource.readUser();
 
-    if (user == null) return _statusController.add(AuthStatus.unauthenticated);
+    if (user != null) {
+      await authLocalDataSource.logOut(id: user.id);
+      await preferenceDataSource.writeUser(null);
+    }
 
-    await authLocalDataSource.logOut(id: user.id);
-
-    _statusController.add(AuthStatus.authenticated);
+    _statusController.add(AuthStatus.unauthenticated);
   }
 }

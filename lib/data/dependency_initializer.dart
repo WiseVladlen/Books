@@ -10,6 +10,8 @@ abstract class DependencyInitializer {
     final IAuthLocalDataSource authLocalDataSource = AuthLocalDataSourceImpl(db: database);
     final IUserLocalDataSource userLocalDataSource = UserLocalDataSourceImpl(db: database);
 
+    final IPreferenceDataSource preferenceDataSource = PreferenceDataSourceImpl();
+
     final IBookRemoteDataSource bookRemoteDataSource = GoogleBooksDataSourceImpl(
       errorInterceptor: ErrorInterceptor(
         onResponseErrorHandler: (
@@ -25,19 +27,23 @@ abstract class DependencyInitializer {
     final IAuthRepository authRepository = AuthRepositoryImpl(
       authLocalDataSource: authLocalDataSource,
       userLocalDataSource: userLocalDataSource,
+      preferenceDataSource: preferenceDataSource,
     );
 
     final IBookRepository bookRepository = BookRepositoryImpl(
       localDataSource: bookLocalDataSource,
       remoteDataSource: bookRemoteDataSource,
+      preferenceDataSource: preferenceDataSource,
     );
 
     final IUserRepository userRepository = UserRepositoryImpl(
       localDataSource: userLocalDataSource,
+      preferenceDataSource: preferenceDataSource,
     );
 
     final IFavoritesRepository favoritesRepository = FavoritesRepositoryImpl(
       bookLocalDataSource: bookLocalDataSource,
+      preferenceDataSource: preferenceDataSource,
     );
 
     return RepositoryStorage(

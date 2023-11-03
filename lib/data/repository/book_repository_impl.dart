@@ -4,10 +4,21 @@ class BookRepositoryImpl implements IBookRepository {
   const BookRepositoryImpl({
     required this.localDataSource,
     required this.remoteDataSource,
+    required this.preferenceDataSource,
   });
 
   final IBookLocalDataSource localDataSource;
   final IBookRemoteDataSource remoteDataSource;
+
+  final IPreferenceDataSource preferenceDataSource;
+
+  @override
+  Stream<Set<BookModel>> get userBookStream {
+    final UserModel? user = preferenceDataSource.readUser();
+    return user != null
+        ? localDataSource.getUserBookStream(userId: user.id)
+        : Stream<Set<BookModel>>.error(Exception('Authenticated user was null'));
+  }
 
   @override
   Future<List<BookModel>> getBooks({
@@ -22,10 +33,4 @@ class BookRepositoryImpl implements IBookRepository {
 
   @override
   Future<void> upsertBooks(List<BookModel> books) => localDataSource.upsertBooks(books);
-
-  @override
-  // FIXME: Change the source of userId retrieval
-  Stream<Set<BookModel>> getUserBookStream({required int userId}) {
-    return localDataSource.getUserBookStream(userId: userId);
-  }
 }
