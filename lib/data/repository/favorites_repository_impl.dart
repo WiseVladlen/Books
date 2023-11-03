@@ -15,7 +15,7 @@ class FavoritesRepositoryImpl implements IFavoritesRepository {
     final UserModel? user = preferenceDataSource.readUser();
     return user != null
         ? bookLocalDataSource.addBookToFavourites(userId: user.id, bookId: bookId)
-        : Future<void>.error(Exception('Authenticated user was null'));
+        : Future<void>.error(Exception('Authenticated user was null'), StackTrace.current);
   }
 
   @override

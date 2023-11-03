@@ -28,14 +28,10 @@ class _SingleSelectSection<T> extends StatelessWidget {
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(top: 6, bottom: 12),
-          child: SizedBox(
-            width: double.maxFinite,
-            child: Center(
-              child: Text(
-                title,
-                style: context.textStyles.dialogTitle,
-              ),
-            ),
+          child: Text(
+            title,
+            style: context.textStyles.dialogTitle,
+            textAlign: TextAlign.center,
           ),
         ),
         for (final ({String title, T value}) item in items)
@@ -54,14 +50,14 @@ Future<void> showSettingsModalBottomSheet(BuildContext context) {
   return showModalBottomSheet(
     context: context,
     shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.horizontal(
-        left: Radius.circular(12),
-        right: Radius.circular(12),
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(12),
+        topRight: Radius.circular(12),
       ),
     ),
     builder: (BuildContext sheetContext) {
-      return Container(
-        margin: const EdgeInsets.symmetric(vertical: 12),
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -69,6 +65,8 @@ Future<void> showSettingsModalBottomSheet(BuildContext context) {
               title: context.l10n.dataSourceTypeHeader,
               groupValue: context.read<SearchBloc>().state.dataSourceType,
               onChanged: (DataSourceType? value) {
+                if (value == null) return;
+
                 context.read<SearchBloc>().add(DataSourceChangedEvent(value));
                 Navigator.pop(context);
               },
@@ -90,6 +88,8 @@ Future<void> showSettingsModalBottomSheet(BuildContext context) {
               title: context.l10n.languageHeader,
               groupValue: context.read<SearchBloc>().state.languageCode,
               onChanged: (LanguageCode? value) {
+                if (value == null) return;
+
                 context.read<SearchBloc>().add(LanguageChangedEvent(value));
                 Navigator.pop(context);
               },

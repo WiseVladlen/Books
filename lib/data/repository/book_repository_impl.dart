@@ -17,7 +17,10 @@ class BookRepositoryImpl implements IBookRepository {
     final UserModel? user = preferenceDataSource.readUser();
     return user != null
         ? localDataSource.getUserBookStream(userId: user.id)
-        : Stream<Set<BookModel>>.error(Exception('Authenticated user was null'));
+        : Stream<Set<BookModel>>.error(
+            Exception('Authenticated user was null'),
+            StackTrace.current,
+          );
   }
 
   @override

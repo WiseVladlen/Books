@@ -117,15 +117,13 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   Future<void> _dataSourceChanged(DataSourceChangedEvent event, Emitter<SearchState> emit) async {
-    final DataSourceType? dataSourceType = event.dataSourceType;
-
-    if (dataSourceType == null && dataSourceType == state.dataSourceType) return;
+    if (event.dataSourceType == state.dataSourceType) return;
 
     emit(
       state.copyWith(
         books: <BookModel>[],
         bookDownloadStatus: DownloadStatus.inProgress,
-        dataSourceType: dataSourceType,
+        dataSourceType: event.dataSourceType,
         requestParameterChanged: true,
       ),
     );
@@ -150,15 +148,13 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   Future<void> _languageChanged(LanguageChangedEvent event, Emitter<SearchState> emit) async {
-    final LanguageCode? languageCode = event.languageCode;
-
-    if (languageCode == null && languageCode == state.languageCode) return;
+    if (event.languageCode == state.languageCode) return;
 
     emit(
       state.copyWith(
         books: <BookModel>[],
         bookDownloadStatus: DownloadStatus.inProgress,
-        languageCode: languageCode,
+        languageCode: event.languageCode,
         requestParameterChanged: true,
       ),
     );
@@ -200,6 +196,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       onComplete: onComplete,
     );
 
+    // Caching result when downloading from a remote source
     if (dataSourceType.isRemote) bookRepository.upsertBooks(books);
 
     return books;
