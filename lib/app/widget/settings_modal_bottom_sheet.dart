@@ -4,10 +4,10 @@ import 'package:books/utils/build_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-typedef _SettingsSectionItems<T> = Iterable<({String title, T value})>;
+typedef _SectionItems<T> = Iterable<({String title, T value})>;
 
-class _SettingsSection<T> extends StatelessWidget {
-  const _SettingsSection({
+class _SingleSelectSection<T> extends StatelessWidget {
+  const _SingleSelectSection({
     required this.title,
     required this.groupValue,
     required this.onChanged,
@@ -20,7 +20,7 @@ class _SettingsSection<T> extends StatelessWidget {
 
   final ValueChanged<T?> onChanged;
 
-  final _SettingsSectionItems<T> items;
+  final _SectionItems<T> items;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +65,7 @@ Future<void> showSettingsModalBottomSheet(BuildContext context) {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            _SettingsSection<DataSourceType>(
+            _SingleSelectSection<DataSourceType>(
               title: context.l10n.dataSourceTypeHeader,
               groupValue: context.read<SearchBloc>().state.dataSourceType,
               onChanged: (DataSourceType? value) {
@@ -86,7 +86,7 @@ Future<void> showSettingsModalBottomSheet(BuildContext context) {
               ),
             ),
             const Divider(),
-            _SettingsSection<LanguageCode>(
+            _SingleSelectSection<LanguageCode>(
               title: context.l10n.languageHeader,
               groupValue: context.read<SearchBloc>().state.languageCode,
               onChanged: (LanguageCode? value) {
