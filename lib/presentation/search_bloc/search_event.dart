@@ -19,3 +19,15 @@ final class RefreshBooksEvent extends SearchEvent {
 
   final VoidCallback onComplete;
 }
+
+final class DataSourceChangedEvent extends SearchEvent {
+  const DataSourceChangedEvent(this.dataSourceType);
+
+  final DataSourceType dataSourceType;
+}
+
+final class LanguageChangedEvent extends SearchEvent {
+  const LanguageChangedEvent(this.languageCode);
+
+  final LanguageCode languageCode;
+}

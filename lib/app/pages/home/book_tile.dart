@@ -38,13 +38,21 @@ class BookTile extends StatelessWidget {
   }
 
   final String bookId;
+
   final String title;
+
   final List<String> authors;
+
   final int? pageCount;
+
   final String publisher;
+
   final DateTime? publishedDate;
+
   final String description;
+
   final String imageLink;
+
   final String language;
 
   @override

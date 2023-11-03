@@ -23,5 +23,9 @@
   "positiveDialogButton": "Да",
   "negativeDialogButton": "Нет",
   "searchLabel": "Поиск",
-  "favoritesLabel": "Избранное"
+  "favoritesLabel": "Избранное",
+  "settingsHeader": "Настройки",
+  "dataSourceTypeHeader": "Тип источника данных",
+  "localDataSourceHeader": "Локальный",
+  "remoteDataSourceHeader": "Удаленный"
 }

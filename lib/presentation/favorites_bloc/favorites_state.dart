@@ -2,11 +2,11 @@ part of 'favorites_bloc.dart';
 
 class FavoritesState extends Equatable {
   const FavoritesState({
-    this.books = const <BookModel>[],
+    this.books = const <BookModel>{},
     this.bookDownloadStatus = DownloadStatus.initial,
   });
 
-  final List<BookModel> books;
+  final Set<BookModel> books;
   final DownloadStatus bookDownloadStatus;
 
   bool get isBooksLoadedSuccessfully => bookDownloadStatus.isSuccess && books.isNotEmpty;
@@ -16,7 +16,7 @@ class FavoritesState extends Equatable {
   }
 
   FavoritesState copyWith({
-    List<BookModel>? books,
+    Set<BookModel>? books,
     DownloadStatus? bookDownloadStatus,
   }) {
     return FavoritesState(

@@ -18,6 +18,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     on<LoadBooksEvent>(_loadBooks, transformer: droppable());
     on<SearchQueryChangedEvent>(_searchQueryChanged, transformer: restartable());
     on<RefreshBooksEvent>(_refreshBooks);
+    on<DataSourceChangedEvent>(_dataSourceChanged);
+    on<LanguageChangedEvent>(_languageChanged);
   }
 
   final IBookRepository bookRepository;
@@ -28,8 +30,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     final List<BookModel> books = await _bookSearch(
       queryParameters: QueryParameters(
         query: state.query,
+        languageCode: state.languageCode,
         startIndex: state.lastBookIndex,
       ),
+      dataSourceType: state.dataSourceType,
       emit: emit,
     );
 
@@ -71,7 +75,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     );
 
     final List<BookModel> books = await _bookSearch(
-      queryParameters: QueryParameters(query: query),
+      queryParameters: QueryParameters(
+        query: query,
+        languageCode: state.languageCode,
+      ),
+      dataSourceType: state.dataSourceType,
       emit: emit,
     );
 
@@ -89,7 +97,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     if (state.bookDownloadStatus.isInProgress) return;
 
     final List<BookModel> books = await _bookSearch(
-      queryParameters: QueryParameters(query: state.query),
+      queryParameters: QueryParameters(
+        query: state.query,
+        languageCode: state.languageCode,
+      ),
+      dataSourceType: state.dataSourceType,
       emit: emit,
       onComplete: () => event.onComplete(),
     );
@@ -104,21 +116,88 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     );
   }
 
+  Future<void> _dataSourceChanged(DataSourceChangedEvent event, Emitter<SearchState> emit) async {
+    if (event.dataSourceType == state.dataSourceType) return;
+
+    emit(
+      state.copyWith(
+        books: <BookModel>[],
+        bookDownloadStatus: DownloadStatus.inProgress,
+        dataSourceType: event.dataSourceType,
+        requestParameterChanged: true,
+      ),
+    );
+
+    final List<BookModel> books = await _bookSearch(
+      queryParameters: QueryParameters(
+        query: state.query,
+        languageCode: state.languageCode,
+      ),
+      dataSourceType: state.dataSourceType,
+      emit: emit,
+    );
+
+    emit(
+      state.copyWith(
+        books: books,
+        bookDownloadStatus: DownloadStatus.success,
+        lastBookIndex: books.length,
+        booksHavePeaked: books.length < QueryParameters.pageSize,
+      ),
+    );
+  }
+
+  Future<void> _languageChanged(LanguageChangedEvent event, Emitter<SearchState> emit) async {
+    if (event.languageCode == state.languageCode) return;
+
+    emit(
+      state.copyWith(
+        books: <BookModel>[],
+        bookDownloadStatus: DownloadStatus.inProgress,
+        languageCode: event.languageCode,
+        requestParameterChanged: true,
+      ),
+    );
+
+    final List<BookModel> books = await _bookSearch(
+      queryParameters: QueryParameters(
+        query: state.query,
+        languageCode: state.languageCode,
+      ),
+      dataSourceType: state.dataSourceType,
+      emit: emit,
+    );
+
+    emit(
+      state.copyWith(
+        books: books,
+        bookDownloadStatus: DownloadStatus.success,
+        lastBookIndex: books.length,
+        booksHavePeaked: books.length < QueryParameters.pageSize,
+      ),
+    );
+  }
+
   /// Searches for books according to the search query and returns a list of books
   Future<List<BookModel>> _bookSearch({
     required QueryParameters queryParameters,
+    required DataSourceType dataSourceType,
     required Emitter<SearchState> emit,
     VoidCallback? onComplete,
   }) async {
     if (state.query.isEmpty) return <BookModel>[];
 
     final List<BookModel> books = await _runSafely(
-      () => bookRepository.getBooks(queryParameters: queryParameters),
+      () => bookRepository.getBooks(
+        queryParameters: queryParameters,
+        dataSourceType: dataSourceType,
+      ),
       emit: emit,
       onComplete: onComplete,
     );
 
-    bookRepository.upsertBooks(books);
+    // Caching result when downloading from a remote source
+    if (dataSourceType.isRemote) bookRepository.upsertBooks(books);
 
     return books;
   }

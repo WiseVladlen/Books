@@ -31,14 +31,16 @@ class BookLocalDataSourceImpl implements IBookLocalDataSource {
   @override
   Future<List<BookModel>> getBooks({required QueryParameters queryParameters}) async {
     final String substring = queryParameters.query.toLowerCase();
+    final String langRestrict = queryParameters.languageCode.name;
 
     final List<Join<HasResultSet, dynamic>> joins = <Join<HasResultSet, dynamic>>[
       innerJoin(db.bookAuthorEntity, db.bookAuthorEntity.bookId.equalsExp(db.bookEntity.id)),
       innerJoin(db.authorEntity, db.authorEntity.id.equalsExp(db.bookAuthorEntity.authorId)),
     ];
 
-    final Expression<bool> expression = db.bookEntity.title.lower().contains(substring) |
-        db.bookEntity.description.lower().contains(substring);
+    final Expression<bool> expression = db.bookEntity.language.equals(langRestrict) &
+        (db.bookEntity.title.lower().contains(substring) |
+            db.bookEntity.description.lower().contains(substring));
 
     final JoinedSelectStatement<HasResultSet, dynamic> query = db.select(db.bookEntity).join(joins)
       ..where(expression)
@@ -46,7 +48,7 @@ class BookLocalDataSourceImpl implements IBookLocalDataSource {
 
     final List<TypedResult> rows = await query.get();
 
-    return rows.mapToBooks(database: db);
+    return rows.mapToBooks(database: db).toList(growable: false);
   }
 
   @override
@@ -68,7 +70,7 @@ class BookLocalDataSourceImpl implements IBookLocalDataSource {
   }
 
   @override
-  Stream<List<BookModel>> getUserBookStream({required int userId}) {
+  Stream<Set<BookModel>> getUserBookStream({required int userId}) {
     final List<Join<HasResultSet, dynamic>> joins = <Join<HasResultSet, dynamic>>[
       innerJoin(
         db.userBookEntity,

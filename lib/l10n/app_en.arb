@@ -98,5 +98,21 @@
   "favoritesLabel": "Favorites",
   "@favoritesLabel": {
     "description": "Bottom navigation bar label describing the favorites page"
+  },
+  "settingsHeader": "Settings",
+  "@settingsHeader": {
+    "description": "Header of the settings page"
+  },
+  "dataSourceTypeHeader": "Data source type",
+  "@dataSourceTypeHeader": {
+    "description": "Header defining the type of data source"
+  },
+  "localDataSourceHeader": "Local",
+  "@localDataSourceHeader": {
+    "description": "Header defining the local data source"
+  },
+  "remoteDataSourceHeader": "Remote",
+  "@remoteDataSourceHeader": {
+    "description": "Header defining the remote data source"
   }
 }

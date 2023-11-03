@@ -9,6 +9,7 @@ part of 'query_parameters_dto.dart';
 Map<String, dynamic> _$QueryParametersDTOToJson(QueryParametersDTO instance) =>
     <String, dynamic>{
       'q': instance.query,
+      'langRestrict': instance.languageCode,
       'startIndex': instance.startIndex,
       'maxResults': instance.maxResults,
     };
