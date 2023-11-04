@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:books/app/pages/pages.dart';
+import 'package:books/app/app.dart';
 import 'package:books/data/data.dart';
 import 'package:books/domain/domain.dart';
 import 'package:books/presentation/presentation.dart';
@@ -10,16 +10,25 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nested/nested.dart';
 
-void main() {
+Future<void> main() async {
   FlutterError.onError = (FlutterErrorDetails details) {
     FlutterError.presentError(details);
     // TODO: handle error
   };
 
   runZonedGuarded(
-    () => runApp(
-      App(repositoryStorage: DependencyInitializer.run()),
-    ),
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
+
+      final ServiceStorage serviceStorage = await DependencyInitializer.buildServiceStorage();
+
+      runApp(
+        App(
+          repositoryStorage: DependencyInitializer.buildRepositoryStorage(),
+          serviceStorage: serviceStorage,
+        ),
+      );
+    },
     (Object error, StackTrace stack) {
       // TODO: handle error
       debugPrint('$error - $stack');
@@ -27,33 +36,67 @@ void main() {
   );
 }
 
-class App extends StatelessWidget {
-  const App({super.key, required this.repositoryStorage});
+class App extends StatefulWidget {
+  const App({
+    super.key,
+    required this.repositoryStorage,
+    required this.serviceStorage,
+  });
 
   final RepositoryStorage repositoryStorage;
+  final ServiceStorage serviceStorage;
+
+  @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  @override
+  void initState() {
+    super.initState();
+    widget.serviceStorage.connectivityService.listen();
+  }
+
+  @override
+  void dispose() {
+    widget.serviceStorage.connectivityService.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: <SingleChildWidget>[
         RepositoryProvider<IAuthRepository>.value(
-          value: repositoryStorage.authRepository,
+          value: widget.repositoryStorage.authRepository,
         ),
         RepositoryProvider<IBookRepository>.value(
-          value: repositoryStorage.bookRepository,
+          value: widget.repositoryStorage.bookRepository,
         ),
         RepositoryProvider<IUserRepository>.value(
-          value: repositoryStorage.userRepository,
+          value: widget.repositoryStorage.userRepository,
         ),
         RepositoryProvider<IFavoritesRepository>.value(
-          value: repositoryStorage.favoritesRepository,
+          value: widget.repositoryStorage.favoritesRepository,
+        ),
+        RepositoryProvider<IConnectivityService>.value(
+          value: widget.serviceStorage.connectivityService,
         ),
       ],
-      child: BlocProvider<UserAuthBloc>(
-        create: (BuildContext context) => UserAuthBloc(
-          authRepository: context.read<IAuthRepository>(),
-          userRepository: context.read<IUserRepository>(),
-        ),
+      child: MultiBlocProvider(
+        providers: <SingleChildWidget>[
+          BlocProvider<UserAuthBloc>(
+            create: (BuildContext context) => UserAuthBloc(
+              authRepository: context.read<IAuthRepository>(),
+              userRepository: context.read<IUserRepository>(),
+            ),
+          ),
+          BlocProvider<ConnectionCubit>(
+            create: (BuildContext context) => ConnectionCubit(
+              connectivityService: context.read<IConnectivityService>(),
+            ),
+          ),
+        ],
         child: const _AppView(),
       ),
     );
@@ -74,11 +117,35 @@ class _AppView extends StatelessWidget {
           return (oldState.status != newState.status);
         },
         builder: (BuildContext context, UserAuthState state) {
-          return switch (state.status) {
-            AuthStatus.initial => const Center(child: CircularProgressIndicator()),
-            AuthStatus.unauthenticated => const AuthPage(),
-            AuthStatus.authenticated => const HomePage(),
-          };
+          return Scaffold(
+            body: Column(
+              children: <Widget>[
+                Expanded(
+                  child: switch (state.status) {
+                    AuthStatus.initial => const Center(child: CircularProgressIndicator()),
+                    AuthStatus.unauthenticated => const AuthPage(),
+                    AuthStatus.authenticated => const HomePage(),
+                  },
+                ),
+                BlocBuilder<ConnectionCubit, ConnectionStatus>(
+                  buildWhen: (ConnectionStatus oldState, ConnectionStatus newState) {
+                    return oldState != newState;
+                  },
+                  builder: (BuildContext context, ConnectionStatus state) {
+                    if (state.isOnline) {
+                      return BottomNotificationPanel.online(
+                        title: context.l10n.networkConnectedMessage,
+                      );
+                    }
+
+                    return BottomNotificationPanel.offline(
+                      title: context.l10n.networkConnectionWaitingMessage,
+                    );
+                  },
+                ),
+              ],
+            ),
+          );
         },
       ),
     );
