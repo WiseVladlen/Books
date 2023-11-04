@@ -27,5 +27,7 @@
   "settingsHeader": "Настройки",
   "dataSourceTypeHeader": "Тип источника данных",
   "localDataSourceHeader": "Локальный",
-  "remoteDataSourceHeader": "Удаленный"
+  "remoteDataSourceHeader": "Удаленный",
+  "networkConnectedMessage": "Подключено",
+  "networkConnectionWaitingMessage": "Ожидание сети..."
 }

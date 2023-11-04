@@ -114,5 +114,13 @@
   "remoteDataSourceHeader": "Remote",
   "@remoteDataSourceHeader": {
     "description": "Header defining the remote data source"
+  },
+  "networkConnectedMessage": "Connected",
+  "@networkConnectedMessage": {
+    "description": "Message that the network connection has been established"
+  },
+  "networkConnectionWaitingMessage": "Waiting for connection...",
+  "@networkConnectionWaitingMessage": {
+    "description": "Message informing you that the network connection is pending"
   }
 }
