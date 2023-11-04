@@ -4,6 +4,12 @@ abstract class SearchEvent {
   const SearchEvent();
 }
 
+final class _ConnectionStatusChangedEvent extends SearchEvent {
+  const _ConnectionStatusChangedEvent(this.status);
+
+  final ConnectionStatus status;
+}
+
 final class LoadBooksEvent extends SearchEvent {
   const LoadBooksEvent();
 }

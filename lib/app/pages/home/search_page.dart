@@ -16,6 +16,7 @@ class SearchPage extends StatelessWidget {
     return BlocProvider<SearchBloc>(
       create: (BuildContext context) => SearchBloc(
         bookRepository: context.read<IBookRepository>(),
+        connectivityService: context.read<IConnectivityService>(),
       ),
       child: Scaffold(
         appBar: AppBar(

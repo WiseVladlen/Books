@@ -14,15 +14,68 @@ part 'search_state.dart';
 final String _tag = (SearchBloc).toString();
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  SearchBloc({required this.bookRepository}) : super(const SearchState()) {
+  SearchBloc({
+    required this.bookRepository,
+    required this.connectivityService,
+  }) : super(_buildInitialState(connectionStatus: connectivityService.status)) {
+    on<_ConnectionStatusChangedEvent>(_connectionStatusChanged);
     on<LoadBooksEvent>(_loadBooks, transformer: droppable());
     on<SearchQueryChangedEvent>(_searchQueryChanged, transformer: restartable());
     on<RefreshBooksEvent>(_refreshBooks);
     on<DataSourceChangedEvent>(_dataSourceChanged);
     on<LanguageChangedEvent>(_languageChanged);
+
+    _connectionStatusSubscription = connectivityService.statusStream.listen((
+      ConnectionStatus status,
+    ) {
+      add(_ConnectionStatusChangedEvent(status));
+    });
   }
 
+  late final StreamSubscription<ConnectionStatus> _connectionStatusSubscription;
+
   final IBookRepository bookRepository;
+
+  final IConnectivityService connectivityService;
+
+  static SearchState _buildInitialState({required ConnectionStatus connectionStatus}) {
+    if (connectionStatus.isOnline) {
+      return const SearchState();
+    } else {
+      return const SearchState(dataSourceType: DataSourceType.local);
+    }
+  }
+
+  Future<void> _connectionStatusChanged(
+    _ConnectionStatusChangedEvent event,
+    Emitter<SearchState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        bookDownloadStatus: DownloadStatus.inProgress,
+        dataSourceType: event.status.isOnline ? DataSourceType.remote : DataSourceType.local,
+        requestParameterChanged: true,
+      ),
+    );
+
+    final List<BookModel> books = await _bookSearch(
+      queryParameters: QueryParameters(
+        query: state.query,
+        languageCode: state.languageCode,
+      ),
+      dataSourceType: state.dataSourceType,
+      emit: emit,
+    );
+
+    emit(
+      state.copyWith(
+        books: books,
+        bookDownloadStatus: DownloadStatus.success,
+        lastBookIndex: books.length,
+        booksHavePeaked: books.length < QueryParameters.pageSize,
+      ),
+    );
+  }
 
   Future<void> _loadBooks(LoadBooksEvent event, Emitter<SearchState> emit) async {
     if (state.booksHavePeaked) return;
@@ -225,5 +278,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }) {
     log(message, error: error ?? 'Unknown error', stackTrace: stackTrace);
     emit(state.copyWith(bookDownloadStatus: DownloadStatus.failure));
+  }
+
+  @override
+  Future<void> close() {
+    _connectionStatusSubscription.cancel();
+    return super.close();
   }
 }
