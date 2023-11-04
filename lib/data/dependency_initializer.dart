@@ -3,7 +3,7 @@ import 'package:books/domain/domain.dart';
 
 abstract class DependencyInitializer {
   /// Initializes dependencies and returns an instance of the [RepositoryStorage] class
-  static RepositoryStorage run() {
+  static RepositoryStorage buildRepositoryStorage() {
     final Database database = Database();
 
     final IBookLocalDataSource bookLocalDataSource = BookLocalDataSourceImpl(db: database);
@@ -52,5 +52,14 @@ abstract class DependencyInitializer {
       userRepository: userRepository,
       favoritesRepository: favoritesRepository,
     );
+  }
+
+  /// Initializes dependencies and returns an instance of the [ServiceStorage] class
+  static Future<ServiceStorage> buildServiceStorage() async {
+    final IConnectivityService connectivityService = ConnectivityServiceImpl();
+
+    await connectivityService.check();
+
+    return ServiceStorage(connectivityService: connectivityService);
   }
 }
