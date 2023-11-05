@@ -5,20 +5,23 @@ import 'package:books/data/data.dart';
 import 'package:books/domain/domain.dart';
 import 'package:books/presentation/presentation.dart';
 import 'package:books/utils/utils.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nested/nested.dart';
 
 Future<void> main() async {
-  FlutterError.onError = (FlutterErrorDetails details) {
-    FlutterError.presentError(details);
-    // TODO: handle error
-  };
-
   runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
+
+      await Firebase.initializeApp();
+
+      await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+
+      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
       final ServiceStorage serviceStorage = await DependencyInitializer.buildServiceStorage();
 
@@ -29,10 +32,7 @@ Future<void> main() async {
         ),
       );
     },
-    (Object error, StackTrace stack) {
-      // TODO: handle error
-      debugPrint('$error - $stack');
-    },
+    (Object error, StackTrace stack) => FirebaseCrashlytics.instance.recordError(error, stack),
   );
 }
 

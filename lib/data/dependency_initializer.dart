@@ -1,5 +1,6 @@
 import 'package:books/data/data.dart';
 import 'package:books/domain/domain.dart';
+import 'package:dio/dio.dart';
 
 abstract class DependencyInitializer {
   /// Initializes dependencies and returns an instance of the [RepositoryStorage] class
@@ -14,13 +15,7 @@ abstract class DependencyInitializer {
 
     final IBookRemoteDataSource bookRemoteDataSource = GoogleBooksDataSourceImpl(
       errorInterceptor: ErrorInterceptor(
-        onResponseErrorHandler: (
-          String? message,
-          Object? error,
-          StackTrace stakeTrace,
-        ) {
-          // TODO: handle error
-        },
+        onResponseErrorHandler: (DioException err) => sendToCrashlytics(err),
       ),
     );
 
