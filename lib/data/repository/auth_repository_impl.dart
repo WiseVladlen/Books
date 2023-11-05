@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:books/domain/domain.dart';
+import 'package:books/utils/exception/exception.dart';
 
 class AuthRepositoryImpl implements IAuthRepository {
   AuthRepositoryImpl({
@@ -21,7 +22,9 @@ class AuthRepositoryImpl implements IAuthRepository {
 
   @override
   Future<void> signUp({required RegistrationDataModel model}) async {
-    await authLocalDataSource.signUp(data: model);
+    final UserModel? user = await authLocalDataSource.signUp(data: model);
+
+    if (user == null) throw const SignUpFailure();
 
     await logIn(model: LoginDataModel(email: model.email, password: model.password));
   }
@@ -30,9 +33,11 @@ class AuthRepositoryImpl implements IAuthRepository {
   Future<void> logIn({required LoginDataModel model}) async {
     final UserModel? user = await authLocalDataSource.logIn(data: model);
 
+    if (user == null) throw const LogInFailure();
+
     await preferenceDataSource.writeUser(user);
 
-    _statusController.add(user != null ? AuthStatus.authenticated : AuthStatus.unauthenticated);
+    _statusController.add(AuthStatus.authenticated);
   }
 
   @override

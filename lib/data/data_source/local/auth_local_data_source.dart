@@ -8,8 +8,13 @@ class AuthLocalDataSourceImpl implements IAuthLocalDataSource {
   final Database db;
 
   @override
-  Future<void> signUp({required RegistrationDataModel data}) async {
-    await db.into(db.userEntity).insertOnConflictUpdate(data.toUserEntityCompanion());
+  Future<UserModel?> signUp({required RegistrationDataModel data}) async {
+    final UserEntityData? user = await db.into(db.userEntity).insertReturningOrNull(
+          data.toUserEntityCompanion(),
+          mode: InsertMode.insertOrIgnore,
+        );
+
+    return user?.toUserModel();
   }
 
   @override

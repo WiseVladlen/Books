@@ -2,6 +2,7 @@
 export 'book_placeholder.dart';
 export 'bottom_notification_panel.dart';
 export 'custom_network_image.dart';
+export 'information_dialog.dart';
 export 'loading_background.dart';
 export 'log_out_dialog.dart';
 export 'no_results_background.dart';

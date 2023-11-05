@@ -12,6 +12,6 @@ class UserLocalDataSourceImpl implements IUserLocalDataSource {
     final SimpleSelectStatement<$UserEntityTable, UserEntityData> query = db.select(db.userEntity)
       ..where(($UserEntityTable user) => user.isAuthenticated.equals(true));
 
-    return (await query.getSingleOrNull())?.toUserModel();
+    return (await query.get()).firstOrNull?.toUserModel();
   }
 }

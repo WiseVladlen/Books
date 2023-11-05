@@ -122,5 +122,13 @@
   "networkConnectionWaitingMessage": "Waiting for connection...",
   "@networkConnectionWaitingMessage": {
     "description": "Message informing you that the network connection is pending"
+  },
+  "logInFailureMessage": "Wrong email or password",
+  "@logInFailureMessage": {
+    "description": "Message informing about unsuccessful log in attempt"
+  },
+  "signUpFailureMessage": "A user with this login already exists",
+  "@signUpFailureMessage": {
+    "description": "Message informing about unsuccessful sign up attempt"
   }
 }

@@ -1,4 +1,5 @@
 //GENERATED BARREL FILE
+export './exception/exception.dart';
 export './validator/validator.dart';
 export 'build_context.dart';
 export 'button_style.dart';
