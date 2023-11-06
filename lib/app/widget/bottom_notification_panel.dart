@@ -68,13 +68,10 @@ class _BottomNotificationPanelState extends State<BottomNotificationPanel> {
       height: _isVisible ? 32 : 0,
       color: widget.backgroundColor,
       duration: const Duration(milliseconds: 200),
-      child: ColoredBox(
-        color: widget.backgroundColor,
-        child: Center(
-          child: Text(
-            widget.title,
-            style: context.textStyles.notificationPanelText,
-          ),
+      child: Center(
+        child: Text(
+          widget.title,
+          style: context.textStyles.notificationPanelText,
         ),
       ),
     );
