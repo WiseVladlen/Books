@@ -36,7 +36,45 @@ Future<void> main() async {
   );
 }
 
-class App extends StatefulWidget {
+class NetworkConnectionListener extends StatefulWidget {
+  const NetworkConnectionListener({
+    super.key,
+    required this.repositoryStorage,
+    required this.serviceStorage,
+  });
+
+  final RepositoryStorage repositoryStorage;
+  final ServiceStorage serviceStorage;
+
+  @override
+  State<NetworkConnectionListener> createState() => _NetworkConnectionListenerState();
+}
+
+class _NetworkConnectionListenerState extends State<NetworkConnectionListener> {
+  @override
+  void initState() {
+    super.initState();
+
+    widget.serviceStorage.connectivityService.listen();
+  }
+
+  @override
+  void dispose() {
+    widget.serviceStorage.connectivityService.cancel();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return App(
+      repositoryStorage: widget.repositoryStorage,
+      serviceStorage: widget.serviceStorage,
+    );
+  }
+}
+
+class App extends StatelessWidget {
   const App({
     super.key,
     required this.repositoryStorage,
@@ -47,40 +85,23 @@ class App extends StatefulWidget {
   final ServiceStorage serviceStorage;
 
   @override
-  State<App> createState() => _AppState();
-}
-
-class _AppState extends State<App> {
-  @override
-  void initState() {
-    super.initState();
-    widget.serviceStorage.connectivityService.listen();
-  }
-
-  @override
-  void dispose() {
-    widget.serviceStorage.connectivityService.cancel();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: <SingleChildWidget>[
         RepositoryProvider<IAuthRepository>.value(
-          value: widget.repositoryStorage.authRepository,
+          value: repositoryStorage.authRepository,
         ),
         RepositoryProvider<IBookRepository>.value(
-          value: widget.repositoryStorage.bookRepository,
+          value: repositoryStorage.bookRepository,
         ),
         RepositoryProvider<IUserRepository>.value(
-          value: widget.repositoryStorage.userRepository,
+          value: repositoryStorage.userRepository,
         ),
         RepositoryProvider<IFavoritesRepository>.value(
-          value: widget.repositoryStorage.favoritesRepository,
+          value: repositoryStorage.favoritesRepository,
         ),
         RepositoryProvider<IConnectivityService>.value(
-          value: widget.serviceStorage.connectivityService,
+          value: serviceStorage.connectivityService,
         ),
       ],
       child: MultiBlocProvider(
@@ -91,8 +112,8 @@ class _AppState extends State<App> {
               userRepository: context.read<IUserRepository>(),
             ),
           ),
-          BlocProvider<ConnectionCubit>(
-            create: (BuildContext context) => ConnectionCubit(
+          BlocProvider<NetworkConnectionCubit>(
+            create: (BuildContext context) => NetworkConnectionCubit(
               connectivityService: context.read<IConnectivityService>(),
             ),
           ),
@@ -127,12 +148,12 @@ class _AppView extends StatelessWidget {
                     AuthStatus.authenticated => const HomePage(),
                   },
                 ),
-                BlocBuilder<ConnectionCubit, ConnectionStatus>(
-                  buildWhen: (ConnectionStatus oldState, ConnectionStatus newState) {
-                    return oldState != newState;
+                BlocBuilder<NetworkConnectionCubit, NetworkConnectionState>(
+                  buildWhen: (NetworkConnectionState oldState, NetworkConnectionState newState) {
+                    return oldState.status != newState.status;
                   },
-                  builder: (BuildContext context, ConnectionStatus state) {
-                    if (state.isOnline) {
+                  builder: (BuildContext context, NetworkConnectionState state) {
+                    if (state.status.isOnline) {
                       return BottomNotificationPanel.online(
                         title: context.l10n.networkConnectedMessage,
                       );
