@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:ui';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
@@ -11,13 +10,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 part 'search_event.dart';
 part 'search_state.dart';
 
-final String _tag = (SearchBloc).toString();
-
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc({
     required this.bookRepository,
     required this.connectivityService,
-  }) : super(_buildInitialState(connectionStatus: connectivityService.status)) {
+  }) : super(SearchState(dataSourceType: connectivityService.status.toDataSourceType())) {
     on<_ConnectionStatusChangedEvent>(_connectionStatusChanged);
     on<LoadBooksEvent>(_loadBooks, transformer: droppable());
     on<SearchQueryChangedEvent>(_searchQueryChanged, transformer: restartable());
@@ -38,25 +35,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   final IConnectivityService connectivityService;
 
-  static SearchState _buildInitialState({required ConnectionStatus connectionStatus}) {
-    if (connectionStatus.isOnline) {
-      return const SearchState();
-    } else {
-      return const SearchState(dataSourceType: DataSourceType.local);
-    }
-  }
-
   Future<void> _connectionStatusChanged(
     _ConnectionStatusChangedEvent event,
     Emitter<SearchState> emit,
   ) async {
-    emit(
-      state.copyWith(
-        bookDownloadStatus: DownloadStatus.inProgress,
-        dataSourceType: event.status.isOnline ? DataSourceType.remote : DataSourceType.local,
-        requestParameterChanged: true,
-      ),
-    );
+    if (state.query.isEmpty) {
+      return emit(SearchState(dataSourceType: event.status.toDataSourceType()));
+    }
+
+    emit(state.copyToProgressStateWith(dataSourceType: event.status.toDataSourceType()));
 
     final List<BookModel> books = await _bookSearch(
       queryParameters: QueryParameters(
@@ -106,26 +93,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
     if (query == state.query) return;
 
-    if (query.isEmpty) {
-      return emit(
-        state.copyWith(
-          query: query,
-          books: const <BookModel>[],
-          bookDownloadStatus: DownloadStatus.initial,
-          lastBookIndex: 0,
-          booksHavePeaked: false,
-          requestParameterChanged: true,
-        ),
-      );
-    }
+    if (query.isEmpty) return emit(SearchState(dataSourceType: state.dataSourceType));
 
-    emit(
-      state.copyWith(
-        query: query,
-        bookDownloadStatus: DownloadStatus.inProgress,
-        requestParameterChanged: true,
-      ),
-    );
+    emit(state.copyToProgressStateWith(query: query));
 
     final List<BookModel> books = await _bookSearch(
       queryParameters: QueryParameters(
@@ -172,14 +142,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   Future<void> _dataSourceChanged(DataSourceChangedEvent event, Emitter<SearchState> emit) async {
     if (event.dataSourceType == state.dataSourceType) return;
 
-    emit(
-      state.copyWith(
-        books: <BookModel>[],
-        bookDownloadStatus: DownloadStatus.inProgress,
-        dataSourceType: event.dataSourceType,
-        requestParameterChanged: true,
-      ),
-    );
+    if (state.query.isEmpty) return emit(SearchState(dataSourceType: state.dataSourceType));
+
+    emit(state.copyToProgressStateWith(dataSourceType: event.dataSourceType));
 
     final List<BookModel> books = await _bookSearch(
       queryParameters: QueryParameters(
@@ -203,14 +168,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   Future<void> _languageChanged(LanguageChangedEvent event, Emitter<SearchState> emit) async {
     if (event.languageCode == state.languageCode) return;
 
-    emit(
-      state.copyWith(
-        books: <BookModel>[],
-        bookDownloadStatus: DownloadStatus.inProgress,
-        languageCode: event.languageCode,
-        requestParameterChanged: true,
-      ),
-    );
+    if (state.query.isEmpty) return emit(SearchState(dataSourceType: state.dataSourceType));
+
+    emit(state.copyToProgressStateWith(languageCode: event.languageCode));
 
     final List<BookModel> books = await _bookSearch(
       queryParameters: QueryParameters(
@@ -238,8 +198,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     required Emitter<SearchState> emit,
     VoidCallback? onComplete,
   }) async {
-    if (state.query.isEmpty) return <BookModel>[];
-
     final List<BookModel> books = await _runSafely(
       () => bookRepository.getBooks(
         queryParameters: queryParameters,
@@ -262,22 +220,12 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }) async {
     try {
       return await query();
-    } on DioException catch (error, stack) {
-      _handleException(emit: emit, message: _tag, error: error, stackTrace: stack);
+    } on DioException {
+      emit(state.copyWith(bookDownloadStatus: DownloadStatus.failure));
       rethrow;
     } finally {
       onComplete?.call();
     }
-  }
-
-  void _handleException({
-    required Emitter<SearchState> emit,
-    required String message,
-    Object? error,
-    StackTrace? stackTrace,
-  }) {
-    log(message, error: error ?? 'Unknown error', stackTrace: stackTrace);
-    emit(state.copyWith(bookDownloadStatus: DownloadStatus.failure));
   }
 
   @override

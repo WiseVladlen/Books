@@ -4,7 +4,6 @@ class SearchState extends Equatable {
   const SearchState({
     this.query = '',
     this.books = const <BookModel>[],
-    this.userBooks = const <BookModel>[],
     this.bookDownloadStatus = DownloadStatus.initial,
     this.dataSourceType = DataSourceType.remote,
     this.languageCode = LanguageCode.en,
@@ -15,7 +14,6 @@ class SearchState extends Equatable {
 
   final String query;
   final List<BookModel> books;
-  final List<BookModel> userBooks;
   final DownloadStatus bookDownloadStatus;
   final DataSourceType dataSourceType;
   final LanguageCode languageCode;
@@ -28,7 +26,6 @@ class SearchState extends Equatable {
   SearchState copyWith({
     String? query,
     List<BookModel>? books,
-    List<BookModel>? userBooks,
     DownloadStatus? bookDownloadStatus,
     DataSourceType? dataSourceType,
     LanguageCode? languageCode,
@@ -39,7 +36,6 @@ class SearchState extends Equatable {
     return SearchState(
       query: query ?? this.query,
       books: books ?? this.books,
-      userBooks: userBooks ?? this.userBooks,
       bookDownloadStatus: bookDownloadStatus ?? this.bookDownloadStatus,
       dataSourceType: dataSourceType ?? this.dataSourceType,
       languageCode: languageCode ?? this.languageCode,
@@ -49,11 +45,26 @@ class SearchState extends Equatable {
     );
   }
 
+  SearchState copyToProgressStateWith({
+    String? query,
+    DataSourceType? dataSourceType,
+    LanguageCode? languageCode,
+  }) {
+    return SearchState(
+      query: query ?? this.query,
+      bookDownloadStatus: DownloadStatus.inProgress,
+      dataSourceType: dataSourceType ?? this.dataSourceType,
+      languageCode: languageCode ?? this.languageCode,
+      lastBookIndex: lastBookIndex,
+      booksHavePeaked: booksHavePeaked,
+      requestParameterChanged: true,
+    );
+  }
+
   @override
   List<Object> get props => <Object>[
         query,
         books,
-        userBooks,
         bookDownloadStatus,
         dataSourceType,
         languageCode,

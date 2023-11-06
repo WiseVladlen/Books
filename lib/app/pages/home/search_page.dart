@@ -132,7 +132,6 @@ class _BookListState extends State<_BookList> {
       child: BlocBuilder<SearchBloc, SearchState>(
         buildWhen: (SearchState oldState, SearchState newState) {
           return (oldState.books != newState.books) ||
-              (oldState.userBooks != newState.userBooks) ||
               (oldState.bookDownloadStatus != newState.bookDownloadStatus) ||
               (oldState.booksHavePeaked != newState.booksHavePeaked);
         },
