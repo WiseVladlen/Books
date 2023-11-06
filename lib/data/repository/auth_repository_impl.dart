@@ -22,9 +22,9 @@ class AuthRepositoryImpl implements IAuthRepository {
 
   @override
   Future<void> signUp({required RegistrationDataModel model}) async {
-    final UserModel? user = await authLocalDataSource.signUp(data: model);
+    final bool userAdded = await authLocalDataSource.signUp(data: model);
 
-    if (user == null) throw const SignUpFailure();
+    if (!userAdded) throw const SignUpException();
 
     await logIn(model: LoginDataModel(email: model.email, password: model.password));
   }
@@ -33,7 +33,7 @@ class AuthRepositoryImpl implements IAuthRepository {
   Future<void> logIn({required LoginDataModel model}) async {
     final UserModel? user = await authLocalDataSource.logIn(data: model);
 
-    if (user == null) throw const LogInFailure();
+    if (user == null) throw const LogInException();
 
     await preferenceDataSource.writeUser(user);
 
