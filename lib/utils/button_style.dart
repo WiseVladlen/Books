@@ -4,9 +4,11 @@ class ButtonStyles extends ThemeExtension<ButtonStyles> {
   const ButtonStyles({
     this.positiveDialogButton = const ButtonStyle(
       foregroundColor: MaterialStatePropertyAll<Color>(Color(0xFF388E3C)),
+      overlayColor: MaterialStatePropertyAll<Color>(Color(0x1F388E3C)),
     ),
     this.negativeDialogButton = const ButtonStyle(
       foregroundColor: MaterialStatePropertyAll<Color>(Color(0xFFEF5350)),
+      overlayColor: MaterialStatePropertyAll<Color>(Color(0x1FEF5350)),
     ),
   });
 
