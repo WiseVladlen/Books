@@ -72,7 +72,7 @@ class BookTile extends StatelessWidget {
                     decoration: BoxDecoration(
                       boxShadow: <BoxShadow>[
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.25),
+                          color: context.colors.boxShadow,
                           offset: const Offset(0, 2),
                           spreadRadius: 2,
                           blurRadius: 4,
@@ -166,7 +166,7 @@ class _FavoriteButton extends StatelessWidget {
             context.read<FavoritesBloc>().add(FavouriteButtonClickedEvent(bookId: bookId));
           },
           splashRadius: 28,
-          color: isFavorite ? Colors.redAccent : Theme.of(context).colorScheme.onSurface,
+          color: isFavorite ? context.colors.favorite : context.colors.nonFavorite,
           icon: isFavorite ? const Icon(Icons.favorite) : const Icon(Icons.favorite_border),
         );
       },

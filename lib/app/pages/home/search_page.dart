@@ -45,12 +45,12 @@ class _SearchInput extends StatelessWidget {
       style: context.textStyles.appBarTextField,
       textAlignVertical: TextAlignVertical.center,
       decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.search, color: Colors.white),
+        prefixIcon: Icon(Icons.search, color: context.colors.appBarTextFieldPrimary),
         hintText: context.l10n.searchHint,
         hintStyle: context.textStyles.inputDecorationHint,
         border: InputBorder.none,
       ),
-      cursorColor: Colors.white,
+      cursorColor: context.colors.appBarTextFieldPrimary,
     );
   }
 }

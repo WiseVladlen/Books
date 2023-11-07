@@ -9,17 +9,17 @@ class BottomNotificationPanel extends StatefulWidget {
     required this.activateDelayedHiding,
   });
 
-  const BottomNotificationPanel.online({required String title})
+  const BottomNotificationPanel.online({required String title, required Color backgroundColor})
       : this._(
           title: title,
-          backgroundColor: Colors.green,
+          backgroundColor: backgroundColor,
           activateDelayedHiding: true,
         );
 
-  const BottomNotificationPanel.offline({required String title})
+  const BottomNotificationPanel.offline({required String title, required Color backgroundColor})
       : this._(
           title: title,
-          backgroundColor: Colors.red,
+          backgroundColor: backgroundColor,
           activateDelayedHiding: false,
         );
 
@@ -65,7 +65,7 @@ class _BottomNotificationPanelState extends State<BottomNotificationPanel> {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      height: _isVisible ? 32 : 0,
+      height: _isVisible ? 24 : 0,
       color: widget.backgroundColor,
       duration: const Duration(milliseconds: 200),
       child: Center(
