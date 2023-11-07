@@ -62,7 +62,7 @@ Future<void> showSettingsModalBottomSheet(BuildContext externalContext) {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             _SingleSelectSection<DataSourceType>(
-              title: externalContext.l10n.dataSourceTypeHeader,
+              title: context.l10n.dataSourceTypeHeader,
               groupValue: externalContext.read<SearchBloc>().state.dataSourceType,
               onChanged: (DataSourceType? value) {
                 if (value == null) return;
@@ -74,11 +74,11 @@ Future<void> showSettingsModalBottomSheet(BuildContext externalContext) {
               items: DataSourceType.values.map(
                 (DataSourceType dataSourceType) => switch (dataSourceType) {
                   DataSourceType.local => (
-                      title: externalContext.l10n.localDataSourceHeader,
+                      title: context.l10n.localDataSourceHeader,
                       value: dataSourceType
                     ),
                   DataSourceType.remote => (
-                      title: externalContext.l10n.remoteDataSourceHeader,
+                      title: context.l10n.remoteDataSourceHeader,
                       value: dataSourceType
                     ),
                 },
