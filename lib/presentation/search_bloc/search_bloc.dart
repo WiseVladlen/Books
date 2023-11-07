@@ -142,7 +142,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   Future<void> _dataSourceChanged(DataSourceChangedEvent event, Emitter<SearchState> emit) async {
     if (event.dataSourceType == state.dataSourceType) return;
 
-    if (state.query.isEmpty) return emit(SearchState(dataSourceType: state.dataSourceType));
+    if (state.query.isEmpty) {
+      return emit(
+        SearchState(dataSourceType: event.dataSourceType, languageCode: state.languageCode),
+      );
+    }
 
     emit(state.copyToProgressStateWith(dataSourceType: event.dataSourceType));
 
@@ -168,7 +172,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   Future<void> _languageChanged(LanguageChangedEvent event, Emitter<SearchState> emit) async {
     if (event.languageCode == state.languageCode) return;
 
-    if (state.query.isEmpty) return emit(SearchState(dataSourceType: state.dataSourceType));
+    if (state.query.isEmpty) {
+      return emit(
+        SearchState(dataSourceType: state.dataSourceType, languageCode: event.languageCode),
+      );
+    }
 
     emit(state.copyToProgressStateWith(languageCode: event.languageCode));
 
