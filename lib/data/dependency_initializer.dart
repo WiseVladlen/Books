@@ -1,7 +1,6 @@
 import 'package:books/data/data.dart';
 import 'package:books/domain/domain.dart';
-import 'package:books/utils/exception/exception.dart';
-import 'package:dio/dio.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 abstract class DependencyInitializer {
   /// Initializes dependencies and returns an instance of the [RepositoryStorage] class
@@ -14,15 +13,7 @@ abstract class DependencyInitializer {
 
     final IPreferenceDataSource preferenceDataSource = PreferenceDataSourceImpl();
 
-    final IBookRemoteDataSource bookRemoteDataSource = GoogleBooksDataSourceImpl(
-      errorInterceptor: ErrorInterceptor(
-        onResponseErrorHandler: (DioException err) {
-          serviceStorage.errorLoggerService.recordHttpError(
-            helper: HttpExceptionHelper.fromDioException(err),
-          );
-        },
-      ),
-    );
+    final IBookRemoteDataSource bookRemoteDataSource = GoogleBooksDataSourceImpl();
 
     final IAuthRepository authRepository = AuthRepositoryImpl(
       authLocalDataSource: authLocalDataSource,
@@ -56,8 +47,12 @@ abstract class DependencyInitializer {
 
   /// Initializes dependencies and returns an instance of the [ServiceStorage] class
   static Future<ServiceStorage> buildServiceStorage() async {
+    await Firebase.initializeApp();
+
     final IConnectivityService connectivityService = ConnectivityServiceImpl();
     final IErrorLoggerService crashlyticsService = CrashlyticsServiceImpl();
+
+    await crashlyticsService.initialize();
 
     await connectivityService.check();
 

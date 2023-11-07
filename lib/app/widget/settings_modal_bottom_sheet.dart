@@ -46,38 +46,39 @@ class _SingleSelectSection<T> extends StatelessWidget {
   }
 }
 
-Future<void> showSettingsModalBottomSheet(BuildContext context) {
+Future<void> showSettingsModalBottomSheet(BuildContext externalContext) {
   return showModalBottomSheet(
-    context: context,
+    context: externalContext,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(12),
         topRight: Radius.circular(12),
       ),
     ),
-    builder: (BuildContext sheetContext) {
+    builder: (BuildContext context) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             _SingleSelectSection<DataSourceType>(
-              title: context.l10n.dataSourceTypeHeader,
-              groupValue: context.read<SearchBloc>().state.dataSourceType,
+              title: externalContext.l10n.dataSourceTypeHeader,
+              groupValue: externalContext.read<SearchBloc>().state.dataSourceType,
               onChanged: (DataSourceType? value) {
                 if (value == null) return;
 
-                context.read<SearchBloc>().add(DataSourceChangedEvent(value));
-                Navigator.pop(sheetContext);
+                // Since no bloc is found when using context, externalContext is used
+                externalContext.read<SearchBloc>().add(DataSourceChangedEvent(value));
+                Navigator.pop(context);
               },
               items: DataSourceType.values.map(
                 (DataSourceType dataSourceType) => switch (dataSourceType) {
                   DataSourceType.local => (
-                      title: context.l10n.localDataSourceHeader,
+                      title: externalContext.l10n.localDataSourceHeader,
                       value: dataSourceType
                     ),
                   DataSourceType.remote => (
-                      title: context.l10n.remoteDataSourceHeader,
+                      title: externalContext.l10n.remoteDataSourceHeader,
                       value: dataSourceType
                     ),
                 },
@@ -85,13 +86,14 @@ Future<void> showSettingsModalBottomSheet(BuildContext context) {
             ),
             const Divider(),
             _SingleSelectSection<LanguageCode>(
-              title: context.l10n.languageHeader,
-              groupValue: context.read<SearchBloc>().state.languageCode,
+              title: externalContext.l10n.languageHeader,
+              groupValue: externalContext.read<SearchBloc>().state.languageCode,
               onChanged: (LanguageCode? value) {
                 if (value == null) return;
 
-                context.read<SearchBloc>().add(LanguageChangedEvent(value));
-                Navigator.pop(sheetContext);
+                // Since no bloc is found when using context, externalContext is used
+                externalContext.read<SearchBloc>().add(LanguageChangedEvent(value));
+                Navigator.pop(context);
               },
               items: LanguageCode.values.map(
                 (LanguageCode languageCode) => (
