@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app_runner/app_runner.dart';
 import 'package:books/app/app.dart';
 import 'package:books/data/data.dart';
 import 'package:books/domain/domain.dart';
@@ -12,66 +13,84 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nested/nested.dart';
 
+typedef AppBuilderData = ({
+  ServiceStorage serviceStorage,
+  RepositoryStorage repositoryStorage,
+});
+
+abstract class AppBuilderDataWrapper {
+  static late final IErrorLoggerService errorLoggerService;
+}
+
 Future<void> main() async {
-  runZonedGuarded(
-    () async {
-      WidgetsFlutterBinding.ensureInitialized();
+  final WidgetConfiguration widgetConfiguration = WidgetConfiguration(
+    child: AppBuilder<AppBuilderData>(
+      preInitialize: (WidgetsBinding binding) async {
+        WidgetsFlutterBinding.ensureInitialized();
 
-      await Firebase.initializeApp();
+        await Firebase.initializeApp();
 
-      await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+        await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
 
-      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-
-      final ServiceStorage serviceStorage = await DependencyInitializer.buildServiceStorage();
-
-      runApp(
-        App(
-          repositoryStorage: DependencyInitializer.buildRepositoryStorage(),
+        final ServiceStorage serviceStorage = await DependencyInitializer.buildServiceStorage();
+        final RepositoryStorage repositoryStorage = DependencyInitializer.buildRepositoryStorage(
           serviceStorage: serviceStorage,
-        ),
-      );
+        );
+
+        AppBuilderDataWrapper.errorLoggerService = serviceStorage.errorLoggerService;
+
+        return (serviceStorage: serviceStorage, repositoryStorage: repositoryStorage);
+      },
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<AppBuilderData?> snapshot,
+        Widget? child,
+      ) {
+        late final Widget _child;
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+          case ConnectionState.active:
+          case ConnectionState.waiting:
+            _child = SizedBox.fromSize(
+              size: const Size.square(128),
+              child: const FlutterLogo(),
+            );
+            continue display;
+          case ConnectionState.done:
+            final AppBuilderData? data = snapshot.data;
+            if (data != null) {
+              _child = App(
+                repositoryStorage: data.repositoryStorage,
+                serviceStorage: data.serviceStorage,
+              );
+            }
+            continue display;
+          display:
+          default:
+            return AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: _child,
+            );
+        }
+      },
+    ),
+    onFlutterError: (FlutterErrorDetails details) {
+      AppBuilderDataWrapper.errorLoggerService.recordError(details.exception, details.stack);
     },
-    (Object error, StackTrace stack) => FirebaseCrashlytics.instance.recordError(error, stack),
   );
-}
 
-class NetworkConnectionListener extends StatefulWidget {
-  const NetworkConnectionListener({
-    super.key,
-    required this.repositoryStorage,
-    required this.serviceStorage,
-  });
+  final ZoneConfiguration zoneConfiguration = ZoneConfiguration(
+    onZoneError: (Object error, StackTrace stackTrace) {
+      AppBuilderDataWrapper.errorLoggerService.recordError(error, stackTrace);
+    },
+  );
 
-  final RepositoryStorage repositoryStorage;
-  final ServiceStorage serviceStorage;
-
-  @override
-  State<NetworkConnectionListener> createState() => _NetworkConnectionListenerState();
-}
-
-class _NetworkConnectionListenerState extends State<NetworkConnectionListener> {
-  @override
-  void initState() {
-    super.initState();
-
-    widget.serviceStorage.connectivityService.listen();
-  }
-
-  @override
-  void dispose() {
-    widget.serviceStorage.connectivityService.cancel();
-
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return App(
-      repositoryStorage: widget.repositoryStorage,
-      serviceStorage: widget.serviceStorage,
-    );
-  }
+  appRunner(
+    RunnerConfiguration.guarded(
+      widgetConfig: widgetConfiguration,
+      zoneConfig: zoneConfiguration,
+    ),
+  );
 }
 
 class App extends StatelessWidget {
@@ -118,7 +137,10 @@ class App extends StatelessWidget {
             ),
           ),
         ],
-        child: const _AppView(),
+        child: NetworkConnectionListener(
+          connectivityService: serviceStorage.connectivityService,
+          child: const _AppView(),
+        ),
       ),
     );
   }
@@ -156,11 +178,13 @@ class _AppView extends StatelessWidget {
                     if (state.status.isOnline) {
                       return BottomNotificationPanel.online(
                         title: context.l10n.networkConnectedMessage,
+                        backgroundColor: context.colors.positive,
                       );
                     }
 
                     return BottomNotificationPanel.offline(
                       title: context.l10n.networkConnectionWaitingMessage,
+                      backgroundColor: context.colors.negative,
                     );
                   },
                 ),
