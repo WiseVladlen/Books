@@ -11,7 +11,7 @@ class NoResultsBackground extends StatelessWidget {
   final Text text;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(_) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

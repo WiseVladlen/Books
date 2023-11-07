@@ -32,5 +32,5 @@ class _NetworkConnectionListenerState extends State<NetworkConnectionListener> {
   }
 
   @override
-  Widget build(BuildContext context) => widget.child;
+  Widget build(_) => widget.child;
 }

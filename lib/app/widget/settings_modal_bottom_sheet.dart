@@ -68,7 +68,7 @@ Future<void> showSettingsModalBottomSheet(BuildContext context) {
                 if (value == null) return;
 
                 context.read<SearchBloc>().add(DataSourceChangedEvent(value));
-                Navigator.pop(context);
+                Navigator.pop(sheetContext);
               },
               items: DataSourceType.values.map(
                 (DataSourceType dataSourceType) => switch (dataSourceType) {
@@ -91,7 +91,7 @@ Future<void> showSettingsModalBottomSheet(BuildContext context) {
                 if (value == null) return;
 
                 context.read<SearchBloc>().add(LanguageChangedEvent(value));
-                Navigator.pop(context);
+                Navigator.pop(sheetContext);
               },
               items: LanguageCode.values.map(
                 (LanguageCode languageCode) => (

@@ -26,6 +26,6 @@ class _InformationAlertDialog extends StatelessWidget {
 Future<void> showInformationDialog(BuildContext context, {required String title}) {
   return showDialog(
     context: context,
-    builder: (BuildContext _) => _InformationAlertDialog(title: title),
+    builder: (_) => _InformationAlertDialog(title: title),
   );
 }
