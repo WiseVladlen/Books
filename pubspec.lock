@@ -33,6 +33,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.11.2"
+  app_runner:
+    dependency: "direct main"
+    description:
+      name: app_runner
+      sha256: "0b2e6f2cc3b7576c24017d095b8a570dd21b61bc06ea9837bcf7eb35155bec67"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.2"
   args:
     dependency: transitive
     description:
