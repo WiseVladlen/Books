@@ -14,18 +14,19 @@ abstract class ThemeDataX {
           selectionColor: Colors.white.withOpacity(0.25),
           selectionHandleColor: Colors.green[300],
         ),
+        bottomNavigationBarTheme: BottomNavigationBarThemeX.from(brightness: brightness),
         extensions: brightness == Brightness.light ? lightExtensions : darkExtensions,
       );
 
   static const List<ThemeExtension<dynamic>> lightExtensions = <ThemeExtension<dynamic>>[
     TextStyles.light(),
     ButtonStyles.light(),
+    ColorPalette.light(),
   ];
 
   static const List<ThemeExtension<dynamic>> darkExtensions = <ThemeExtension<dynamic>>[
     TextStyles.dark(),
     ButtonStyles.dark(),
+    ColorPalette.dark(),
   ];
-
-  static const Color outlinedTextFieldPrimaryColor = Colors.green;
 }
