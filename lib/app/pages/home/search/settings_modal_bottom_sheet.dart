@@ -46,16 +46,16 @@ class _SingleSelectSection<T> extends StatelessWidget {
   }
 }
 
-Future<void> showSettingsModalBottomSheet(BuildContext context) {
+Future<void> showSettingsModalBottomSheet(BuildContext externalContext) {
   return showModalBottomSheet(
-    context: context,
+    context: externalContext,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(12),
         topRight: Radius.circular(12),
       ),
     ),
-    builder: (BuildContext sheetContext) {
+    builder: (BuildContext context) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
         child: Column(
@@ -63,11 +63,12 @@ Future<void> showSettingsModalBottomSheet(BuildContext context) {
           children: <Widget>[
             _SingleSelectSection<DataSourceType>(
               title: context.l10n.dataSourceTypeHeader,
-              groupValue: context.read<SearchBloc>().state.dataSourceType,
+              groupValue: externalContext.read<SearchBloc>().state.dataSourceType,
               onChanged: (DataSourceType? value) {
                 if (value == null) return;
 
-                context.read<SearchBloc>().add(DataSourceChangedEvent(value));
+                // Since no bloc is found when using context, externalContext is used
+                externalContext.read<SearchBloc>().add(DataSourceChangedEvent(value));
                 Navigator.pop(context);
               },
               items: DataSourceType.values.map(
@@ -85,12 +86,13 @@ Future<void> showSettingsModalBottomSheet(BuildContext context) {
             ),
             const Divider(),
             _SingleSelectSection<LanguageCode>(
-              title: context.l10n.languageHeader,
-              groupValue: context.read<SearchBloc>().state.languageCode,
+              title: externalContext.l10n.languageHeader,
+              groupValue: externalContext.read<SearchBloc>().state.languageCode,
               onChanged: (LanguageCode? value) {
                 if (value == null) return;
 
-                context.read<SearchBloc>().add(LanguageChangedEvent(value));
+                // Since no bloc is found when using context, externalContext is used
+                externalContext.read<SearchBloc>().add(LanguageChangedEvent(value));
                 Navigator.pop(context);
               },
               items: LanguageCode.values.map(

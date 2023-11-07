@@ -1,9 +1,10 @@
 import 'package:books/data/data.dart';
 import 'package:books/domain/domain.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 abstract class DependencyInitializer {
   /// Initializes dependencies and returns an instance of the [RepositoryStorage] class
-  static RepositoryStorage run() {
+  static RepositoryStorage buildRepositoryStorage({required ServiceStorage serviceStorage}) {
     final Database database = Database();
 
     final IBookLocalDataSource bookLocalDataSource = BookLocalDataSourceImpl(db: database);
@@ -12,17 +13,7 @@ abstract class DependencyInitializer {
 
     final IPreferenceDataSource preferenceDataSource = PreferenceDataSourceImpl();
 
-    final IBookRemoteDataSource bookRemoteDataSource = GoogleBooksDataSourceImpl(
-      errorInterceptor: ErrorInterceptor(
-        onResponseErrorHandler: (
-          String? message,
-          Object? error,
-          StackTrace stakeTrace,
-        ) {
-          // TODO: handle error
-        },
-      ),
-    );
+    final IBookRemoteDataSource bookRemoteDataSource = GoogleBooksDataSourceImpl();
 
     final IAuthRepository authRepository = AuthRepositoryImpl(
       authLocalDataSource: authLocalDataSource,
@@ -51,6 +42,23 @@ abstract class DependencyInitializer {
       bookRepository: bookRepository,
       userRepository: userRepository,
       favoritesRepository: favoritesRepository,
+    );
+  }
+
+  /// Initializes dependencies and returns an instance of the [ServiceStorage] class
+  static Future<ServiceStorage> buildServiceStorage() async {
+    await Firebase.initializeApp();
+
+    final IConnectivityService connectivityService = ConnectivityServiceImpl();
+    final IErrorLoggerService crashlyticsService = CrashlyticsServiceImpl();
+
+    await crashlyticsService.initialize();
+
+    await connectivityService.check();
+
+    return ServiceStorage(
+      connectivityService: connectivityService,
+      errorLoggerService: crashlyticsService,
     );
   }
 }

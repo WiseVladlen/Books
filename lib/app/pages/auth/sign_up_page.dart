@@ -18,7 +18,13 @@ class SignUpPage extends StatelessWidget {
       ),
       child: Column(
         children: <Widget>[
-          BlocBuilder<SignUpCubit, SignUpState>(
+          BlocConsumer<SignUpCubit, SignUpState>(
+            listenWhen: (SignUpState oldState, SignUpState newState) {
+              return (oldState.status != newState.status) && newState.status.isFailure;
+            },
+            listener: (BuildContext context, SignUpState state) {
+              showInformationDialog(context, title: context.l10n.signUpFailureMessage);
+            },
             buildWhen: (SignUpState oldState, SignUpState newState) {
               return oldState.name != newState.name;
             },

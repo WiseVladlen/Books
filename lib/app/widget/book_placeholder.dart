@@ -19,11 +19,5 @@ class BookPlaceholder extends StatelessWidget {
   final BoxFit fit;
 
   @override
-  Widget build(BuildContext context) {
-    return Image(
-      image: image,
-      height: height,
-      fit: fit,
-    );
-  }
+  Widget build(_) => Image(image: image, height: height, fit: fit);
 }

@@ -10,7 +10,7 @@ class OutlinedTextField extends StatelessWidget {
     required this.labelText,
     this.errorText,
     this.borderWidth = 2,
-    this.primaryColor = ThemeDataX.outlinedTextFieldPrimaryColor,
+    this.primaryColor,
     this.padding = EdgeInsets.zero,
     required this.onChanged,
   });
@@ -23,7 +23,7 @@ class OutlinedTextField extends StatelessWidget {
 
   final String? errorText;
 
-  final Color primaryColor;
+  final Color? primaryColor;
 
   final double borderWidth;
 
@@ -43,11 +43,14 @@ class OutlinedTextField extends StatelessWidget {
           errorText: errorText,
           border: const OutlineInputBorder(),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(width: borderWidth, color: primaryColor),
+            borderSide: BorderSide(
+              width: borderWidth,
+              color: primaryColor ?? context.colors.textFieldPrimary,
+            ),
           ),
         ),
         onChanged: onChanged,
-        cursorColor: primaryColor,
+        cursorColor: primaryColor ?? context.colors.textFieldPrimary,
       ),
     );
   }

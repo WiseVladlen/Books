@@ -18,7 +18,13 @@ class LoginPage extends StatelessWidget {
       ),
       child: Column(
         children: <Widget>[
-          BlocBuilder<LoginCubit, LoginState>(
+          BlocConsumer<LoginCubit, LoginState>(
+            listenWhen: (LoginState oldState, LoginState newState) {
+              return (oldState.status != newState.status) && newState.status.isFailure;
+            },
+            listener: (BuildContext context, LoginState state) {
+              showInformationDialog(context, title: context.l10n.logInFailureMessage);
+            },
             buildWhen: (LoginState oldState, LoginState newState) {
               return oldState.email != newState.email;
             },

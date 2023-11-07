@@ -4,14 +4,13 @@ import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 class GoogleBooksDataSourceImpl implements IBookRemoteDataSource {
-  GoogleBooksDataSourceImpl({required ErrorInterceptor errorInterceptor}) {
+  GoogleBooksDataSourceImpl() {
     _dio = Dio(BaseOptions(baseUrl: RestPaths.baseUrl))
       ..interceptors.addAll(<Interceptor>[
         PrettyDioLogger(
           requestHeader: true,
           requestBody: true,
         ),
-        errorInterceptor,
       ]);
   }
 

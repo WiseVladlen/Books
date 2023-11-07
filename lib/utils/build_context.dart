@@ -8,4 +8,6 @@ extension BuildContextX on BuildContext {
   TextStyles get textStyles => Theme.of(this).extension<TextStyles>()!;
 
   ButtonStyles get buttonStyles => Theme.of(this).extension<ButtonStyles>()!;
+
+  ColorPalette get colors => Theme.of(this).extension<ColorPalette>()!;
 }

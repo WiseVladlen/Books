@@ -3,10 +3,15 @@ part of '../database.dart';
 class UserEntity extends Table {
   IntColumn get id => integer().autoIncrement()();
 
-  TextColumn get email => text()();
+  TextColumn get email => text().unique()();
   TextColumn get name => text()();
   TextColumn get password => text()();
   BoolColumn get isAuthenticated => boolean()();
+
+  @override
+  List<Set<Column<Object>>> get uniqueKeys => <Set<Column<Object>>>[
+        <Column<Object>>{id, email},
+      ];
 }
 
 extension UserModelToUserTableCompanionMapper on RegistrationDataModel {

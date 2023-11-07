@@ -16,6 +16,7 @@ class SearchPage extends StatelessWidget {
     return BlocProvider<SearchBloc>(
       create: (BuildContext context) => SearchBloc(
         bookRepository: context.read<IBookRepository>(),
+        connectivityService: context.read<IConnectivityService>(),
       ),
       child: Scaffold(
         appBar: AppBar(
@@ -44,12 +45,12 @@ class _SearchInput extends StatelessWidget {
       style: context.textStyles.appBarTextField,
       textAlignVertical: TextAlignVertical.center,
       decoration: InputDecoration(
-        prefixIcon: const Icon(Icons.search, color: Colors.white),
+        prefixIcon: Icon(Icons.search, color: context.colors.appBarTextFieldPrimary),
         hintText: context.l10n.searchHint,
         hintStyle: context.textStyles.inputDecorationHint,
         border: InputBorder.none,
       ),
-      cursorColor: Colors.white,
+      cursorColor: context.colors.appBarTextFieldPrimary,
     );
   }
 }
@@ -131,7 +132,6 @@ class _BookListState extends State<_BookList> {
       child: BlocBuilder<SearchBloc, SearchState>(
         buildWhen: (SearchState oldState, SearchState newState) {
           return (oldState.books != newState.books) ||
-              (oldState.userBooks != newState.userBooks) ||
               (oldState.bookDownloadStatus != newState.bookDownloadStatus) ||
               (oldState.booksHavePeaked != newState.booksHavePeaked);
         },

@@ -1,4 +1,5 @@
 import 'package:books/domain/domain.dart';
+import 'package:books/utils/exception/exception.dart';
 import 'package:books/utils/validator/validator.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -46,14 +47,17 @@ class SignUpCubit extends Cubit<SignUpState> {
 
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
 
-    // TODO: handle possible error
-    await authenticationRepository.signUp(
-      model: RegistrationDataModel(
-        name: state.name.value,
-        email: state.email.value,
-        password: state.password.value,
-      ),
-    );
+    try {
+      await authenticationRepository.signUp(
+        model: RegistrationDataModel(
+          name: state.name.value,
+          email: state.email.value,
+          password: state.password.value,
+        ),
+      );
+    } on SignUpException {
+      return emit(state.copyWith(status: FormzSubmissionStatus.failure));
+    }
 
     emit(state.copyWith(status: FormzSubmissionStatus.success));
   }

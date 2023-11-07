@@ -14,9 +14,9 @@
   "emailLabel": "Email",
   "passwordLabel": "Пароль",
   "nameLabel": "Имя",
-  "invalidEmailMessage": "Неверный email",
-  "invalidPasswordMessage": "Неверный пароль",
-  "invalidNameMessage": "Неверное имя",
+  "invalidEmailMessage": "Некорректный email",
+  "invalidPasswordMessage": "Некорректный пароль",
+  "invalidNameMessage": "Некорректное имя",
   "notAccountQuestion": "Нет учетной записи?",
   "alreadyHaveAccountQuestion": "Уже есть аккаунт?",
   "logOutQuestion": "Выйти из аккаунта?",
@@ -27,5 +27,9 @@
   "settingsHeader": "Настройки",
   "dataSourceTypeHeader": "Тип источника данных",
   "localDataSourceHeader": "Локальный",
-  "remoteDataSourceHeader": "Удаленный"
+  "remoteDataSourceHeader": "Удаленный",
+  "networkConnectedMessage": "Подключено",
+  "networkConnectionWaitingMessage": "Ожидание сети...",
+  "logInFailureMessage": "Неверный email или пароль",
+  "signUpFailureMessage": "Пользователь с таким email уже существует"
 }

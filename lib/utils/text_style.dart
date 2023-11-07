@@ -18,6 +18,7 @@ class TextStyles extends ThemeExtension<TextStyles> {
       fontSize: 18,
       fontWeight: FontWeight.w500,
     ),
+    this.notificationPanelText = const TextStyle(color: Colors.white),
   });
 
   const TextStyles.light() : this();
@@ -37,6 +38,7 @@ class TextStyles extends ThemeExtension<TextStyles> {
   final TextStyle appBarTextField;
   final TextStyle inputDecorationHint;
   final TextStyle dialogTitle;
+  final TextStyle notificationPanelText;
 
   @override
   ThemeExtension<TextStyles> copyWith({
@@ -46,6 +48,7 @@ class TextStyles extends ThemeExtension<TextStyles> {
     TextStyle? appBarTextField,
     TextStyle? inputDecorationHint,
     TextStyle? dialogTitle,
+    TextStyle? notificationPanelText,
   }) {
     return TextStyles(
       appTitleLarge: appTitleLarge ?? this.appTitleLarge,
@@ -54,6 +57,7 @@ class TextStyles extends ThemeExtension<TextStyles> {
       appBarTextField: appBarTextField ?? this.appBarTextField,
       inputDecorationHint: inputDecorationHint ?? this.inputDecorationHint,
       dialogTitle: dialogTitle ?? this.dialogTitle,
+      notificationPanelText: notificationPanelText ?? this.notificationPanelText,
     );
   }
 
@@ -68,6 +72,7 @@ class TextStyles extends ThemeExtension<TextStyles> {
       appBarTextField: TextStyle.lerp(appBarTextField, other.appBarTextField, t)!,
       inputDecorationHint: TextStyle.lerp(inputDecorationHint, other.inputDecorationHint, t)!,
       dialogTitle: TextStyle.lerp(dialogTitle, other.dialogTitle, t)!,
+      notificationPanelText: TextStyle.lerp(notificationPanelText, other.notificationPanelText, t)!,
     );
   }
 }
