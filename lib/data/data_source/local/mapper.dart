@@ -1,35 +1,38 @@
 import 'package:books/data/database.dart';
 import 'package:books/domain/model/model.dart';
+import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 
 extension JoinedSelectStatementMapper on List<TypedResult> {
   /// The current elements of this iterable are converted into a list of books
   Set<BookModel> mapToBooks({required Database database}) {
-    final Iterable<BookEntityData> bookEntity = map(
-      (TypedResult e) => e.readTable(database.bookEntity),
-    );
+    final Set<AuthorEntityData> authorSet = map(
+      (TypedResult typedResult) => typedResult.readTable(database.authorEntity),
+    ).toSet();
 
-    final Iterable<AuthorEntityData> authorEntity = map(
-      (TypedResult e) => e.readTable(database.authorEntity),
-    );
+    final Map<String, Set<BookAuthorEntityData>> bookAuthorsMap = map(
+      (TypedResult typedResult) => typedResult.readTable(database.bookAuthorEntity),
+    ).groupSetsBy((BookAuthorEntityData bookAuthor) => bookAuthor.bookId);
 
-    final Iterable<BookAuthorEntityData> bookAuthorEntity = map(
-      (TypedResult e) => e.readTable(database.bookAuthorEntity),
-    );
+    final Iterable<BookModel> books = map((TypedResult typedResult) {
+      final BookEntityData book = typedResult.readTable(database.bookEntity);
+      final Set<BookAuthorEntityData>? bookAuthors = bookAuthorsMap[book.id];
 
-    final Iterable<BookModel> books = bookEntity.map((BookEntityData book) {
-      final Iterable<int> authorIds = bookAuthorEntity
-          .where((BookAuthorEntityData bookAuthor) => bookAuthor.bookId == book.id)
-          .map((BookAuthorEntityData bookAuthor) => bookAuthor.authorId);
+      if (bookAuthors == null || bookAuthors.isEmpty) {
+        return (book: book, authors: <AuthorEntityData>[]).model;
+      }
 
-      final Iterable<AuthorEntityData> authors = authorEntity.where(
+      final Iterable<int> authorIds = bookAuthors.map(
+        (BookAuthorEntityData bookAuthor) => bookAuthor.authorId,
+      );
+
+      final Iterable<AuthorEntityData> authors = authorSet.where(
         (AuthorEntityData author) => authorIds.contains(author.id),
       );
 
       return (book: book, authors: authors).model;
     });
 
-    // FIXME: When using join, books with multiple authors are matched with redundant equivalent entries
     return books.toSet();
   }
 }
