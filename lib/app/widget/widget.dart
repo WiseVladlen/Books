@@ -1,4 +1,5 @@
 //GENERATED BARREL FILE
+export './transition/transition.dart';
 export 'book_placeholder.dart';
 export 'bottom_notification_panel.dart';
 export 'custom_network_image.dart';
