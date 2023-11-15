@@ -13,6 +13,8 @@ abstract class DependencyInitializer {
 
     final ICacheDataSource cacheDataSource = CacheDataSourceImpl();
 
+    final IPreferenceDataSource preferenceDataSource = PreferenceDataSourceImpl();
+
     final IBookRemoteDataSource bookRemoteDataSource = GoogleBooksDataSourceImpl();
 
     final IAuthRepository authRepository = AuthRepositoryImpl(
@@ -37,11 +39,17 @@ abstract class DependencyInitializer {
       cacheDataSource: cacheDataSource,
     );
 
+    final IPreferenceRepository preferenceRepository = PreferenceRepositoryImpl(
+      preferenceDataSource: preferenceDataSource,
+      cacheDataSource: cacheDataSource,
+    );
+
     return RepositoryStorage(
       authRepository: authRepository,
       bookRepository: bookRepository,
       userRepository: userRepository,
       favoritesRepository: favoritesRepository,
+      preferenceRepository: preferenceRepository,
     );
   }
 

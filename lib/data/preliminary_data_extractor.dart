@@ -4,5 +4,8 @@ abstract class PreliminaryDataExtractor {
   /// Retrieves the pre-initialization data that will be needed to start the application.
   static Future<void> run({required RepositoryStorage repositoryStorage}) async {
     await repositoryStorage.userRepository.fetchAuthenticatedUser();
+
+    await repositoryStorage.preferenceRepository.fetchThemeMode();
+    await repositoryStorage.preferenceRepository.fetchLanguageCode();
   }
 }
