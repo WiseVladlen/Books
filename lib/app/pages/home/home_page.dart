@@ -84,16 +84,12 @@ class _Drawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.language),
             title: Text(context.l10n.appLanguageHeader),
-            onTap: () {
-              // TODO: show language selection dialog
-            },
+            onTap: () => showLocaleSettingsModalBottomSheet(context),
           ),
           ListTile(
             leading: const Icon(Icons.palette),
             title: Text(context.l10n.themeModeHeader),
-            onTap: () {
-              // TODO: show theme selection dialog
-            },
+            onTap: () => showThemeModeSettingsModalBottomSheet(context),
           ),
           const Divider(),
           ListTile(
