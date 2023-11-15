@@ -9,11 +9,16 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
     this.textFieldPrimary = Colors.green,
     this.positive = Colors.green,
     this.negative = Colors.red,
+    this.drawerBackground = const Color(0xFFBC004B),
   });
 
   const ColorPalette.light() : this();
 
-  const ColorPalette.dark() : this(nonFavorite: const Color(0xFFECE0E0));
+  const ColorPalette.dark()
+      : this(
+          nonFavorite: const Color(0xFFECE0E0),
+          drawerBackground: const Color(0xFF201A1B),
+        );
 
   final Color boxShadow;
 
@@ -29,6 +34,8 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
 
   final Color negative;
 
+  final Color drawerBackground;
+
   @override
   ThemeExtension<ColorPalette> copyWith({
     Color? boxShadow,
@@ -38,6 +45,7 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
     Color? textFieldPrimary,
     Color? positive,
     Color? negative,
+    Color? drawerBackground,
   }) {
     return ColorPalette(
       boxShadow: boxShadow ?? this.boxShadow,
@@ -47,6 +55,7 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
       textFieldPrimary: textFieldPrimary ?? this.textFieldPrimary,
       positive: positive ?? this.positive,
       negative: negative ?? this.negative,
+      drawerBackground: drawerBackground ?? this.drawerBackground,
     );
   }
 
@@ -62,6 +71,7 @@ class ColorPalette extends ThemeExtension<ColorPalette> {
       textFieldPrimary: Color.lerp(textFieldPrimary, other.textFieldPrimary, t)!,
       positive: Color.lerp(positive, other.positive, t)!,
       negative: Color.lerp(negative, other.negative, t)!,
+      drawerBackground: Color.lerp(drawerBackground, other.drawerBackground, t)!,
     );
   }
 }
