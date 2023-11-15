@@ -30,6 +30,8 @@ class AbstractPageRouterDelegate<T> extends AbstractRouterDelegate<AppRoute> {
   Widget build(BuildContext context) {
     return BlocListener<NavigationBloc, NavigationState>(
       listenWhen: (NavigationState oldState, NavigationState newState) {
+        if (newState.currentStack.runtimeType != T) return false;
+
         final AppRoute oldStack = oldState.rootStack.firstWhereType(T);
         final AppRoute newStack = newState.rootStack.firstWhereType(T);
         return oldStack != newStack;
