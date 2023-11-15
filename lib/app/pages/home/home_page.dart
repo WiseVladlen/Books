@@ -1,50 +1,107 @@
-import 'package:books/app/pages/home/home.dart';
-import 'package:books/domain/domain.dart';
+import 'package:books/app/app.dart';
+import 'package:books/domain/repository/repository.dart';
 import 'package:books/presentation/presentation.dart';
 import 'package:books/utils/build_context.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nested/nested.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: <SingleChildWidget>[
-        BlocProvider<NavigationCubit>(create: (_) => NavigationCubit()),
-        BlocProvider<FavoritesBloc>(
-          create: (BuildContext context) => FavoritesBloc(
-            bookRepository: context.read<IBookRepository>(),
-            favoritesRepository: context.read<IFavoritesRepository>(),
+    return BlocProvider<FavoritesBloc>(
+      create: (BuildContext context) => FavoritesBloc(
+        bookRepository: context.read<IBookRepository>(),
+        favoritesRepository: context.read<IFavoritesRepository>(),
+      ),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Center(child: Text(context.l10n.appName)),
+          actions: <Widget>[
+            IconButton(
+              onPressed: () {
+                context
+                    .read<NavigationBloc>()
+                    .add(const AddToRootStackEvent(route: SearchPageRoute()));
+              },
+              icon: const Icon(Icons.search),
+            ),
+          ],
+        ),
+        drawer: const _Drawer(),
+        body: Router<AppRoute>(
+          routerDelegate: AbstractPageRouterDelegate<HomePageRoute>(
+            bloc: context.read<NavigationBloc>(),
+            navigatorKey: navigatorKey,
           ),
         ),
-      ],
-      child: BlocBuilder<NavigationCubit, NavigationState>(
-        builder: (BuildContext context, NavigationState state) {
-          return Scaffold(
-            body: switch (state.pageViewType) {
-              PageViewType.favourite => const FavouritesPage(),
-              PageViewType.search => const SearchPage(),
-            },
-            bottomNavigationBar: BottomNavigationBar(
-              currentIndex: state.pageViewType.index,
-              items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  icon: const Icon(Icons.favorite_border),
-                  label: context.l10n.favoritesLabel,
-                  activeIcon: const Icon(Icons.favorite),
+      ),
+    );
+  }
+}
+
+class _Drawer extends StatelessWidget {
+  const _Drawer();
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: Column(
+        children: <Widget>[
+          SizedBox.fromSize(
+            size: const Size.fromHeight(208),
+            child: DrawerHeader(
+              decoration: BoxDecoration(color: Theme.of(context).colorScheme.inversePrimary),
+              padding: const EdgeInsets.all(20),
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    // TODO: add actual user info
+                    Text(
+                      'Username',
+                      style: context.textStyles.userInfoLarge,
+                    ),
+                    Text(
+                      'user@email.com',
+                      style: context.textStyles.userInfoMedium,
+                    ),
+                  ],
                 ),
-                BottomNavigationBarItem(
-                  icon: const Icon(Icons.search),
-                  label: context.l10n.searchLabel,
-                ),
-              ],
-              onTap: (int index) => context.read<NavigationCubit>().clickOnPage(index: index),
+              ),
             ),
-          );
-        },
+          ),
+          ListTile(
+            leading: const Icon(Icons.language),
+            title: Text(context.l10n.appLanguageHeader),
+            onTap: () {
+              // TODO: show language selection dialog
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.palette),
+            title: Text(context.l10n.themeModeHeader),
+            onTap: () {
+              // TODO: show theme selection dialog
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: Text(context.l10n.logOutHeader),
+            onTap: () => showLogOutDialog(context),
+          ),
+        ],
       ),
     );
   }
