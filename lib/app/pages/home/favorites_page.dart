@@ -12,50 +12,37 @@ class FavouritesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(child: Text(context.l10n.favoritesLabel)),
-        elevation: 0,
-      ),
-      body: const _BookList(),
-    );
-  }
-}
+      body: BlocBuilder<FavoritesBloc, FavoritesState>(
+        builder: (BuildContext context, FavoritesState state) {
+          if (state.bookDownloadStatus.isInProgress) return const LoadingBackground();
 
-class _BookList extends StatelessWidget {
-  const _BookList();
+          final Set<BookModel> books = state.books;
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<FavoritesBloc, FavoritesState>(
-      builder: (BuildContext context, FavoritesState state) {
-        if (state.bookDownloadStatus.isInProgress) return const LoadingBackground();
+          if (state.isBooksLoadedSuccessfully) {
+            return ListView.separated(
+              itemBuilder: (BuildContext context, int index) {
+                final BookModel book = books.elementAt(index);
 
-        final Set<BookModel> books = state.books;
+                return BookTile.fromModel(
+                  key: ValueKey<String>(book.id),
+                  model: book,
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) => const Divider(height: 1),
+              itemCount: books.length,
+              physics: const BouncingScrollPhysics(),
+            );
+          }
 
-        if (state.isBooksLoadedSuccessfully) {
-          return ListView.separated(
-            itemBuilder: (BuildContext context, int index) {
-              final BookModel book = books.elementAt(index);
-
-              return BookTile.fromModel(
-                key: ValueKey<String>(book.id),
-                model: book,
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) => const Divider(height: 1),
-            itemCount: books.length,
-            physics: const BouncingScrollPhysics(),
+          return NoResultsBackground(
+            icon: const Icon(Icons.info_outline, size: 28),
+            text: Text(
+              context.l10n.noFavouriteBooksMessage,
+              style: context.textStyles.backgroundLogoMedium,
+            ),
           );
-        }
-
-        return NoResultsBackground(
-          icon: const Icon(Icons.info_outline, size: 28),
-          text: Text(
-            context.l10n.noFavouriteBooksMessage,
-            style: context.textStyles.backgroundLogoMedium,
-          ),
-        );
-      },
+        },
+      ),
     );
   }
 }
