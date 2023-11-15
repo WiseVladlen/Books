@@ -1,4 +1,5 @@
 import 'package:books/app/app.dart';
+import 'package:books/domain/model/user_model.dart';
 import 'package:books/domain/repository/repository.dart';
 import 'package:books/presentation/presentation.dart';
 import 'package:books/utils/build_context.dart';
@@ -59,7 +60,7 @@ class _Drawer extends StatelessWidget {
           SizedBox.fromSize(
             size: const Size.fromHeight(208),
             child: DrawerHeader(
-              decoration: BoxDecoration(color: Theme.of(context).colorScheme.inversePrimary),
+              decoration: BoxDecoration(color: context.colors.drawerBackground),
               padding: const EdgeInsets.all(20),
               child: Align(
                 alignment: Alignment.bottomLeft,
@@ -67,14 +68,27 @@ class _Drawer extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    // TODO: add actual user info
-                    Text(
-                      'Username',
-                      style: context.textStyles.userInfoLarge,
+                    BlocBuilder<UserAuthBloc, UserAuthState>(
+                      builder: (BuildContext context, UserAuthState state) {
+                        final UserModel? user = state.user;
+                        return user != null
+                            ? Text(
+                                user.name,
+                                style: context.textStyles.userInfoLarge,
+                              )
+                            : const SizedBox.shrink();
+                      },
                     ),
-                    Text(
-                      'user@email.com',
-                      style: context.textStyles.userInfoMedium,
+                    BlocBuilder<UserAuthBloc, UserAuthState>(
+                      builder: (BuildContext context, UserAuthState state) {
+                        final UserModel? user = state.user;
+                        return user != null
+                            ? Text(
+                                user.email,
+                                style: context.textStyles.userInfoMedium,
+                              )
+                            : const SizedBox.shrink();
+                      },
                     ),
                   ],
                 ),
