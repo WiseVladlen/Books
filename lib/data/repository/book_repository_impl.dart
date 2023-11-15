@@ -4,17 +4,17 @@ class BookRepositoryImpl implements IBookRepository {
   const BookRepositoryImpl({
     required this.localDataSource,
     required this.remoteDataSource,
-    required this.preferenceDataSource,
+    required this.cacheDataSource,
   });
 
   final IBookLocalDataSource localDataSource;
   final IBookRemoteDataSource remoteDataSource;
 
-  final ICacheDataSource preferenceDataSource;
+  final ICacheDataSource cacheDataSource;
 
   @override
   Stream<Set<BookModel>> get userBookStream {
-    final UserModel? user = preferenceDataSource.readUser();
+    final UserModel? user = cacheDataSource.readUser();
     return user != null
         ? localDataSource.getUserBookStream(userId: user.id)
         : Stream<Set<BookModel>>.error(

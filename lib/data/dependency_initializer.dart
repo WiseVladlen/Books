@@ -11,30 +11,30 @@ abstract class DependencyInitializer {
     final IAuthLocalDataSource authLocalDataSource = AuthLocalDataSourceImpl(db: database);
     final IUserLocalDataSource userLocalDataSource = UserLocalDataSourceImpl(db: database);
 
-    final ICacheDataSource preferenceDataSource = CacheDataSourceImpl();
+    final ICacheDataSource cacheDataSource = CacheDataSourceImpl();
 
     final IBookRemoteDataSource bookRemoteDataSource = GoogleBooksDataSourceImpl();
 
     final IAuthRepository authRepository = AuthRepositoryImpl(
       authLocalDataSource: authLocalDataSource,
       userLocalDataSource: userLocalDataSource,
-      preferenceDataSource: preferenceDataSource,
+      cacheDataSource: cacheDataSource,
     );
 
     final IBookRepository bookRepository = BookRepositoryImpl(
       localDataSource: bookLocalDataSource,
       remoteDataSource: bookRemoteDataSource,
-      preferenceDataSource: preferenceDataSource,
+      cacheDataSource: cacheDataSource,
     );
 
     final IUserRepository userRepository = UserRepositoryImpl(
       localDataSource: userLocalDataSource,
-      cacheDataSource: preferenceDataSource,
+      cacheDataSource: cacheDataSource,
     );
 
     final IFavoritesRepository favoritesRepository = FavoritesRepositoryImpl(
       bookLocalDataSource: bookLocalDataSource,
-      preferenceDataSource: preferenceDataSource,
+      cacheDataSource: cacheDataSource,
     );
 
     return RepositoryStorage(
