@@ -24,6 +24,8 @@ Future<void> main() async {
           serviceStorage: serviceStorage,
         );
 
+        await PreliminaryDataExtractor.run(repositoryStorage: repositoryStorage);
+
         errorWrapper.errorLoggerService = serviceStorage.errorLoggerService;
 
         return (serviceStorage: serviceStorage, repositoryStorage: repositoryStorage);
