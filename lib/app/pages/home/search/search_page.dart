@@ -18,16 +18,30 @@ class SearchPage extends StatelessWidget {
         bookRepository: context.read<IBookRepository>(),
         connectivityService: context.read<IConnectivityService>(),
       ),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const _SearchInput(),
-          actions: const <Widget>[
-            _AppBarMoreButton(),
-          ],
-          elevation: 0,
-        ),
-        body: const _BookList(),
+      child: const _SearchPageView(),
+    );
+  }
+}
+
+class _SearchPageView extends StatelessWidget {
+  const _SearchPageView();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const _SearchInput(),
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {
+              showSearchSettingsModalBottomSheet(context);
+            },
+            icon: const Icon(Icons.filter_list),
+          ),
+        ],
+        titleSpacing: 12,
       ),
+      body: const _BookList(),
     );
   }
 }
@@ -38,40 +52,18 @@ class _SearchInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      key: const Key('homePage_searchInput_TextField'),
+      key: const Key('searchPage_textFieldInput'),
       onChanged: (String value) => DelayedAction.run(() {
         context.read<SearchBloc>().add(SearchQueryChangedEvent(value));
       }),
       style: context.textStyles.appBarTextField,
       textAlignVertical: TextAlignVertical.center,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.search, color: context.colors.appBarTextFieldPrimary),
         hintText: context.l10n.searchHint,
         hintStyle: context.textStyles.inputDecorationHint,
         border: InputBorder.none,
       ),
       cursorColor: context.colors.appBarTextFieldPrimary,
-    );
-  }
-}
-
-class _AppBarMoreButton extends StatelessWidget {
-  const _AppBarMoreButton();
-
-  @override
-  Widget build(BuildContext context) {
-    return PopupMenuButton<void>(
-      itemBuilder: (_) => <PopupMenuEntry<void>>[
-        PopupMenuItem<void>(
-          child: Text(context.l10n.settingsHeader),
-          onTap: () => showSettingsModalBottomSheet(context),
-        ),
-        const PopupMenuDivider(),
-        PopupMenuItem<void>(
-          child: Text(context.l10n.logOutHeader),
-          onTap: () => showLogOutDialog(context),
-        ),
-      ],
     );
   }
 }

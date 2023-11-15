@@ -12,24 +12,29 @@ class TextStyles extends ThemeExtension<TextStyles> {
       fontWeight: FontWeight.bold,
     ),
     this.appBarTextField = const TextStyle(color: Colors.white),
-    this.inputDecorationHint = const TextStyle(color: Color(0xFFDCDCDC)),
+    this.inputDecorationHint = const TextStyle(color: Color(0xFFE0E0E0)),
     this.dialogTitle = const TextStyle(
       color: Colors.black,
       fontSize: 18,
       fontWeight: FontWeight.w500,
     ),
     this.notificationPanelText = const TextStyle(color: Colors.white),
+    this.trailingTileText = const TextStyle(color: Color(0xFF757575)),
+    this.userInfoLarge = const TextStyle(color: Colors.white, fontSize: 16),
+    this.userInfoMedium = const TextStyle(color: Colors.white, fontSize: 14),
   });
 
   const TextStyles.light() : this();
 
   const TextStyles.dark()
       : this(
+          inputDecorationHint: const TextStyle(color: Colors.grey),
           dialogTitle: const TextStyle(
             color: Colors.white,
             fontSize: 18,
             fontWeight: FontWeight.w500,
           ),
+          trailingTileText: const TextStyle(color: Color(0xFF616161)),
         );
 
   final TextStyle appTitleLarge;
@@ -39,6 +44,9 @@ class TextStyles extends ThemeExtension<TextStyles> {
   final TextStyle inputDecorationHint;
   final TextStyle dialogTitle;
   final TextStyle notificationPanelText;
+  final TextStyle trailingTileText;
+  final TextStyle userInfoLarge;
+  final TextStyle userInfoMedium;
 
   @override
   ThemeExtension<TextStyles> copyWith({
@@ -49,6 +57,9 @@ class TextStyles extends ThemeExtension<TextStyles> {
     TextStyle? inputDecorationHint,
     TextStyle? dialogTitle,
     TextStyle? notificationPanelText,
+    TextStyle? trailingTileText,
+    TextStyle? userInfoLarge,
+    TextStyle? userInfoMedium,
   }) {
     return TextStyles(
       appTitleLarge: appTitleLarge ?? this.appTitleLarge,
@@ -58,6 +69,9 @@ class TextStyles extends ThemeExtension<TextStyles> {
       inputDecorationHint: inputDecorationHint ?? this.inputDecorationHint,
       dialogTitle: dialogTitle ?? this.dialogTitle,
       notificationPanelText: notificationPanelText ?? this.notificationPanelText,
+      trailingTileText: trailingTileText ?? this.trailingTileText,
+      userInfoLarge: userInfoLarge ?? this.userInfoLarge,
+      userInfoMedium: userInfoMedium ?? this.userInfoMedium,
     );
   }
 
@@ -73,6 +87,9 @@ class TextStyles extends ThemeExtension<TextStyles> {
       inputDecorationHint: TextStyle.lerp(inputDecorationHint, other.inputDecorationHint, t)!,
       dialogTitle: TextStyle.lerp(dialogTitle, other.dialogTitle, t)!,
       notificationPanelText: TextStyle.lerp(notificationPanelText, other.notificationPanelText, t)!,
+      trailingTileText: TextStyle.lerp(trailingTileText, other.trailingTileText, t)!,
+      userInfoLarge: TextStyle.lerp(userInfoLarge, other.userInfoLarge, t)!,
+      userInfoMedium: TextStyle.lerp(userInfoMedium, other.userInfoMedium, t)!,
     );
   }
 }

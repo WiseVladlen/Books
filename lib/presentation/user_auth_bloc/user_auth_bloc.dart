@@ -11,14 +11,9 @@ class UserAuthBloc extends Bloc<UserAuthEvent, UserAuthState> {
   UserAuthBloc({
     required this.authRepository,
     required this.userRepository,
-  }) : super(const UserAuthState.initial()) {
+  }) : super(_buildStateByUser(userRepository.authenticatedUserOrNull)) {
     on<_AuthenticationStatusChanged>(_statusChanged);
-    on<UserLoadingEvent>(_userLoading);
     on<LogoutRequested>(_logoutRequested);
-    on<SwitchToLoginPage>(_switchToLoginPage);
-    on<SwitchToSignUpPage>(_switchToSignUpPage);
-
-    add(const UserLoadingEvent());
 
     _statusSubscription = authRepository.statusStream.listen((AuthStatus status) {
       add(_AuthenticationStatusChanged(status));
@@ -30,8 +25,7 @@ class UserAuthBloc extends Bloc<UserAuthEvent, UserAuthState> {
   final IAuthRepository authRepository;
   final IUserRepository userRepository;
 
-  Future<UserAuthState> _buildState() async {
-    final UserModel? user = await userRepository.getAuthenticatedUserOrNull();
+  static UserAuthState _buildStateByUser(UserModel? user) {
     return user != null
         ? UserAuthState.authenticated(user: user)
         : const UserAuthState.unauthenticated();
@@ -45,26 +39,12 @@ class UserAuthBloc extends Bloc<UserAuthEvent, UserAuthState> {
       case AuthStatus.unauthenticated:
         emit(const UserAuthState.unauthenticated());
       case AuthStatus.authenticated:
-        emit(await _buildState());
-      case AuthStatus.initial:
-        emit(const UserAuthState.initial());
+        emit(_buildStateByUser(userRepository.authenticatedUserOrNull));
     }
-  }
-
-  Future<void> _userLoading(UserLoadingEvent event, Emitter<UserAuthState> emit) async {
-    emit(await _buildState());
   }
 
   void _logoutRequested(LogoutRequested event, Emitter<UserAuthState> emit) {
     authRepository.logOut();
-  }
-
-  void _switchToLoginPage(SwitchToLoginPage event, Emitter<UserAuthState> emit) {
-    emit(const UserAuthState.unauthenticated());
-  }
-
-  void _switchToSignUpPage(SwitchToSignUpPage event, Emitter<UserAuthState> emit) {
-    emit(const UserAuthState.unauthenticated(isLoginPage: false));
   }
 
   @override

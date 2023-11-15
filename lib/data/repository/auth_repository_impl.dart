@@ -15,7 +15,7 @@ class AuthRepositoryImpl implements IAuthRepository {
   final IAuthLocalDataSource authLocalDataSource;
   final IUserLocalDataSource userLocalDataSource;
 
-  final IPreferenceDataSource preferenceDataSource;
+  final ICacheDataSource preferenceDataSource;
 
   @override
   Stream<AuthStatus> get statusStream => _statusController.stream;

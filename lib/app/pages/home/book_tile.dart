@@ -112,7 +112,7 @@ class BookTile extends StatelessWidget {
                                 context.l10n.publisherHeader.combineWith(publisher),
                               if (pageCount case final int pageCount)
                                 context.l10n.pageCountHeader.combineWith(pageCount),
-                              context.l10n.languageHeader.combineWith(language, endSymbol: ''),
+                              context.l10n.bookLanguageHeader.combineWith(language, endSymbol: ''),
                             ],
                           ),
                         ),

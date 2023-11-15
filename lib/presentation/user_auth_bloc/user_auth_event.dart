@@ -4,10 +4,6 @@ abstract class UserAuthEvent {
   const UserAuthEvent();
 }
 
-final class UserLoadingEvent extends UserAuthEvent {
-  const UserLoadingEvent();
-}
-
 final class _AuthenticationStatusChanged extends UserAuthEvent {
   const _AuthenticationStatusChanged(this.status);
 
@@ -16,12 +12,4 @@ final class _AuthenticationStatusChanged extends UserAuthEvent {
 
 final class LogoutRequested extends UserAuthEvent {
   const LogoutRequested();
-}
-
-final class SwitchToLoginPage extends UserAuthEvent {
-  const SwitchToLoginPage();
-}
-
-final class SwitchToSignUpPage extends UserAuthEvent {
-  const SwitchToSignUpPage();
 }

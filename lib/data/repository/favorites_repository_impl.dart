@@ -8,7 +8,7 @@ class FavoritesRepositoryImpl implements IFavoritesRepository {
 
   final IBookLocalDataSource bookLocalDataSource;
 
-  final IPreferenceDataSource preferenceDataSource;
+  final ICacheDataSource preferenceDataSource;
 
   @override
   Future<void> addBook({required String bookId}) {

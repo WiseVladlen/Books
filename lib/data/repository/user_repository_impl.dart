@@ -3,19 +3,19 @@ import 'package:books/domain/domain.dart';
 class UserRepositoryImpl implements IUserRepository {
   const UserRepositoryImpl({
     required this.localDataSource,
-    required this.preferenceDataSource,
+    required this.cacheDataSource,
   });
 
   final IUserLocalDataSource localDataSource;
 
-  final IPreferenceDataSource preferenceDataSource;
+  final ICacheDataSource cacheDataSource;
 
   @override
-  Future<UserModel?> getAuthenticatedUserOrNull() async {
+  UserModel? get authenticatedUserOrNull => cacheDataSource.readUser();
+
+  @override
+  Future<void> fetchAuthenticatedUser() async {
     final UserModel? user = await localDataSource.getAuthenticatedUserOrNull();
-
-    await preferenceDataSource.writeUser(user);
-
-    return user;
+    await cacheDataSource.writeUser(user);
   }
 }

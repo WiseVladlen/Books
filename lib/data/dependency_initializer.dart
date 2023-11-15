@@ -11,7 +11,7 @@ abstract class DependencyInitializer {
     final IAuthLocalDataSource authLocalDataSource = AuthLocalDataSourceImpl(db: database);
     final IUserLocalDataSource userLocalDataSource = UserLocalDataSourceImpl(db: database);
 
-    final IPreferenceDataSource preferenceDataSource = PreferenceDataSourceImpl();
+    final ICacheDataSource preferenceDataSource = CacheDataSourceImpl();
 
     final IBookRemoteDataSource bookRemoteDataSource = GoogleBooksDataSourceImpl();
 
@@ -29,7 +29,7 @@ abstract class DependencyInitializer {
 
     final IUserRepository userRepository = UserRepositoryImpl(
       localDataSource: userLocalDataSource,
-      preferenceDataSource: preferenceDataSource,
+      cacheDataSource: preferenceDataSource,
     );
 
     final IFavoritesRepository favoritesRepository = FavoritesRepositoryImpl(
@@ -52,7 +52,7 @@ abstract class DependencyInitializer {
     final IConnectivityService connectivityService = ConnectivityServiceImpl();
     final IErrorLoggerService crashlyticsService = CrashlyticsServiceImpl();
 
-    await crashlyticsService.initialize();
+    await crashlyticsService.init();
 
     await connectivityService.check();
 

@@ -39,13 +39,27 @@ class App extends StatelessWidget {
       ],
       child: MultiBlocProvider(
         providers: <SingleChildWidget>[
+          BlocProvider<NavigationBloc>(
+            lazy: false,
+            create: (BuildContext context) => NavigationBloc(
+              user: context.read<IUserRepository>().authenticatedUserOrNull,
+            ),
+          ),
           BlocProvider<UserAuthBloc>(
+            lazy: false,
             create: (BuildContext context) => UserAuthBloc(
               authRepository: context.read<IAuthRepository>(),
               userRepository: context.read<IUserRepository>(),
             ),
           ),
+          BlocProvider<FavoritesBloc>(
+            create: (BuildContext context) => FavoritesBloc(
+              bookRepository: context.read<IBookRepository>(),
+              favoritesRepository: context.read<IFavoritesRepository>(),
+            ),
+          ),
           BlocProvider<NetworkConnectionCubit>(
+            lazy: false,
             create: (BuildContext context) => NetworkConnectionCubit(
               connectivityService: context.read<IConnectivityService>(),
             ),
@@ -60,52 +74,33 @@ class App extends StatelessWidget {
   }
 }
 
-class _AppView extends StatelessWidget {
+class _AppView extends StatefulWidget {
   const _AppView();
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      theme: ThemeDataX.from(brightness: Brightness.light),
-      home: BlocBuilder<UserAuthBloc, UserAuthState>(
-        buildWhen: (UserAuthState oldState, UserAuthState newState) {
-          return (oldState.status != newState.status);
-        },
-        builder: (BuildContext context, UserAuthState state) {
-          return Scaffold(
-            body: Column(
-              children: <Widget>[
-                Expanded(
-                  child: switch (state.status) {
-                    AuthStatus.initial => const Center(child: CircularProgressIndicator()),
-                    AuthStatus.unauthenticated => const AuthPage(),
-                    AuthStatus.authenticated => const HomePage(),
-                  },
-                ),
-                BlocBuilder<NetworkConnectionCubit, NetworkConnectionState>(
-                  buildWhen: (NetworkConnectionState oldState, NetworkConnectionState newState) {
-                    return oldState.status != newState.status;
-                  },
-                  builder: (BuildContext context, NetworkConnectionState state) {
-                    if (state.status.isOnline) {
-                      return BottomNotificationPanel.online(
-                        title: context.l10n.networkConnectedMessage,
-                        backgroundColor: context.colors.positive,
-                      );
-                    }
+  State<_AppView> createState() => _AppViewState();
+}
 
-                    return BottomNotificationPanel.offline(
-                      title: context.l10n.networkConnectionWaitingMessage,
-                      backgroundColor: context.colors.negative,
-                    );
-                  },
-                ),
-              ],
-            ),
-          );
-        },
+class _AppViewState extends State<_AppView> {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<UserAuthBloc, UserAuthState>(
+      listenWhen: (UserAuthState oldState, UserAuthState newState) {
+        return oldState.status != newState.status;
+      },
+      listener: (BuildContext context, UserAuthState state) {
+        context.read<NavigationBloc>().add(ResetRootStackEvent(user: state.user));
+      },
+      child: MaterialApp.router(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        theme: ThemeDataX.from(brightness: Brightness.light),
+        routerDelegate: AppRouterDelegate(
+          bloc: context.read<NavigationBloc>(),
+          navigatorKey: navigatorKey,
+        ),
       ),
     );
   }
