@@ -7,7 +7,7 @@
   "authorsHeader": "Авторы",
   "publisherHeader": "Издательство",
   "pageCountHeader": "Кол-во страниц",
-  "languageHeader": "Язык",
+  "bookLanguageHeader": "Язык",
   "logInHeader": "Войти",
   "signUpHeader": "Зарегистрироваться",
   "logOutHeader": "Выйти",
@@ -31,5 +31,7 @@
   "networkConnectedMessage": "Подключено",
   "networkConnectionWaitingMessage": "Ожидание сети...",
   "logInFailureMessage": "Неверный email или пароль",
-  "signUpFailureMessage": "Пользователь с таким email уже существует"
+  "signUpFailureMessage": "Пользователь с таким email уже существует",
+  "appLanguageHeader": "Язык",
+  "themeModeHeader": "Тема"
 }

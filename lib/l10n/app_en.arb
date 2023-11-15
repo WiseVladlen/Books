@@ -31,9 +31,9 @@
   "@pageCountHeader": {
     "description": "Header of the \"Page count\" section"
   },
-  "languageHeader": "Language",
-  "@languageHeader": {
-    "description": "Header of the \"Language\" section"
+  "bookLanguageHeader": "Language",
+  "@bookLanguageHeader": {
+    "description": "Header of the \"Book language\" section"
   },
   "logInHeader": "Log In",
   "@logInHeader": {
@@ -130,5 +130,13 @@
   "signUpFailureMessage": "A user with this login already exists",
   "@signUpFailureMessage": {
     "description": "Message informing about unsuccessful sign up attempt"
+  },
+  "appLanguageHeader": "Language",
+  "@appLanguageHeader": {
+    "description": "Header of the \"App language\" section"
+  },
+  "themeModeHeader": "Theme mode",
+  "@themeModeHeader": {
+    "description":  "Header of the \"Theme mode\" section"
   }
 }
