@@ -39,6 +39,11 @@ class App extends StatelessWidget {
       ],
       child: MultiBlocProvider(
         providers: <SingleChildWidget>[
+          BlocProvider<SettingsBloc>(
+            create: (BuildContext context) => SettingsBloc(
+              preferenceRepository: repositoryStorage.preferenceRepository,
+            ),
+          ),
           BlocProvider<NavigationBloc>(
             lazy: false,
             create: (BuildContext context) => NavigationBloc(
@@ -93,14 +98,21 @@ class _AppViewState extends State<_AppView> {
       listener: (BuildContext context, UserAuthState state) {
         context.read<NavigationBloc>().add(ResetRootStackEvent(user: state.user));
       },
-      child: MaterialApp.router(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        theme: ThemeDataX.from(brightness: Brightness.light),
-        routerDelegate: AppRouterDelegate(
-          bloc: context.read<NavigationBloc>(),
-          navigatorKey: navigatorKey,
-        ),
+      child: BlocBuilder<SettingsBloc, SettingsState>(
+        builder: (BuildContext context, SettingsState state) {
+          return MaterialApp.router(
+            locale: state.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            theme: ThemeDataX.from(brightness: Brightness.light),
+            darkTheme: ThemeDataX.from(brightness: Brightness.dark),
+            themeMode: state.themeMode,
+            routerDelegate: AppRouterDelegate(
+              bloc: context.read<NavigationBloc>(),
+              navigatorKey: navigatorKey,
+            ),
+          );
+        },
       ),
     );
   }
