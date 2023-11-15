@@ -5,7 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class CrashlyticsServiceImpl implements IErrorLoggerService {
   @override
-  Future<void> initialize() async {
+  Future<void> init() async {
     await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   }
 

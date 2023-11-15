@@ -10,7 +10,7 @@ class BookRepositoryImpl implements IBookRepository {
   final IBookLocalDataSource localDataSource;
   final IBookRemoteDataSource remoteDataSource;
 
-  final IPreferenceDataSource preferenceDataSource;
+  final ICacheDataSource preferenceDataSource;
 
   @override
   Stream<Set<BookModel>> get userBookStream {

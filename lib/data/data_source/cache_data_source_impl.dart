@@ -2,7 +2,7 @@ import 'package:books/domain/domain.dart';
 
 const String _userKey = 'user_key';
 
-class PreferenceDataSourceImpl implements IPreferenceDataSource {
+class CacheDataSourceImpl implements ICacheDataSource {
   final Map<String, dynamic> _cache = <String, dynamic>{};
 
   @override
