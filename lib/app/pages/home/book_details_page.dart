@@ -43,94 +43,89 @@ class BookDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        child: Column(
-          children: <Widget>[
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: SizedBox(
-                    width: 96,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                            color: context.colors.boxShadow,
-                            offset: const Offset(0, 2),
-                            spreadRadius: 2,
-                            blurRadius: 4,
-                          ),
-                        ],
+    return Scaffold(
+      appBar: AppBar(
+        titleSpacing: 12,
+        title: Text(title),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          child: Column(
+            children: <Widget>[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: SizedBox(
+                      width: 96,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                              color: context.colors.boxShadow,
+                              offset: const Offset(0, 2),
+                              spreadRadius: 2,
+                              blurRadius: 4,
+                            ),
+                          ],
+                        ),
+                        child: imageLink.isNotEmpty
+                            ? CustomNetworkImage(imageLink: imageLink)
+                            : const BookPlaceholder(height: 96),
                       ),
-                      child: imageLink.isNotEmpty
-                          ? CustomNetworkImage(imageLink: imageLink)
-                          : const BookPlaceholder(height: 96),
                     ),
                   ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Text(
-                            title.combineTitleWithDate(publishedDate),
-                            style: context.textStyles.cardTitleMedium,
-                          ),
-                        ),
-                        if (authors.isNotEmpty)
-                          Text(
-                            context.l10n.authorsHeader.combineSectionHeaderWith(
-                              authors.toFormattedString(),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: Text(
+                              title.combineTitleWithDate(publishedDate),
+                              style: context.textStyles.cardTitleMedium,
                             ),
                           ),
-                        if (publisher.isNotEmpty)
-                          Text(context.l10n.publisherHeader.combineSectionHeaderWith(publisher)),
-                        if (pageCount case final int pageCount)
-                          Text(context.l10n.pageCountHeader.combineSectionHeaderWith(pageCount)),
-                        Text(context.l10n.bookLanguageHeader.combineSectionHeaderWith(language)),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 12),
-              child: Column(
-                children: <Widget>[
-                  if (description.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: Text(description),
-                    ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        TextButton.icon(
-                          onPressed: () => Navigator.pop(context),
-                          label: Text(context.l10n.backHeader),
-                          icon: const Icon(Icons.arrow_back),
-                          style: context.buttonStyles.neutralButton,
-                        ),
-                        FavoriteBookButton(bookId: bookId),
-                      ],
+                          if (authors.isNotEmpty)
+                            Text(
+                              context.l10n.authorsHeader.combineSectionHeaderWith(
+                                authors.toFormattedString(),
+                              ),
+                            ),
+                          if (publisher.isNotEmpty)
+                            Text(context.l10n.publisherHeader.combineSectionHeaderWith(publisher)),
+                          if (pageCount case final int pageCount)
+                            Text(context.l10n.pageCountHeader.combineSectionHeaderWith(pageCount)),
+                          Text(context.l10n.bookLanguageHeader.combineSectionHeaderWith(language)),
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: Column(
+                  children: <Widget>[
+                    if (description.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Text(description),
+                      ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: FavoriteBookButton(bookId: bookId),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
