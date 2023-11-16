@@ -1,8 +1,8 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 
-class FadeScaleTransitionPage extends Page<dynamic> {
-  const FadeScaleTransitionPage({
+class FadeThroughTransitionPage extends Page<dynamic> {
+  const FadeThroughTransitionPage({
     required super.key,
     required this.page,
   });
@@ -26,12 +26,13 @@ class FadeScaleTransitionPage extends Page<dynamic> {
         Animation<double> secondaryAnimation,
         Widget child,
       ) {
-        return FadeScaleTransition(
+        return FadeThroughTransition(
           animation: animation,
+          secondaryAnimation: secondaryAnimation,
           child: child,
         );
       },
-      barrierColor: Theme.of(context).cardColor,
+      barrierColor: Colors.transparent,
     );
   }
 }
