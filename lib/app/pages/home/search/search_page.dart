@@ -76,7 +76,7 @@ class _BookList extends StatefulWidget {
 }
 
 class _BookListState extends State<_BookList> {
-  static const int _scrollPadding = 400;
+  static const int _scrollPadding = 100;
 
   final ScrollController _scrollController = ScrollController();
 
