@@ -1,7 +1,6 @@
 //GENERATED BARREL FILE
 export './exception/exception.dart';
 export './validator/validator.dart';
-export 'bottom_navigation_bar_theme.dart';
 export 'build_context.dart';
 export 'button_style.dart';
 export 'color_palette.dart';
