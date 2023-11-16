@@ -35,7 +35,7 @@ class TextStyles extends ThemeExtension<TextStyles> {
             fontSize: 18,
             fontWeight: FontWeight.w500,
           ),
-          trailingTileText: const TextStyle(color: Color(0xFF616161)),
+          trailingTileText: const TextStyle(color: Colors.white54),
         );
 
   final TextStyle appTitleLarge;
