@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ColorPalette extends ThemeExtension<ColorPalette> {
   const ColorPalette({
     this.boxShadow = const Color(0x40000000),
-    this.favorite = Colors.redAccent,
+    this.favorite = const Color(0xFFFF4444),
     this.nonFavorite = const Color(0xFF201A1B),
     this.appBarTextFieldPrimary = Colors.white,
     this.textFieldPrimary = Colors.green,
