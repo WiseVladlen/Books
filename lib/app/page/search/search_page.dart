@@ -34,7 +34,7 @@ class _SearchPageView extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             onPressed: () {
-              showSearchSettingsModalBottomSheet(context);
+              showSearchFiltersSettingModalBottomSheet(context);
             },
             icon: const Icon(Icons.filter_list),
           ),
