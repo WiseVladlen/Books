@@ -1,5 +1,7 @@
+import 'package:books/app/pages/home/book_details_page.dart';
 import 'package:books/app/pages/pages.dart';
 import 'package:books/app/widget/transition/transition.dart';
+import 'package:books/domain/model/model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
@@ -70,4 +72,10 @@ final class HomePageRoute extends AppRoute {
 
 final class FavoritesPageRoute extends AppRoute {
   const FavoritesPageRoute();
+}
+
+final class BookDetailsPageRoute extends AppRoute {
+  const BookDetailsPageRoute({required this.book});
+
+  final BookModel book;
 }

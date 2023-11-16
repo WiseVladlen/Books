@@ -27,6 +27,10 @@ extension ListAppRouteX on List<AppRoute> {
               key: ValueKey<String>('FavoritesPageRoute'),
               page: FavouritesPage(),
             ),
+          final BookDetailsPageRoute route => FadeScaleTransitionPage(
+              key: const ValueKey<String>('BookDetailsPageRoute'),
+              page: BookDetailsPage.fromModel(route.book),
+            ),
         },
       ).toList();
 }
