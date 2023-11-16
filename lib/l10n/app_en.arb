@@ -138,9 +138,5 @@
   "themeModeHeader": "Theme mode",
   "@themeModeHeader": {
     "description":  "Header of the \"Theme mode\" section"
-  },
-  "backHeader": "Back",
-  "@backHeader": {
-    "description":  "Header informing about go back ability"
   }
 }

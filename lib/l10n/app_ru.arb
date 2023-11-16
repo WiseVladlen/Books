@@ -33,6 +33,5 @@
   "logInFailureMessage": "Неверный email или пароль",
   "signUpFailureMessage": "Пользователь с таким email уже существует",
   "appLanguageHeader": "Язык",
-  "themeModeHeader": "Тема",
-  "backHeader": "Назад"
+  "themeModeHeader": "Тема"
 }
