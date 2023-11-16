@@ -45,8 +45,8 @@ class BookDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        titleSpacing: 12,
-        title: Text(title),
+        title: Text(context.l10n.bookDetailsHeader),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Padding(

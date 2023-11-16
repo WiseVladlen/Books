@@ -22,32 +22,32 @@ class _TrailingTileParameter extends StatelessWidget {
   }
 }
 
-Future<void> showSearchSettingsModalBottomSheet(BuildContext externalContext) {
+Future<void> showSearchFiltersSettingModalBottomSheet(BuildContext context) {
   return showRoundedRectangleBorderModalBottomSheet(
-    externalContext,
+    context,
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         ListTile(
           leading: const Icon(Icons.data_object),
-          title: Text(externalContext.l10n.dataSourceTypeHeader),
+          title: Text(context.l10n.dataSourceTypeHeader),
           trailing: _TrailingTileParameter(
-            value: externalContext.read<SearchBloc>().state.dataSourceType.name.toCapitalized(),
+            value: context.read<SearchBloc>().state.dataSourceType.name.toCapitalized(),
           ),
           onTap: () {
-            Navigator.pop(externalContext);
-            showDataSourceSettingsModalBottomSheet(externalContext);
+            Navigator.pop(context);
+            showDataSourceSettingsModalBottomSheet(context);
           },
         ),
         ListTile(
           leading: const Icon(Icons.language),
-          title: Text(externalContext.l10n.bookLanguageHeader),
+          title: Text(context.l10n.bookLanguageHeader),
           trailing: _TrailingTileParameter(
-            value: externalContext.read<SearchBloc>().state.languageCode.name.toUpperCase(),
+            value: context.read<SearchBloc>().state.languageCode.name.toUpperCase(),
           ),
           onTap: () {
-            Navigator.pop(externalContext);
-            showBookLanguageSettingsModalBottomSheet(externalContext);
+            Navigator.pop(context);
+            showBookLanguageSettingsModalBottomSheet(context);
           },
         ),
       ],
@@ -90,7 +90,7 @@ Future<void> showBookLanguageSettingsModalBottomSheet(BuildContext context) {
       onChanged: (LanguageCode? value) {
         if (value == null) return;
 
-        context.read<SearchBloc>().add(LanguageChangedEvent(value));
+        context.read<SearchBloc>().add(BookLanguageChangedEvent(value));
         Navigator.pop(context);
       },
       items: LanguageCode.values.map(

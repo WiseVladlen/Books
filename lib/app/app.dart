@@ -1,5 +1,5 @@
 //GENERATED BARREL FILE
-export './pages/pages.dart';
+export './page/page.dart';
 export './route/route.dart';
 export './router/router.dart';
 export './widget/widget.dart';

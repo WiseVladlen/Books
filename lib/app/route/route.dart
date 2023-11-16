@@ -1,5 +1,4 @@
-import 'package:books/app/pages/home/book_details_page.dart';
-import 'package:books/app/pages/pages.dart';
+import 'package:books/app/page/page.dart';
 import 'package:books/app/widget/transition/transition.dart';
 import 'package:books/domain/model/model.dart';
 import 'package:equatable/equatable.dart';

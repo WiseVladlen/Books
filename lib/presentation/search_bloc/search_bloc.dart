@@ -20,7 +20,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     on<SearchQueryChangedEvent>(_searchQueryChanged, transformer: restartable());
     on<RefreshBooksEvent>(_refreshBooks);
     on<DataSourceChangedEvent>(_dataSourceChanged);
-    on<LanguageChangedEvent>(_languageChanged);
+    on<BookLanguageChangedEvent>(_bookLanguageChanged);
 
     _connectionStatusSubscription = connectivityService.statusStream.listen((
       ConnectionStatus status,
@@ -169,7 +169,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     );
   }
 
-  Future<void> _languageChanged(LanguageChangedEvent event, Emitter<SearchState> emit) async {
+  Future<void> _bookLanguageChanged(
+    BookLanguageChangedEvent event,
+    Emitter<SearchState> emit,
+  ) async {
     if (event.languageCode == state.languageCode) return;
 
     if (state.query.isEmpty) {

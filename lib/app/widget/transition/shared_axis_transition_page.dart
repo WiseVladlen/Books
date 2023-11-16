@@ -13,6 +13,7 @@ class SharedAxisTransitionPage extends Page<dynamic> {
   Route<dynamic> createRoute(BuildContext context) {
     return PageRouteBuilder<dynamic>(
       settings: this,
+      pageBuilder: (_, __, ___) => page,
       transitionsBuilder: (
         BuildContext context,
         Animation<double> animation,
@@ -26,13 +27,6 @@ class SharedAxisTransitionPage extends Page<dynamic> {
           transitionType: SharedAxisTransitionType.horizontal,
           child: child,
         );
-      },
-      pageBuilder: (
-        BuildContext context,
-        Animation<double> animation,
-        Animation<double> secondaryAnimation,
-      ) {
-        return page;
       },
     );
   }

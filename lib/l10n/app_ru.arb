@@ -22,9 +22,6 @@
   "logOutQuestion": "Выйти из аккаунта?",
   "positiveDialogButton": "Да",
   "negativeDialogButton": "Нет",
-  "searchLabel": "Поиск",
-  "favoritesLabel": "Избранное",
-  "settingsHeader": "Настройки",
   "dataSourceTypeHeader": "Тип источника данных",
   "localDataSourceHeader": "Локальный",
   "remoteDataSourceHeader": "Удаленный",
@@ -34,5 +31,6 @@
   "signUpFailureMessage": "Пользователь с таким email уже существует",
   "appLanguageHeader": "Язык",
   "themeModeHeader": "Тема",
-  "languageHeader": "Язык"
+  "languageHeader": "Язык",
+  "bookDetailsHeader": "Детали книги"
 }

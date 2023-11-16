@@ -91,18 +91,6 @@
   "@negativeDialogButton": {
     "description": "Negative text of the dialog box"
   },
-  "searchLabel": "Search",
-  "@searchLabel": {
-    "description": "Bottom navigation bar label describing the search page"
-  },
-  "favoritesLabel": "Favorites",
-  "@favoritesLabel": {
-    "description": "Bottom navigation bar label describing the favorites page"
-  },
-  "settingsHeader": "Settings",
-  "@settingsHeader": {
-    "description": "Header of the settings page"
-  },
   "dataSourceTypeHeader": "Data source type",
   "@dataSourceTypeHeader": {
     "description": "Header defining the type of data source"
@@ -142,5 +130,9 @@
   "languageHeader": "Language",
   "@languageHeader": {
     "description": "Header of the \"Abstract Language\" section"
+  },
+  "bookDetailsHeader": "Book details",
+  "@bookDetailsHeader": {
+    "description": "App bar header \"Book details\""
   }
 }

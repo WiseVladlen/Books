@@ -12,13 +12,7 @@ class SlideTransitionPage extends Page<dynamic> {
   Route<dynamic> createRoute(BuildContext context) {
     return PageRouteBuilder<dynamic>(
       settings: this,
-      pageBuilder: (
-        BuildContext context,
-        Animation<double> animation,
-        Animation<double> secondaryAnimation,
-      ) {
-        return page;
-      },
+      pageBuilder: (_, __, ___) => page,
       transitionsBuilder: (
         BuildContext context,
         Animation<double> animation,

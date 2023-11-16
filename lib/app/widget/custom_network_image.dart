@@ -11,9 +11,7 @@ class CustomNetworkImage extends StatelessWidget {
   });
 
   final String imageLink;
-
   final Duration fadeOutDuration;
-
   final Duration fadeInDuration;
 
   @override

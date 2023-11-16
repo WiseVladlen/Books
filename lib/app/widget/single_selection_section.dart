@@ -10,10 +10,8 @@ class SingleSelectSection<T> extends StatelessWidget {
   });
 
   final T groupValue;
-
-  final ValueChanged<T?> onChanged;
-
   final SectionItems<T> items;
+  final ValueChanged<T?> onChanged;
 
   @override
   Widget build(BuildContext context) {
