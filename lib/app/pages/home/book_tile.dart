@@ -1,9 +1,7 @@
 import 'package:books/app/app.dart';
 import 'package:books/domain/model/model.dart';
-import 'package:books/presentation/favorites_bloc/favorites_bloc.dart';
 import 'package:books/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BookTile extends StatelessWidget {
   const BookTile({
@@ -134,42 +132,11 @@ class BookTile extends StatelessWidget {
             padding: const EdgeInsets.only(top: 12),
             child: Align(
               alignment: Alignment.centerRight,
-              child: _FavoriteButton(bookId: bookId),
+              child: FavoriteButton(bookId: bookId),
             ),
           ),
         ],
       ),
-    );
-  }
-}
-
-class _FavoriteButton extends StatelessWidget {
-  const _FavoriteButton({required this.bookId});
-
-  final String bookId;
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<FavoritesBloc, FavoritesState>(
-      buildWhen: (FavoritesState oldState, FavoritesState newState) {
-        final BookModel? favoriteBookFromOldList = oldState.getFavoriteBookByIdOrNull(bookId);
-        final BookModel? favoriteBookFromNewList = newState.getFavoriteBookByIdOrNull(bookId);
-
-        return (favoriteBookFromOldList == null && favoriteBookFromNewList != null) ||
-            (favoriteBookFromOldList != null && favoriteBookFromNewList == null);
-      },
-      builder: (BuildContext context, FavoritesState state) {
-        final bool isFavorite = state.getFavoriteBookByIdOrNull(bookId) != null;
-
-        return IconButton(
-          onPressed: () {
-            context.read<FavoritesBloc>().add(FavouriteButtonClickedEvent(bookId: bookId));
-          },
-          splashRadius: 28,
-          color: isFavorite ? context.colors.favorite : context.colors.nonFavorite,
-          icon: isFavorite ? const Icon(Icons.favorite) : const Icon(Icons.favorite_border),
-        );
-      },
     );
   }
 }
