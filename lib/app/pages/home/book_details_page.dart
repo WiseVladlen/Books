@@ -101,7 +101,7 @@ class BookDetailsPage extends StatelessWidget {
                             Text(context.l10n.publisherHeader.combineSectionHeaderWith(publisher)),
                           if (pageCount case final int pageCount)
                             Text(context.l10n.pageCountHeader.combineSectionHeaderWith(pageCount)),
-                          Text(context.l10n.bookLanguageHeader.combineSectionHeaderWith(language)),
+                          Text(context.l10n.languageHeader.combineSectionHeaderWith(language)),
                         ],
                       ),
                     ),
