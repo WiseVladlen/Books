@@ -14,7 +14,6 @@ abstract class ThemeDataX {
           selectionColor: Colors.white.withOpacity(0.25),
           selectionHandleColor: Colors.green[300],
         ),
-        bottomNavigationBarTheme: BottomNavigationBarThemeX.from(brightness: brightness),
         extensions: brightness == Brightness.light ? lightExtensions : darkExtensions,
       );
 
