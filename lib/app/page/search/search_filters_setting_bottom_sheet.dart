@@ -90,7 +90,7 @@ Future<void> showBookLanguageSettingsModalBottomSheet(BuildContext context) {
       onChanged: (LanguageCode? value) {
         if (value == null) return;
 
-        context.read<SearchBloc>().add(LanguageChangedEvent(value));
+        context.read<SearchBloc>().add(BookLanguageChangedEvent(value));
         Navigator.pop(context);
       },
       items: LanguageCode.values.map(

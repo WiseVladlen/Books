@@ -11,11 +11,8 @@ class BookPlaceholder extends StatelessWidget {
   });
 
   final ImageProvider image;
-
   final double width;
-
   final double height;
-
   final BoxFit fit;
 
   @override

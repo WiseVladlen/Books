@@ -1,7 +1,6 @@
 import 'package:books/utils/utils.dart';
 import 'package:flutter/material.dart';
 
-@immutable
 class OutlinedTextField extends StatelessWidget {
   const OutlinedTextField({
     super.key,
@@ -15,17 +14,11 @@ class OutlinedTextField extends StatelessWidget {
   });
 
   final TextInputType keyboardType;
-
   final bool obscureText;
-
   final String labelText;
-
   final String? errorText;
-
   final double borderWidth;
-
   final EdgeInsets padding;
-
   final ValueChanged<String> onChanged;
 
   @override

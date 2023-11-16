@@ -12,13 +12,7 @@ class BaseTransitionPage extends Page<dynamic> {
   Route<dynamic> createRoute(BuildContext context) {
     return PageRouteBuilder<dynamic>(
       settings: this,
-      pageBuilder: (
-        BuildContext context,
-        Animation<double> animation,
-        Animation<double> secondaryAnimation,
-      ) {
-        return page;
-      },
+      pageBuilder: (_, __, ___) => page,
       transitionDuration: const Duration(milliseconds: 200),
       reverseTransitionDuration: const Duration(milliseconds: 200),
     );

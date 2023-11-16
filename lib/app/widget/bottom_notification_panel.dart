@@ -25,9 +25,7 @@ class BottomNotificationPanel extends StatefulWidget {
         );
 
   final String title;
-
   final Color backgroundColor;
-
   final bool activateDelayedHiding;
 
   @override

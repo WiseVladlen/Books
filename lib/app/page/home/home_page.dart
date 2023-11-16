@@ -25,7 +25,8 @@ class _HomePageState extends State<HomePage> {
       ),
       child: Scaffold(
         appBar: AppBar(
-          title: Center(child: Text(context.l10n.appName)),
+          title: Text(context.l10n.appName),
+          centerTitle: true,
           actions: <Widget>[
             IconButton(
               onPressed: () {
