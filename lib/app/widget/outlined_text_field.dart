@@ -10,7 +10,6 @@ class OutlinedTextField extends StatelessWidget {
     required this.labelText,
     this.errorText,
     this.borderWidth = 2,
-    this.primaryColor,
     this.padding = EdgeInsets.zero,
     required this.onChanged,
   });
@@ -22,8 +21,6 @@ class OutlinedTextField extends StatelessWidget {
   final String labelText;
 
   final String? errorText;
-
-  final Color? primaryColor;
 
   final double borderWidth;
 
@@ -40,17 +37,18 @@ class OutlinedTextField extends StatelessWidget {
         obscureText: obscureText,
         decoration: InputDecoration(
           labelText: labelText,
+          labelStyle: errorText == null ? context.textStyles.textFieldLabel : null,
           errorText: errorText,
           border: const OutlineInputBorder(),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
               width: borderWidth,
-              color: primaryColor ?? context.colors.textFieldPrimary,
+              color: context.colors.textFieldPrimary,
             ),
           ),
         ),
         onChanged: onChanged,
-        cursorColor: primaryColor ?? context.colors.textFieldPrimary,
+        cursorColor: context.colors.textFieldPrimary,
       ),
     );
   }

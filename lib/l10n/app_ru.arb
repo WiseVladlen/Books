@@ -7,7 +7,7 @@
   "authorsHeader": "Авторы",
   "publisherHeader": "Издательство",
   "pageCountHeader": "Кол-во страниц",
-  "bookLanguageHeader": "Язык",
+  "bookLanguageHeader": "Язык книги",
   "logInHeader": "Войти",
   "signUpHeader": "Зарегистрироваться",
   "logOutHeader": "Выйти",
@@ -33,5 +33,6 @@
   "logInFailureMessage": "Неверный email или пароль",
   "signUpFailureMessage": "Пользователь с таким email уже существует",
   "appLanguageHeader": "Язык",
-  "themeModeHeader": "Тема"
+  "themeModeHeader": "Тема",
+  "languageHeader": "Язык"
 }

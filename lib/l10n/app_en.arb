@@ -31,7 +31,7 @@
   "@pageCountHeader": {
     "description": "Header of the \"Page count\" section"
   },
-  "bookLanguageHeader": "Language",
+  "bookLanguageHeader": "Book language",
   "@bookLanguageHeader": {
     "description": "Header of the \"Book language\" section"
   },
@@ -138,5 +138,9 @@
   "themeModeHeader": "Theme mode",
   "@themeModeHeader": {
     "description":  "Header of the \"Theme mode\" section"
+  },
+  "languageHeader": "Language",
+  "@languageHeader": {
+    "description": "Header of the \"Abstract Language\" section"
   }
 }

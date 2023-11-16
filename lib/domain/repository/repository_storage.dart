@@ -6,10 +6,12 @@ class RepositoryStorage {
     required this.bookRepository,
     required this.userRepository,
     required this.favoritesRepository,
+    required this.preferenceRepository,
   });
 
   final IAuthRepository authRepository;
   final IBookRepository bookRepository;
   final IUserRepository userRepository;
   final IFavoritesRepository favoritesRepository;
+  final IPreferenceRepository preferenceRepository;
 }

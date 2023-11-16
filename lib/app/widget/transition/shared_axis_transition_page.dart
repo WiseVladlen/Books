@@ -20,7 +20,7 @@ class SharedAxisTransitionPage extends Page<dynamic> {
         Widget child,
       ) {
         return SharedAxisTransition(
-          fillColor: Colors.redAccent,
+          fillColor: Colors.transparent,
           animation: animation,
           secondaryAnimation: secondaryAnimation,
           transitionType: SharedAxisTransitionType.horizontal,

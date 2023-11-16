@@ -38,8 +38,9 @@ class SlideTransitionPage extends Page<dynamic> {
           child: child,
         );
       },
+      barrierColor: Theme.of(context).cardColor,
       transitionDuration: const Duration(milliseconds: 200),
-      reverseTransitionDuration: const Duration(milliseconds: 250),
+      reverseTransitionDuration: const Duration(milliseconds: 200),
     );
   }
 }

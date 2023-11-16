@@ -30,7 +30,7 @@ class _SearchPageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const _SearchInput(),
+        title: _SearchInput(),
         actions: <Widget>[
           IconButton(
             onPressed: () {
@@ -47,13 +47,13 @@ class _SearchPageView extends StatelessWidget {
 }
 
 class _SearchInput extends StatelessWidget {
-  const _SearchInput();
+  final String _delayedActionKey = (_SearchInput).toString();
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       key: const Key('searchPage_textFieldInput'),
-      onChanged: (String value) => DelayedAction.run(() {
+      onChanged: (String value) => DelayedAction(_delayedActionKey).run(() {
         context.read<SearchBloc>().add(SearchQueryChangedEvent(value));
       }),
       style: context.textStyles.appBarTextField,
@@ -76,7 +76,7 @@ class _BookList extends StatefulWidget {
 }
 
 class _BookListState extends State<_BookList> {
-  static const int _scrollPadding = 400;
+  static const int _scrollPadding = 100;
 
   final ScrollController _scrollController = ScrollController();
 

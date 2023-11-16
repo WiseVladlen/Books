@@ -1,41 +1,9 @@
-import 'package:books/app/widget/rounded_rectangle_border_bottom_sheet.dart';
+import 'package:books/app/widget/widget.dart';
 import 'package:books/domain/model/enum/enum.dart';
 import 'package:books/presentation/search_bloc/search_bloc.dart';
 import 'package:books/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-typedef _SectionItems<T> = Iterable<({String title, T value})>;
-
-class _SingleSelectSection<T> extends StatelessWidget {
-  const _SingleSelectSection({
-    required this.groupValue,
-    required this.onChanged,
-    required this.items,
-  });
-
-  final T groupValue;
-
-  final ValueChanged<T?> onChanged;
-
-  final _SectionItems<T> items;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        for (final ({String title, T value}) item in items)
-          RadioListTile<T>(
-            value: item.value,
-            groupValue: groupValue,
-            onChanged: onChanged,
-            title: Text(item.title),
-          ),
-      ],
-    );
-  }
-}
 
 class _TrailingTileParameter extends StatelessWidget {
   const _TrailingTileParameter({required this.value});
@@ -90,7 +58,7 @@ Future<void> showSearchSettingsModalBottomSheet(BuildContext externalContext) {
 Future<void> showDataSourceSettingsModalBottomSheet(BuildContext context) {
   return showRoundedRectangleBorderModalBottomSheet(
     context,
-    child: _SingleSelectSection<DataSourceType>(
+    child: SingleSelectSection<DataSourceType>(
       groupValue: context.read<SearchBloc>().state.dataSourceType,
       onChanged: (DataSourceType? value) {
         if (value == null) return;
@@ -117,7 +85,7 @@ Future<void> showDataSourceSettingsModalBottomSheet(BuildContext context) {
 Future<void> showBookLanguageSettingsModalBottomSheet(BuildContext context) {
   return showRoundedRectangleBorderModalBottomSheet(
     context,
-    child: _SingleSelectSection<LanguageCode>(
+    child: SingleSelectSection<LanguageCode>(
       groupValue: context.read<SearchBloc>().state.languageCode,
       onChanged: (LanguageCode? value) {
         if (value == null) return;

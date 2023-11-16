@@ -4,13 +4,9 @@ final class UserAuthState extends Equatable {
   const UserAuthState._({
     this.user,
     this.status = AuthStatus.unauthenticated,
-    this.isLoginPage = true,
   });
 
-  const UserAuthState.unauthenticated({bool isLoginPage = true})
-      : this._(
-          isLoginPage: isLoginPage,
-        );
+  const UserAuthState.unauthenticated() : this._();
 
   const UserAuthState.authenticated({required UserModel user})
       : this._(
@@ -20,8 +16,7 @@ final class UserAuthState extends Equatable {
 
   final UserModel? user;
   final AuthStatus status;
-  final bool isLoginPage;
 
   @override
-  List<Object?> get props => <Object?>[user, status, isLoginPage];
+  List<Object?> get props => <Object?>[user, status];
 }
