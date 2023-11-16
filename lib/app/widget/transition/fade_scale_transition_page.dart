@@ -1,8 +1,8 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 
-class SharedAxisTransitionPage extends Page<dynamic> {
-  const SharedAxisTransitionPage({
+class FadeScaleTransitionPage extends Page<dynamic> {
+  const FadeScaleTransitionPage({
     required super.key,
     required this.page,
   });
@@ -13,20 +13,6 @@ class SharedAxisTransitionPage extends Page<dynamic> {
   Route<dynamic> createRoute(BuildContext context) {
     return PageRouteBuilder<dynamic>(
       settings: this,
-      transitionsBuilder: (
-        BuildContext context,
-        Animation<double> animation,
-        Animation<double> secondaryAnimation,
-        Widget child,
-      ) {
-        return SharedAxisTransition(
-          fillColor: Theme.of(context).cardColor,
-          animation: animation,
-          secondaryAnimation: secondaryAnimation,
-          transitionType: SharedAxisTransitionType.horizontal,
-          child: child,
-        );
-      },
       pageBuilder: (
         BuildContext context,
         Animation<double> animation,
@@ -34,6 +20,18 @@ class SharedAxisTransitionPage extends Page<dynamic> {
       ) {
         return page;
       },
+      transitionsBuilder: (
+        BuildContext context,
+        Animation<double> animation,
+        Animation<double> secondaryAnimation,
+        Widget child,
+      ) {
+        return FadeScaleTransition(
+          animation: animation,
+          child: child,
+        );
+      },
+      barrierColor: Theme.of(context).cardColor,
     );
   }
 }
